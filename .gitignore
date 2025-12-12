@@ -1,0 +1,17 @@
+# dependencies
+/node_modules
+
+# next.js
+/apps/frontend/.next/
+
+# misc
+.DS_Store
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# typescript
+*.tsbuildinfo
+/apps/frontend/next-env.d.ts
+.idea
+.turbo

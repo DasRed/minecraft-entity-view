@@ -1,0 +1,43 @@
+{
+    "name": "@dasred/minecraft-entity-view-frontend",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "author": "Marco Starker",
+    "license": "MIT",
+    "files": [
+        ".next/*",
+        "next.config.js",
+        "node_modules/*",
+        "package.json",
+        "public/*"
+    ],
+    "scripts": {
+        "dev": "next dev -p 7790",
+        "build": "next build",
+        "start": "next start -p 7790",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@nivo/line": "^0.99.0",
+        "@tailwindcss/postcss": "^4",
+        "clsx": "^2.1.1",
+        "eventemitter0": "^3.0.1",
+        "luxon": "^3.7.2",
+        "next": "^16.0.10",
+        "react": "^19.2.3",
+        "react-dom": "^19.2.3",
+        "tailwind-merge": "^3.4.0",
+        "tailwindcss": "^4.1.17",
+        "tsx": "^4.20.6",
+        "typescript": "^5.9.3",
+        "ws": "^8.18.3"
+    },
+    "devDependencies": {
+        "@types/luxon": "^3.7.1",
+        "@types/node": "^24.10.1",
+        "@types/react": "^19.2.7",
+        "@types/react-dom": "^19.2.3",
+        "@types/ws": "^8.18.1"
+    }
+}

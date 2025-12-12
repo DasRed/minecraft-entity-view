@@ -1,0 +1,25 @@
+{
+    "name": "@dasred/minecraft-entity-view",
+    "packageManager": "npm@11.6.2",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "author": "Marco Starker",
+    "license": "MIT",
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "engines": {
+        "node": ">=25.0.0",
+        "npm": ">=11.6.1"
+    },
+    "scripts": {
+        "dev": "turbo run dev --parallel",
+        "build": "turbo run build"
+    },
+    "devDependencies": {
+        "turbo": "^2.6.3",
+        "typescript": "^5.9.3"
+    }
+}

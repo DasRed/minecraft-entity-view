@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target":            "ES2024",
+        "allowJs":           true,
+        "skipLibCheck":      true,
+        "strict":            true,
+        "noEmit":            true,
+        "esModuleInterop":   true,
+        "module":            "esnext",
+        "moduleResolution":  "bundler",
+        "type":              "module",
+        "resolveJsonModule": true,
+        "isolatedModules":   false,
+        "incremental":       true,
+        "paths":             {
+            "@dasred/minecraft-entity-view-sdk":       ["packages/minecraft-entity-view-sdk/src/index.ts"],
+            "@dasred/minecraft-entity-view-sdk/*":     ["packages/minecraft-entity-view-sdk/src/*"],
+            "@dasred/minecraft-entity-view-backend":   ["packages/minecraft-entity-view-backend/src/index.ts"],
+            "@dasred/minecraft-entity-view-backend/*": ["packages/minecraft-entity-view-backend/src/*"]
+        }
+    },
+    "exclude":         ["node_modules"]
+}
