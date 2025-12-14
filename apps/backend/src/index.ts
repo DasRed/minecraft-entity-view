@@ -1,26 +1,19 @@
 import config from '@/config';
-import entitiesStatistic from '@/lib/entitiesStatistic';
-import {WebSocketServer} from 'ws';
+import DifferenceSenderHandler from '@/service/DifferenceSenderHandler';
+import EntitiesStatisticUpdater from '@/service/EntitiesStatisticUpdater';
+import MinecraftApiClient from '@/service/MinecraftApiClient';
+import WebSocketServer from '@/service/WebSocketServer';
+import WebSocketServerEventEnum from '@/service/webSocketServer/EventEnum';
+import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 
-const wss = new WebSocketServer({port: config.websocket.port});
+const esu = new EntitiesStatisticUpdater(new MinecraftApiClient(config.minecraftServer), config.entitiesStatisticUpdater.interval);
+await esu.start();
 
-wss.on('connection', (ws) => {
-    console.log('New client connected');
+const wss = new WebSocketServer(config.websocket.port);
+wss.on(WebSocketServerEventEnum.CLIENT_CONNECTED, (ws) => wss.sendTo(ws, CommandEnum.FULL_ENTITY_STATISTIC, esu.getCurrentData()));
 
-    ws.on('message', async (message) => {
-        const data = JSON.parse(message.toString());
+new DifferenceSenderHandler(esu, wss);
 
-        if (data.type)
-
-        switch (data.type) {
-            case 'getEntitiesStatistic':
-            default:
-                ws.send(JSON.stringify({type: data.type, data: await entitiesStatistic.updateAndGetStatistic()}));
-                break;
-        }
-    });
-
-    ws.on('close', () => console.log('Client disconnected'));
-});
+setInterval(() => wss.sendToAll(CommandEnum.FULL_ENTITY_STATISTIC, esu.getCurrentData()), config.entitiesStatisticUpdater.sendFullUpdateEvery);
 
 console.log(`> WebSocket on ws://localhost:${config.websocket.port}`);

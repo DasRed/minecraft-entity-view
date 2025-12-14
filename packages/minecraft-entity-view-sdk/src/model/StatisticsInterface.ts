@@ -1,29 +1,11 @@
-import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
-import PointInterface from '@dasred/minecraft-entity-view-sdk/model/PointInterface';
-import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
+import StatisticCountInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/CountInterface';
+import StatisticMobListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticMobListInterface';
+import StatisticTypeCountListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticTypeCountListInterface';
 
 interface StatisticsInterface {
-    count: {
-        total: number;
-        active: number;
-        added: number;
-        updated: number;
-        deleted: number;
-        mobCategory: { [key in MobCategoryEnum]: number };
-
-        history: {
-            total: PointInterface[];
-            active: PointInterface[];
-            added: PointInterface[];
-            updated: PointInterface[];
-            deleted: PointInterface[];
-            mobCategory: { [key in MobCategoryEnum]: PointInterface[] };
-        };
-    };
-
-    entities: { [key: string]: StatisticEntityInterface };
-    entitiesList: StatisticEntityInterface[];
-
+    count: StatisticCountInterface;
+    entity: StatisticMobListInterface;
+    entityTypeCount: StatisticTypeCountListInterface;
 }
 
 export default StatisticsInterface;

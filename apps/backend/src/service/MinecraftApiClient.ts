@@ -1,4 +1,6 @@
 import EntityInterface from '@dasred/minecraft-entity-view-sdk/model/EntityInterface';
+import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
+import StatisticEntityListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityListInterface';
 
 export default class MinecraftApiClient {
     private host: string;
@@ -33,7 +35,34 @@ export default class MinecraftApiClient {
         }
     }
 
-    public getEntities(): Promise<EntityInterface[] | null> {
-        return this.fetch('GET', '/entities');
+    public async getEntities(): Promise<StatisticEntityListInterface | null> {
+        const entities: EntityInterface[] = await this.fetch('GET', '/entities');
+        if (entities === null) {
+            return null;
+        }
+
+        const timestamp = (new Date()).getTime();
+
+        return (entities ?? []).reduce((acc, entity) => {
+            acc[entity.uuid] = {
+                ...entity,
+                stats: {
+                    firstSeenTimestamp: timestamp,
+                    removeTimestamp:    null,
+                    firstPosition:      {
+                        x: entity.x,
+                        y: entity.y,
+                        z: entity.z,
+                    },
+                    previousPosition:   {
+                        x: entity.x,
+                        y: entity.y,
+                        z: entity.z,
+                    },
+                    moved:              false,
+                },
+            } as StatisticEntityInterface;
+            return acc;
+        }, {} as StatisticEntityListInterface);
     }
 }

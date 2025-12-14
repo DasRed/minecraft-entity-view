@@ -2,8 +2,9 @@ import EntityInterface from '@dasred/minecraft-entity-view-sdk/model/EntityInter
 
 interface StatisticEntityInterface extends EntityInterface {
     stats: {
-        updateCount: number;
-        firstSeen: Date;
+        removeTimestamp: number | null;
+        firstSeenTimestamp: number;
+        order: number;
         firstPosition: {
             x: number;
             y: number;
@@ -14,8 +15,7 @@ interface StatisticEntityInterface extends EntityInterface {
             y: number;
             z: number;
         },
-        movedFromFirstPosition: boolean;
-        movedFromPreviousPosition: boolean;
+        moved: boolean;
     };
 }
 

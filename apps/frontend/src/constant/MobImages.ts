@@ -1,6 +1,6 @@
 import EntityTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityTypeEnum';
 
-const MobImages: { [key: string]: string } = {
+const MobImages: Record<string, string> = {
     [EntityTypeEnum.ALLAY]:            '/icons/allay/{size}/allay.png',
     [EntityTypeEnum.ARMADILLO]:        '/icons/armadillo/{size}/armadillo.png',
     [EntityTypeEnum.CAMEL]:            '/icons/camel/{size}/camel.png',

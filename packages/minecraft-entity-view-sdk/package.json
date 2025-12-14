@@ -13,6 +13,16 @@
         "./model/*": {
             "types": "./src/model/*.ts",
             "default": "./src/model/*.ts"
+        },
+        "./service/*": {
+            "types": "./src/service/*.ts",
+            "default": "./src/service/*.ts"
         }
+    },
+    "dependencies": {
+        "lodash-es": "^4.17.21"
+    },
+    "devDependencies": {
+        "@types/lodash-es": "^4.17.12"
     }
 }

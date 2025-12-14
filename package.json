@@ -16,10 +16,12 @@
     },
     "scripts": {
         "dev": "turbo run dev --parallel",
-        "build": "turbo run build"
+        "build": "turbo run build",
+        "wsc": "wsc -C ws://localhost:7791"
     },
     "devDependencies": {
         "turbo": "^2.6.3",
-        "typescript": "^5.9.3"
+        "typescript": "^5.9.3",
+        "wsc": "^0.3.0"
     }
 }
