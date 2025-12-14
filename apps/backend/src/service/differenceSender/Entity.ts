@@ -2,16 +2,16 @@ import objectDeepDifference from '@/lib/objectDeepDifference';
 import DifferenceSenderBase from '@/service/differenceSender/Base';
 import WebSocketServer from '@/service/WebSocketServer';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
-import MobListEnum from '@dasred/minecraft-entity-view-sdk/constant/MobListEnum';
+import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
 import StatisticEntityListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityListInterface';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
 import {flatten} from 'flat';
 import {difference, intersection, isEmpty} from 'lodash-es';
 
 export default class DifferenceSenderEntity extends DifferenceSenderBase {
-    private key: MobListEnum;
+    private key: MobCategoryEnum;
 
-    constructor(wss: WebSocketServer, key: MobListEnum) {
+    constructor(wss: WebSocketServer, key: MobCategoryEnum) {
         super(wss);
         this.key = key;
     }
@@ -23,7 +23,7 @@ export default class DifferenceSenderEntity extends DifferenceSenderBase {
         const entriesAdded   = difference(entriesAfter, entriesBefore);
         const entriesDeleted = difference(entriesBefore, entriesAfter);
         if (entriesAdded.length !== 0 || entriesDeleted.length !== 0) {
-            this.send(CommandEnum.UPDATE_ENTITY_MODIFY(this.key), {
+            this.send(CommandEnum.PATCH_ENTITIES_LIST(this.key), {
                 add:    entriesAdded.reduce((acc, id) => {
                     acc[id] = dataAfter.entity[this.key][id];
                     return acc;
@@ -39,7 +39,7 @@ export default class DifferenceSenderEntity extends DifferenceSenderBase {
 
             const diff = objectDeepDifference(entryAfter, entryBefore);
             if (isEmpty(diff) === false) {
-                this.send(CommandEnum.UPDATE_ENTITY_PATCH_ID(this.key, id), flatten(diff));
+                this.send(CommandEnum.PATCH_ENTITIES_ID(this.key, id), flatten(diff));
             }
         });
     }

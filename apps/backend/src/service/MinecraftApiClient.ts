@@ -1,18 +1,18 @@
-import MobListEnum from '@dasred/minecraft-entity-view-sdk/constant/MobListEnum';
+import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
 import EntityInterface from '@dasred/minecraft-entity-view-sdk/model/EntityInterface';
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
 import StatisticEntityListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityListInterface';
 
-const MobCategoryOriginalToMobCategoryEnum: Record<string, MobListEnum> = {
-    monster:                    MobListEnum.MONSTER,
-    creature:                   MobListEnum.CREATURE,
-    item:                       MobListEnum.ITEM,
-    misc:                       MobListEnum.MISC,
-    ambient:                    MobListEnum.OTHER,
-    axolotls:                   MobListEnum.OTHER,
-    water_ambient:              MobListEnum.OTHER,
-    water_creature:             MobListEnum.OTHER,
-    underground_water_creature: MobListEnum.OTHER,
+const MobCategoryOriginalToMobCategoryEnum: Record<string, MobCategoryEnum> = {
+    monster:                    MobCategoryEnum.MONSTER,
+    creature:                   MobCategoryEnum.CREATURE,
+    item:                       MobCategoryEnum.ITEM,
+    misc:                       MobCategoryEnum.MISC,
+    ambient:                    MobCategoryEnum.OTHER,
+    axolotls:                   MobCategoryEnum.OTHER,
+    water_ambient:              MobCategoryEnum.OTHER,
+    water_creature:             MobCategoryEnum.OTHER,
+    underground_water_creature: MobCategoryEnum.OTHER,
 };
 
 export default class MinecraftApiClient {

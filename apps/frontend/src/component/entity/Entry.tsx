@@ -19,10 +19,10 @@ export default function EntityEntry({entity}: EntityRowOptionsInterface): React.
 
     return (
         <div style={{order: entity.stats.order}} className={cn('w-full border-b border-default grid grid-cols-7 opacity-100 overflow-hidden transition-all duration-700', {
-            'opacity-50 bg-gray-300 line-through': entity.chunkLoaded === false,
-            'bg-orange-400/30':                    entity.stats.moved === true,
-            'bg-green-500/30':                     highlightNew,
-            'bg-red-500/30 opacity-25':            isRemoved,
+            'opacity-inactive bg-inactive line-through': entity.chunkLoaded === false,
+            'bg-value-update':                           entity.stats.moved === true,
+            'bg-value-new':                              highlightNew,
+            'bg-value-removed opacity-removed':          isRemoved,
         })}>
             <div className="col-span-3 overflow-hidden text-ellipsis flex flex-row flex-nowrap items-center text-nowrap">
                 {entity.type === EntityTypeEnum.ITEM && <EntityDisplayNameItem entity={entity}/>}

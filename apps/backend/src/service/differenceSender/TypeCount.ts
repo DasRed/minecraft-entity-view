@@ -6,20 +6,20 @@ import StatisticTypeCountListInterface from '@dasred/minecraft-entity-view-sdk/m
 import {flatten} from 'flat';
 import {difference, intersection, isEmpty} from 'lodash-es';
 
-export default class DifferenceSenderEntityTypeCountEntries extends DifferenceSenderBase {
+export default class DifferenceSenderTypeCount extends DifferenceSenderBase {
     public handle(dataBefore: StatisticsInterface, dataAfter: StatisticsInterface): void {
         const entriesBefore = Object.keys(dataBefore.entityTypeCount);
         const entriesAfter  = Object.keys(dataAfter.entityTypeCount);
 
-        const entriesAdded = difference(entriesAfter, entriesBefore);
+        const entriesAdded   = difference(entriesAfter, entriesBefore);
         const entriesDeleted = difference(entriesBefore, entriesAfter);
         if (entriesAdded.length !== 0 || entriesDeleted.length !== 0) {
-            this.send(CommandEnum.UPDATE_ENTITY_TYPE_COUNT_ENTRIES_MODIFY, {
-                add: entriesAdded.reduce((acc, id) => {
+            this.send(CommandEnum.PATCH_TYPE_COUNT_LIST, {
+                add:    entriesAdded.reduce((acc, id) => {
                     acc[id] = dataAfter.entityTypeCount[id];
                     return acc;
                 }, {} as StatisticTypeCountListInterface),
-                remove: entriesDeleted
+                remove: entriesDeleted,
             });
         }
 
@@ -30,7 +30,7 @@ export default class DifferenceSenderEntityTypeCountEntries extends DifferenceSe
 
             const diff = objectDeepDifference(entryAfter, entryBefore);
             if (isEmpty(diff) === false) {
-                this.send(CommandEnum.UPDATE_ENTITY_TYPE_COUNT_ENTRIES_PATCH_ID(id), flatten(diff));
+                this.send(CommandEnum.PATCH_TYPE_COUNT_ID(id), flatten(diff));
             }
         });
     }

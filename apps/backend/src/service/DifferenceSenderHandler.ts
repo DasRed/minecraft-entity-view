@@ -1,11 +1,11 @@
 import DifferenceSenderBase from '@/service/differenceSender/Base';
+import DifferenceSenderCountAndHistory from '@/service/differenceSender/CountAndHistory';
 import DifferenceSenderEntity from '@/service/differenceSender/Entity';
-import DifferenceSenderEntityTypeCountEntries from '@/service/differenceSender/EntityTypeCountEntries';
-import DifferenceSenderSummary from '@/service/differenceSender/Summary';
+import DifferenceSenderTypeCount from '@/service/differenceSender/TypeCount';
 import EntitiesStatisticUpdater from '@/service/EntitiesStatisticUpdater';
 import EntitiesStatisticUpdaterEventEnum from '@/service/entitiesStatisticUpdater/EventEnum';
 import WebSocketServer from '@/service/WebSocketServer';
-import MobListEnum from '@dasred/minecraft-entity-view-sdk/constant/MobListEnum';
+import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
 
 export default class DifferenceSenderHandler {
@@ -18,9 +18,9 @@ export default class DifferenceSenderHandler {
         this.esu.on(EntitiesStatisticUpdaterEventEnum.UPDATE, (data, dataBefore) => this.handle(data, dataBefore));
 
         this.handler = [
-            new DifferenceSenderSummary(wss),
-            new DifferenceSenderEntityTypeCountEntries(wss),
-            ...Object.values(MobListEnum).map((key) => new DifferenceSenderEntity(wss, key))
+            new DifferenceSenderCountAndHistory(wss),
+            new DifferenceSenderTypeCount(wss),
+            ...Object.values(MobCategoryEnum).map((key) => new DifferenceSenderEntity(wss, key)),
         ];
     }
 

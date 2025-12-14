@@ -1,20 +1,26 @@
 import StatisticCountInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/CountInterface';
+import HistoryCountEntryInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountEntryInterface';
+import HistoryCountInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountInterface';
 import {get} from 'lodash-es';
 
 export default class SummaryConfigEntry {
-    public command: string;
+    public commandHistory: string;
+    public commandValue: string;
     public label: string;
     public path: string;
     public visible: boolean;
 
-    constructor({label, command, path, visible = true}: { label: string, command: string, path: string, visible?: boolean }) {
-        this.label   = label;
-        this.command = command;
-        this.path    = path;
-        this.visible = visible;
+    constructor({label, commandValue, commandHistory, path, visible = true}: { label: string, commandValue: string, commandHistory: string, path: string, visible?: boolean }) {
+        this.label          = label;
+        this.commandHistory = commandHistory;
+        this.commandValue   = commandValue;
+        this.path           = path;
+        this.visible        = visible;
     }
 
-    get(count: StatisticCountInterface): number {
+    get(count: StatisticCountInterface): number;
+    get(count: HistoryCountInterface): HistoryCountEntryInterface[];
+    get(count: StatisticCountInterface | HistoryCountInterface) {
         return get(count, this.path);
     }
 }

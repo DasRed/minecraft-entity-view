@@ -10,10 +10,10 @@ const esu = new EntitiesStatisticUpdater(new MinecraftApiClient(config.minecraft
 await esu.start();
 
 const wss = new WebSocketServer(config.websocket.port);
-wss.on(WebSocketServerEventEnum.CLIENT_CONNECTED, (ws) => wss.sendTo(ws, CommandEnum.FULL_ENTITY_STATISTIC, esu.getCurrentData()));
+wss.on(WebSocketServerEventEnum.CLIENT_CONNECTED, (ws) => wss.sendTo(ws, CommandEnum.FULL_STATISTIC, esu.getCurrentData()));
 
 new DifferenceSenderHandler(esu, wss);
 
-setInterval(() => wss.sendToAll(CommandEnum.FULL_ENTITY_STATISTIC, esu.getCurrentData()), config.entitiesStatisticUpdater.sendFullUpdateEvery);
+setInterval(() => wss.sendToAll(CommandEnum.FULL_STATISTIC, esu.getCurrentData()), config.entitiesStatisticUpdater.sendFullUpdateEvery);
 
 console.log(`> WebSocket on ws://localhost:${config.websocket.port}`);

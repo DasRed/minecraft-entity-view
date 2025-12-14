@@ -1,8 +1,8 @@
 import DimensionEnum from '@dasred/minecraft-entity-view-sdk/constant/DimensionEnum';
-import MobListEnum from '@dasred/minecraft-entity-view-sdk/constant/MobListEnum';
+import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
 
 interface EntityBaseInterface {
-    category: MobListEnum;
+    category: MobCategoryEnum;
     chunkLoaded: boolean,
     customName?: string;
     dimension: DimensionEnum;

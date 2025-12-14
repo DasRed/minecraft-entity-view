@@ -1,4 +1,4 @@
-enum MobListEnum {
+enum MobCategoryEnum {
     MONSTER = 'monster',
     CREATURE = 'creature',
     ITEM = 'item',
@@ -6,4 +6,4 @@ enum MobListEnum {
     OTHER = 'other',
 }
 
-export default MobListEnum;
+export default MobCategoryEnum;

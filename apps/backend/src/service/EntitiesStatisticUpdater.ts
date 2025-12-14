@@ -3,8 +3,8 @@ import EntitiesStatisticUpdaterEventEnum from '@/service/entitiesStatisticUpdate
 import MinecraftApiClient from '@/service/MinecraftApiClient';
 import collator from '@dasred/minecraft-entity-view-frontend/src/lib/collator';
 import EntityTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityTypeEnum';
-import MobListEnum from '@dasred/minecraft-entity-view-sdk/constant/MobListEnum';
-import HistoryCountInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountInterface';
+import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
+import HistoryCountEntryInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountEntryInterface';
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
 import StatisticEntityListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityListInterface';
 import StatisticMobListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticMobListInterface';
@@ -44,22 +44,22 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
                 total:  0,
                 active: 0,
 
-                mobCategory: Object.values(MobListEnum).reduce((acc, mobCategory) => {
+                mobCategory: Object.values(MobCategoryEnum).reduce((acc, mobCategory) => {
                     acc[mobCategory] = 0;
                     return acc;
-                }, {} as Record<MobListEnum, number>),
+                }, {} as Record<MobCategoryEnum, number>),
 
                 history: {
                     total:       [],
                     active:      [],
-                    mobCategory: Object.values(MobListEnum).reduce((acc, mobCategory) => {
+                    mobCategory: Object.values(MobCategoryEnum).reduce((acc, mobCategory) => {
                         acc[mobCategory] = [];
                         return acc;
-                    }, {} as Record<MobListEnum, HistoryCountInterface[]>),
+                    }, {} as Record<MobCategoryEnum, HistoryCountEntryInterface[]>),
                 },
             },
 
-            entity: Object.values(MobListEnum).reduce((acc, key) => {
+            entity: Object.values(MobCategoryEnum).reduce((acc, key) => {
                 acc[key] = {};
                 return acc;
             }, {} as StatisticMobListInterface),
@@ -120,6 +120,15 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
         return this.data;
     }
 
+    handleHistory(prev: HistoryCountEntryInterface[], dateNow: Date, value: number): HistoryCountEntryInterface[] {
+        const result = [...prev];
+        if (prev.length === 0 || prev[prev.length - 1].y !== value) {
+            result.push({x: dateNow.toISOString(), y: value});
+        }
+
+        return result.slice(-1 * config.entitiesStatisticUpdater.preserveHistoryDataLength);
+    }
+
     protected async run(): Promise<this> {
         this.clearTimer();
 
@@ -151,14 +160,16 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
     }
 
     protected async updateAndGetStatistic(): Promise<StatisticsInterface> {
+        const dateNow        = new Date();
+        const timestampNow   = dateNow.getTime();
+        const dataBefore     = this.data;
         const entitiesBefore = this.entities;
         const entitiesAfter  = await this.client.getEntities();
         if (entitiesAfter === null) {
-            return this.data;
+            return dataBefore;
         }
 
         //reAdd removed entities which remove timestamp is not older then
-        const timestampNow = (new Date()).getTime();
         Object.values(entitiesBefore).forEach((entityBefore) => {
             const id = entityBefore.uuid;
             if (entitiesAfter[id] !== undefined) {
@@ -192,6 +203,7 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
 
             if (entityAfter.stats.removeTimestamp === null) {
                 result.count.active += Number(entityAfter.chunkLoaded);
+                result.count.total++;
                 result.count.mobCategory[entityAfter.category]++;
             }
 
@@ -202,10 +214,6 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
         Object.values(result.entity).forEach((entities) =>
             Object.values(entities).sort(this.entityCompare).forEach((entry, index) => entry.stats.order = index),
         );
-
-        // update stats count
-        result.count.total             = Object.values(entitiesAfter).filter((entity) => entity.stats.removeTimestamp === null).length;
-        result.count.mobCategory.other = Object.values(result.entity.other).filter((entity) => entity.stats.removeTimestamp === null).length;
 
         // create type count list
         result.entityTypeCount = Object.values(entitiesAfter).reduce((acc, entity) => {
@@ -225,6 +233,11 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
             acc[type].count++;
             return acc;
         }, {} as StatisticTypeCountListInterface);
+
+        // update history entries
+        result.count.history.total  = this.handleHistory(dataBefore.count.history.total, dateNow, result.count.total);
+        result.count.history.active = this.handleHistory(dataBefore.count.history.active, dateNow, result.count.active);
+        Object.values(MobCategoryEnum).forEach((category) => result.count.history.mobCategory[category] = this.handleHistory(dataBefore.count.history.mobCategory[category], dateNow, result.count.mobCategory[category]));
 
         this.data     = result;
         this.entities = entitiesAfter;

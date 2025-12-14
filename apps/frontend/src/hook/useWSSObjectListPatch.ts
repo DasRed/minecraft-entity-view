@@ -6,7 +6,7 @@ interface STATISTIC_LIST_WSS_MODIFY<T = any> {
     remove: string[];
 }
 
-export default function useWSSListModify<T = any>(entitiesInitial: Record<string, T>, command: string): { entities: T[] } {
+export default function useWSSObjectListPatch<T = any>(entitiesInitial: Record<string, T>, command: string): T[] {
     const [entities, setEntities] = useState<Record<string, T>>(() => entitiesInitial);
     const modify                  = useWSS<STATISTIC_LIST_WSS_MODIFY<T>>(command);
 
@@ -24,5 +24,5 @@ export default function useWSSListModify<T = any>(entitiesInitial: Record<string
         });
     }, [modify]);
 
-    return {entities: Object.values(entities)};
+    return Object.values(entities);
 }

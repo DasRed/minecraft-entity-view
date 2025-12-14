@@ -1,16 +1,16 @@
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
-import MobListEnum from '@dasred/minecraft-entity-view-sdk/constant/MobListEnum';
+import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
 import SummaryConfigEntry from '@dasred/minecraft-entity-view-sdk/service/SummaryConfigEntry';
 
 const SummaryConfig = [
-    new SummaryConfigEntry({label: 'Active', command: CommandEnum.UPDATE_COUNT_ACTIVE, path: 'active'}),
-    new SummaryConfigEntry({label: 'Total', command: CommandEnum.UPDATE_COUNT_TOTAL, path: 'total'}),
+    new SummaryConfigEntry({label: 'Active', commandValue: CommandEnum.UPDATE_COUNT_ACTIVE, commandHistory: CommandEnum.PATCH_COUNT_HISTORY_ACTIVE, path: 'active'}),
+    new SummaryConfigEntry({label: 'Total', commandValue: CommandEnum.UPDATE_COUNT_TOTAL, commandHistory: CommandEnum.PATCH_COUNT_HISTORY_TOTAL, path: 'total'}),
 
-    new SummaryConfigEntry({label: 'Monster', command: CommandEnum[`UPDATE_COUNT_MOB_${MobListEnum.MONSTER}`], path: `mobCategory.${MobListEnum.MONSTER}`}),
-    new SummaryConfigEntry({label: 'Creature', command: CommandEnum[`UPDATE_COUNT_MOB_${MobListEnum.CREATURE}`], path: `mobCategory.${MobListEnum.CREATURE}`}),
-    new SummaryConfigEntry({label: 'Item', command: CommandEnum[`UPDATE_COUNT_MOB_${MobListEnum.ITEM}`], path: `mobCategory.${MobListEnum.ITEM}`}),
-    new SummaryConfigEntry({label: 'Misc', command: CommandEnum[`UPDATE_COUNT_MOB_${MobListEnum.MISC}`], path: `mobCategory.${MobListEnum.MISC}`}),
-    new SummaryConfigEntry({label: 'Other', command: CommandEnum[`UPDATE_COUNT_MOB_${MobListEnum.OTHER}`], path: `mobCategory.${MobListEnum.OTHER}`}),
+    new SummaryConfigEntry({label: 'Monster', commandValue: CommandEnum.UPDATE_COUNT_MOB(MobCategoryEnum.MONSTER), commandHistory: CommandEnum.PATCH_COUNT_HISTORY_MOB(MobCategoryEnum.MONSTER), path: `mobCategory.${MobCategoryEnum.MONSTER}`}),
+    new SummaryConfigEntry({label: 'Creature', commandValue: CommandEnum.UPDATE_COUNT_MOB(MobCategoryEnum.CREATURE), commandHistory: CommandEnum.PATCH_COUNT_HISTORY_MOB(MobCategoryEnum.CREATURE), path: `mobCategory.${MobCategoryEnum.CREATURE}`}),
+    new SummaryConfigEntry({label: 'Item', commandValue: CommandEnum.UPDATE_COUNT_MOB(MobCategoryEnum.ITEM), commandHistory: CommandEnum.PATCH_COUNT_HISTORY_MOB(MobCategoryEnum.ITEM), path: `mobCategory.${MobCategoryEnum.ITEM}`}),
+    new SummaryConfigEntry({label: 'Misc', commandValue: CommandEnum.UPDATE_COUNT_MOB(MobCategoryEnum.MISC), commandHistory: CommandEnum.PATCH_COUNT_HISTORY_MOB(MobCategoryEnum.MISC), path: `mobCategory.${MobCategoryEnum.MISC}`}),
+    new SummaryConfigEntry({label: 'Other', commandValue: CommandEnum.UPDATE_COUNT_MOB(MobCategoryEnum.OTHER), commandHistory: CommandEnum.PATCH_COUNT_HISTORY_MOB(MobCategoryEnum.OTHER), path: `mobCategory.${MobCategoryEnum.OTHER}`}),
 ];
 
 export default SummaryConfig;
