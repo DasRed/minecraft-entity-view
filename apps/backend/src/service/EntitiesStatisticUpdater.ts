@@ -3,8 +3,8 @@ import EntitiesStatisticUpdaterEventEnum from '@/service/entitiesStatisticUpdate
 import MinecraftApiClient from '@/service/MinecraftApiClient';
 import collator from '@dasred/minecraft-entity-view-frontend/src/lib/collator';
 import EntityTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityTypeEnum';
-import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
 import MobListEnum from '@dasred/minecraft-entity-view-sdk/constant/MobListEnum';
+import HistoryCountInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountInterface';
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
 import StatisticEntityListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityListInterface';
 import StatisticMobListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticMobListInterface';
@@ -13,18 +13,6 @@ import StatisticTypeCountListInterface from '@dasred/minecraft-entity-view-sdk/m
 import {cloneDeep} from 'lodash-es';
 import EventEmitter from 'node:events';
 import {clearTimeout} from 'node:timers';
-
-const MobToEntityProperty: Record<MobCategoryEnum, MobListEnum> = {
-    [MobCategoryEnum.MONSTER]:                    MobListEnum.MONSTER,
-    [MobCategoryEnum.CREATURE]:                   MobListEnum.CREATURE,
-    [MobCategoryEnum.ITEM]:                       MobListEnum.ITEM,
-    [MobCategoryEnum.MISC]:                       MobListEnum.MISC,
-    [MobCategoryEnum.AMBIENT]:                    MobListEnum.OTHER,
-    [MobCategoryEnum.AXOLOTLS]:                   MobListEnum.OTHER,
-    [MobCategoryEnum.WATER_AMBIENT]:              MobListEnum.OTHER,
-    [MobCategoryEnum.WATER_CREATURE]:             MobListEnum.OTHER,
-    [MobCategoryEnum.UNDERGROUND_WATER_CREATURE]: MobListEnum.OTHER,
-};
 
 export default class EntitiesStatisticUpdater extends EventEmitter {
     private client: MinecraftApiClient;
@@ -56,10 +44,19 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
                 total:  0,
                 active: 0,
 
-                mobCategory: Object.values(MobCategoryEnum).reduce((acc, mobCategory) => {
+                mobCategory: Object.values(MobListEnum).reduce((acc, mobCategory) => {
                     acc[mobCategory] = 0;
                     return acc;
-                }, {other: 0} as Record<MobCategoryEnum, number> & { other: number }),
+                }, {} as Record<MobListEnum, number>),
+
+                history: {
+                    total:       [],
+                    active:      [],
+                    mobCategory: Object.values(MobListEnum).reduce((acc, mobCategory) => {
+                        acc[mobCategory] = [];
+                        return acc;
+                    }, {} as Record<MobListEnum, HistoryCountInterface[]>),
+                },
             },
 
             entity: Object.values(MobListEnum).reduce((acc, key) => {
@@ -198,7 +195,7 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
                 result.count.mobCategory[entityAfter.category]++;
             }
 
-            result.entity[MobToEntityProperty[entityAfter.category]][entityAfter.uuid] = entityAfter;
+            result.entity[entityAfter.category][entityAfter.uuid] = entityAfter;
         });
 
         // define order value at lists

@@ -1,21 +1,16 @@
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
-import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
+import MobListEnum from '@dasred/minecraft-entity-view-sdk/constant/MobListEnum';
 import SummaryConfigEntry from '@dasred/minecraft-entity-view-sdk/service/SummaryConfigEntry';
 
 const SummaryConfig = [
     new SummaryConfigEntry({label: 'Active', command: CommandEnum.UPDATE_COUNT_ACTIVE, path: 'active'}),
     new SummaryConfigEntry({label: 'Total', command: CommandEnum.UPDATE_COUNT_TOTAL, path: 'total'}),
 
-    new SummaryConfigEntry({label: 'Ambient', command: CommandEnum[`UPDATE_COUNT_MOB_${MobCategoryEnum.AMBIENT}`], path: `mobCategory.${MobCategoryEnum.AMBIENT}`}),
-    new SummaryConfigEntry({label: 'Axolotls', command: CommandEnum[`UPDATE_COUNT_MOB_${MobCategoryEnum.AXOLOTLS}`], path: `mobCategory.${MobCategoryEnum.AXOLOTLS}`}),
-    new SummaryConfigEntry({visible: false, label: 'Creature', command: CommandEnum[`UPDATE_COUNT_MOB_${MobCategoryEnum.CREATURE}`], path: `mobCategory.${MobCategoryEnum.CREATURE}`}),
-    new SummaryConfigEntry({visible: false, label: 'Item', command: CommandEnum[`UPDATE_COUNT_MOB_${MobCategoryEnum.ITEM}`], path: `mobCategory.${MobCategoryEnum.ITEM}`}),
-    new SummaryConfigEntry({visible: false, label: 'Misc', command: CommandEnum[`UPDATE_COUNT_MOB_${MobCategoryEnum.MISC}`], path: `mobCategory.${MobCategoryEnum.MISC}`}),
-    new SummaryConfigEntry({visible: false, label: 'Monster', command: CommandEnum[`UPDATE_COUNT_MOB_${MobCategoryEnum.MONSTER}`], path: `mobCategory.${MobCategoryEnum.MONSTER}`}),
-    new SummaryConfigEntry({label: 'Water Ambient', command: CommandEnum[`UPDATE_COUNT_MOB_${MobCategoryEnum.WATER_AMBIENT}`], path: `mobCategory.${MobCategoryEnum.WATER_AMBIENT}`}),
-    new SummaryConfigEntry({label: 'Water Creature', command: CommandEnum[`UPDATE_COUNT_MOB_${MobCategoryEnum.WATER_CREATURE}`], path: `mobCategory.${MobCategoryEnum.WATER_CREATURE}`}),
-    new SummaryConfigEntry({label: 'Underground Water Creature', command: CommandEnum[`UPDATE_COUNT_MOB_${MobCategoryEnum.UNDERGROUND_WATER_CREATURE}`], path: `mobCategory.${MobCategoryEnum.UNDERGROUND_WATER_CREATURE}`}),
-    new SummaryConfigEntry({visible: false, label: 'Other', command: CommandEnum.UPDATE_COUNT_MOB_OTHER, path: 'mobCategory.other'}),
+    new SummaryConfigEntry({label: 'Monster', command: CommandEnum[`UPDATE_COUNT_MOB_${MobListEnum.MONSTER}`], path: `mobCategory.${MobListEnum.MONSTER}`}),
+    new SummaryConfigEntry({label: 'Creature', command: CommandEnum[`UPDATE_COUNT_MOB_${MobListEnum.CREATURE}`], path: `mobCategory.${MobListEnum.CREATURE}`}),
+    new SummaryConfigEntry({label: 'Item', command: CommandEnum[`UPDATE_COUNT_MOB_${MobListEnum.ITEM}`], path: `mobCategory.${MobListEnum.ITEM}`}),
+    new SummaryConfigEntry({label: 'Misc', command: CommandEnum[`UPDATE_COUNT_MOB_${MobListEnum.MISC}`], path: `mobCategory.${MobListEnum.MISC}`}),
+    new SummaryConfigEntry({label: 'Other', command: CommandEnum[`UPDATE_COUNT_MOB_${MobListEnum.OTHER}`], path: `mobCategory.${MobListEnum.OTHER}`}),
 ];
 
 export default SummaryConfig;
