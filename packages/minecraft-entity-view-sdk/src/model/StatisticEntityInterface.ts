@@ -4,7 +4,14 @@ interface StatisticEntityInterface extends EntityInterface {
     stats: {
         removeTimestamp: number | null;
         firstSeenTimestamp: number;
-        order: number;
+
+        order: {
+            default: number;
+            name: number;
+            dimension: number;
+            position: number;
+        };
+
         firstPosition: {
             x: number;
             y: number;

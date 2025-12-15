@@ -8,7 +8,7 @@ interface EntitySummaryValueOptionInterface {
 }
 
 export default function CountValue({value}: EntitySummaryValueOptionInterface): ReactElement {
-    const highlight = useHighlight([value]);
+    const highlight = useHighlight(value);
 
     return (
         <>

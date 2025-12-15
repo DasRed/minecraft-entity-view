@@ -77,12 +77,13 @@ export default class MinecraftApiClient {
 
             acc[entity.uuid] = {
                 ...entity,
-                category: MobCategoryOriginalToMobCategoryEnum[entity.category],
+                category: MobCategoryOriginalToMobCategoryEnum[entity.category] ?? MobCategoryEnum.OTHER,
                 displayName,
                 displayType,
                 stats:    {
                     firstSeenTimestamp: timestamp,
                     removeTimestamp:    null,
+                    order:              {default: 0, name: 0, dimension: 0, position: 0},
                     firstPosition:      {
                         x: entity.x,
                         y: entity.y,

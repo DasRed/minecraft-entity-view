@@ -1,5 +1,3 @@
-import HighlightDuration from '@/constant/HighlightDuration';
-import useHighlight from '@/hook/useHighlight';
 import useWSSHistoryPatch from '@/hook/useWSSHistoryPatch';
 import cn from '@/lib/cn';
 import HistoryCountEntryInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountEntryInterface';
@@ -14,8 +12,7 @@ interface HistoryChartOptionsInterface {
 }
 
 export default function HistoryChart({className, id = 'count', history: historyInitial, command}: HistoryChartOptionsInterface): ReactElement {
-    const history = useWSSHistoryPatch<HistoryCountEntryInterface>(historyInitial, command);
-    const highlight = useHighlight([history], HighlightDuration.FAST);
+    const {history, highlight} = useWSSHistoryPatch<HistoryCountEntryInterface>(historyInitial, command);
 
     return (
         <div className={cn('w-full h-50 transition-all duration-700', {'bg-value-update-default': highlight}, className)}>

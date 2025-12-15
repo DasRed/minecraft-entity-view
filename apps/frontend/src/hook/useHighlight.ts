@@ -1,15 +1,17 @@
 import HighlightDuration from '@/constant/HighlightDuration';
-import {DependencyList, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
-
-export default function useHighlight(deps?: DependencyList, duration: HighlightDuration = HighlightDuration.NORMAL) {
+export default function useHighlight(value: unknown, duration: HighlightDuration = HighlightDuration.NORMAL) {
     const [highlight, setHighlight] = useState<boolean>(true);
 
     useEffect(() => {
         setHighlight(true);
-        const timeout = setTimeout(() => setHighlight(false), duration);
+        const timeout = setTimeout(() => {
+            clearTimeout(timeout);
+            setHighlight(false);
+        }, duration);
         return () => clearTimeout(timeout);
-    }, deps);
+    }, [value, duration]);
 
     return highlight;
 }

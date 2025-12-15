@@ -1,11 +1,10 @@
 import config from '@/config';
+import collator from '@/lib/collator';
 import EntitiesStatisticUpdaterEventEnum from '@/service/entitiesStatisticUpdater/EventEnum';
+import EntitiesStatisticUpdaterSorter from '@/service/entitiesStatisticUpdater/Sorter';
 import MinecraftApiClient from '@/service/MinecraftApiClient';
-import collator from '@dasred/minecraft-entity-view-frontend/src/lib/collator';
-import EntityTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityTypeEnum';
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
 import HistoryCountEntryInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountEntryInterface';
-import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
 import StatisticEntityListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityListInterface';
 import StatisticMobListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticMobListInterface';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
@@ -19,11 +18,13 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
     private data: StatisticsInterface;
     private entities: StatisticEntityListInterface;
     private interval: number;
+    private sorter: EntitiesStatisticUpdaterSorter;
     private timer: NodeJS.Timeout | undefined;
 
-    constructor(client: MinecraftApiClient, interval: number) {
+    constructor(client: MinecraftApiClient, interval: number, sorter: EntitiesStatisticUpdaterSorter) {
         super();
         this.client   = client;
+        this.sorter   = sorter;
         this.data     = EntitiesStatisticUpdater.createNewStatistic();
         this.entities = {};
         this.interval = interval;
@@ -68,50 +69,6 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
         };
     }
 
-    entityCompare(entityA: StatisticEntityInterface, entityB: StatisticEntityInterface): number {
-        // deleted as last in list
-        if (entityA.stats.removeTimestamp !== null && entityB.stats.removeTimestamp === null) {
-            return 1;
-        }
-        else if (entityA.stats.removeTimestamp === null && entityB.stats.removeTimestamp !== null) {
-            return -1;
-        }
-        else if (entityA.stats.removeTimestamp !== null && entityB.stats.removeTimestamp !== null) {
-            return entityA.stats.removeTimestamp - entityB.stats.removeTimestamp;
-        }
-
-        // if it is items then more as first in list
-        if (entityA.type === EntityTypeEnum.ITEM && entityB.type === EntityTypeEnum.ITEM && entityA.item.count !== entityB.item.count) {
-            return entityB.item.count - entityA.item.count;
-        }
-
-        // older is first in list
-        if (entityA.stats.firstSeenTimestamp !== entityB.stats.firstSeenTimestamp) {
-            return entityA.stats.firstSeenTimestamp - entityB.stats.firstSeenTimestamp;
-        }
-
-        // sort by name
-        const nameA = entityA.type === EntityTypeEnum.ITEM ? entityA.item.name : (entityA.customName ?? entityA.name);
-        const nameB = entityB.type === EntityTypeEnum.ITEM ? entityB.item.name : (entityB.customName ?? entityB.name);
-        if (nameA !== nameB) {
-            return collator.compare(nameA, nameB);
-        }
-
-        // sort by position
-        if (entityA.x !== entityB.x) {
-            return entityA.x - entityB.x;
-        }
-        if (entityA.y !== entityB.y) {
-            return entityA.y - entityB.y;
-        }
-        if (entityA.z !== entityB.z) {
-            return entityA.z - entityB.z;
-        }
-
-        // final by id
-        return collator.compare(entityA.uuid, entityB.uuid);
-    }
-
     public getCurrentData(): StatisticsInterface {
         if (this.data === undefined) {
             throw new Error('EntitiesStatisticUpdater is not running.');
@@ -133,7 +90,7 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
         this.clearTimer();
 
         const dataBefore = this.data;
-        await this.updateAndGetStatistic();
+        await this.update();
         this.emit(EntitiesStatisticUpdaterEventEnum.UPDATE, this.data, dataBefore);
 
         this.timer = setTimeout(() => this.run(), this.interval);
@@ -144,7 +101,7 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
     public async start(): Promise<this> {
         this.clearTimer();
 
-        await this.updateAndGetStatistic();
+        await this.update();
         this.emit(EntitiesStatisticUpdaterEventEnum.STARTED, this.data);
 
         this.timer = setTimeout(() => this.run(), this.interval);
@@ -152,21 +109,14 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
         return this;
     }
 
-    public stop(): this {
-        this.clearTimer();
-        this.emit(EntitiesStatisticUpdaterEventEnum.STOPPED);
-
-        return this;
-    }
-
-    protected async updateAndGetStatistic(): Promise<StatisticsInterface> {
+    protected async update(): Promise<this> {
         const dateNow        = new Date();
         const timestampNow   = dateNow.getTime();
         const dataBefore     = this.data;
         const entitiesBefore = this.entities;
         const entitiesAfter  = await this.client.getEntities();
         if (entitiesAfter === null) {
-            return dataBefore;
+            return this;
         }
 
         //reAdd removed entities which remove timestamp is not older then
@@ -185,9 +135,24 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
             entitiesAfter[id].stats.removeTimestamp = timestamp;
         });
 
-        const result = EntitiesStatisticUpdater.createNewStatistic();
-
         // collect update information
+        const result = this.updateEntity(EntitiesStatisticUpdater.createNewStatistic(), entitiesAfter, entitiesBefore);
+
+        // create type count list
+        result.entityTypeCount = this.updateEntityTypeCount(entitiesAfter);
+
+        // update history entries
+        result.count.history.total  = this.handleHistory(dataBefore.count.history.total, dateNow, result.count.total);
+        result.count.history.active = this.handleHistory(dataBefore.count.history.active, dateNow, result.count.active);
+        Object.values(MobCategoryEnum).forEach((category) => result.count.history.mobCategory[category] = this.handleHistory(dataBefore.count.history.mobCategory[category], dateNow, result.count.mobCategory[category]));
+
+        this.data     = result;
+        this.entities = entitiesAfter;
+
+        return this;
+    }
+
+    private updateEntity(result: StatisticsInterface, entitiesAfter: StatisticEntityListInterface, entitiesBefore: StatisticEntityListInterface): StatisticsInterface {
         Object.values(entitiesAfter).forEach((entityAfter) => {
             const entityPrevious = entitiesBefore[entityAfter.uuid];
 
@@ -211,36 +176,48 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
         });
 
         // define order value at lists
-        Object.values(result.entity).forEach((entities) =>
-            Object.values(entities).sort(this.entityCompare).forEach((entry, index) => entry.stats.order = index),
-        );
+        this.sorter.sort(result.entity);
 
-        // create type count list
-        result.entityTypeCount = Object.values(entitiesAfter).reduce((acc, entity) => {
+        return result;
+    }
+
+    private updateEntityTypeCount(entitiesAfter: StatisticEntityListInterface): StatisticTypeCountListInterface {
+        const result = Object.values(entitiesAfter).reduce((acc, entity) => {
             if (entity.stats.removeTimestamp !== null) {
                 return acc;
             }
 
-            const type = entity.displayType; //entity.type === EntityTypeEnum.ITEM ? entity.item.type : entity.type;
+            const type = entity.displayType;
 
             if (acc[type] === undefined) {
                 acc[type] = {
                     type,
                     count: 0,
-                    name:  entity.displayName, //entity.type === EntityTypeEnum.ITEM ? entity.item.name : entity.name,
+                    name:  entity.displayName,
+                    order: {count: 0, name: 0},
                 };
             }
+
             acc[type].count++;
             return acc;
         }, {} as StatisticTypeCountListInterface);
 
-        // update history entries
-        result.count.history.total  = this.handleHistory(dataBefore.count.history.total, dateNow, result.count.total);
-        result.count.history.active = this.handleHistory(dataBefore.count.history.active, dateNow, result.count.active);
-        Object.values(MobCategoryEnum).forEach((category) => result.count.history.mobCategory[category] = this.handleHistory(dataBefore.count.history.mobCategory[category], dateNow, result.count.mobCategory[category]));
+        // do sort by count
+        Object.values(result)
+              .sort((entryA, entryB) => {
+                  if (entryA.count === entryB.count) {
+                      return collator.compare(entryA.name, entryB.name);
+                  }
 
-        this.data     = result;
-        this.entities = entitiesAfter;
+                  return entryA.count - entryB.count;
+              })
+              .forEach((entry, index) => entry.order.count = index);
+
+        // do sort by name
+        Object.values(result)
+              .sort((entryA, entryB) => collator.compare(entryA.name, entryB.name))
+              .forEach((entry, index) => entry.order.name = index);
+
 
         return result;
     }
