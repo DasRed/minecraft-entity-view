@@ -101,7 +101,7 @@ const MobImages: Record<string, string> = {
     [EntityTypeEnum.WARDEN]:           '/icons/warden/{size}/warden.png',
     [EntityTypeEnum.WITCH]:            '/icons/witch/{size}/witch.png',
     [EntityTypeEnum.WITHER]:           '/icons/wither/{size}/wither.png',
-    [EntityTypeEnum.WITHER_SKELETON]:  '/icons/wither_skeleton/{size}/wither_skeleton.png',
+    [EntityTypeEnum.WITHER_SKELETON]:  '/icons/skeleton/{size}/wither_skeleton.png',
     [EntityTypeEnum.ZOGLIN]:           '/icons/zoglin/{size}/zoglin.png',
     [EntityTypeEnum.ZOMBIE]:           '/icons/zombie/{size}/zombie.png',
     [EntityTypeEnum.ZOMBIE_VILLAGER]:  '/icons/zombie_villager/{size}/zombie_villager.png',

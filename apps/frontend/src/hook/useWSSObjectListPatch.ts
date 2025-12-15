@@ -1,25 +1,26 @@
 import useWSS from '@/hook/useWSS';
+import WS_PATCH_OBJECT_LIST from '@dasred/minecraft-entity-view-sdk/model/WS_PATCH_OBJECT_LIST';
 import {useEffect, useState} from 'react';
-
-interface STATISTIC_LIST_WSS_MODIFY<T = any> {
-    add: Record<string, T>;
-    remove: string[];
-}
 
 export default function useWSSObjectListPatch<T = any>(entitiesInitial: Record<string, T>, command: string): T[] {
     const [entities, setEntities] = useState<Record<string, T>>(() => entitiesInitial);
-    const modify                  = useWSS<STATISTIC_LIST_WSS_MODIFY<T>>(command);
+    const modify                  = useWSS<WS_PATCH_OBJECT_LIST<T>>(command);
 
     useEffect(() => {
         if (modify === null) {
             return;
         }
         setEntities((prev) => {
-            let result = {...prev, ...(modify.add ?? {})};
+            // add ids
+            let result = {...prev, ...modify.add};
 
-            if (modify.remove !== null && result.length !== 0) {
-                modify.remove.forEach((id) => delete result[id]);
-            }
+            // sync ids
+            Object.keys(result).forEach((id) => {
+                if (modify.ids.includes(id) === false) {
+                    delete result[id];
+                }
+            });
+
             return result;
         });
     }, [modify]);

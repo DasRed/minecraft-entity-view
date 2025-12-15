@@ -3,8 +3,10 @@ import DifferenceSenderBase from '@/service/differenceSender/Base';
 import WebSocketServer from '@/service/WebSocketServer';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
+import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
 import StatisticEntityListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityListInterface';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
+import WS_PATCH_OBJECT_LIST from '@dasred/minecraft-entity-view-sdk/model/WS_PATCH_OBJECT_LIST';
 import {flatten} from 'flat';
 import {difference, intersection, isEmpty} from 'lodash-es';
 
@@ -24,12 +26,12 @@ export default class DifferenceSenderEntity extends DifferenceSenderBase {
         const entriesDeleted = difference(entriesBefore, entriesAfter);
         if (entriesAdded.length !== 0 || entriesDeleted.length !== 0) {
             this.send(CommandEnum.PATCH_ENTITIES_LIST(this.key), {
-                add:    entriesAdded.reduce((acc, id) => {
+                ids: entriesAfter,
+                add: entriesAdded.reduce((acc, id) => {
                     acc[id] = dataAfter.entity[this.key][id];
                     return acc;
                 }, {} as StatisticEntityListInterface),
-                remove: entriesDeleted,
-            });
+            } as WS_PATCH_OBJECT_LIST<StatisticEntityInterface>);
         }
 
         // test for update for one entry

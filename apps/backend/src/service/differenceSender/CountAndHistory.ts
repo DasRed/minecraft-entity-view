@@ -17,7 +17,6 @@ export default class DifferenceSenderCountAndHistory extends DifferenceSenderBas
                 const historyBefore = summaryConfig.get(dataBefore.count.history);
 
                 const diff = difference(historyAfter, historyBefore);
-                console.log(summaryConfig.path, difference(historyAfter, historyBefore));
                 this.send(summaryConfig.commandHistory, diff);
             }
         });

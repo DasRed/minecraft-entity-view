@@ -11,9 +11,11 @@ interface TypeCountEntryOptionsInterface {
 
 export default function TypeCountEntry({entity}: TypeCountEntryOptionsInterface): ReactElement {
     const highlight = useHighlight([entity.count]);
+    const order = -entity.count;
+    // const order     = [...entity.name.substring(0, 3)].map(ch => ch.charCodeAt(0).toString().padStart(3, '0')).join('');
 
     return (
-        <div style={{order: entity.count}} className={cn('flex flex-row w-full border-b border-default transition-colors duration-700', {
+        <div style={{order}} className={cn('flex flex-row w-full border-b border-default transition-colors duration-700', {
             'bg-red-500/30': highlight,
         })}>
             <div className="w-3/4 flex flex-row items-center">

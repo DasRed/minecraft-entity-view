@@ -221,13 +221,13 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
                 return acc;
             }
 
-            const type = entity.type === EntityTypeEnum.ITEM ? entity.item.type : entity.type;
+            const type = entity.displayType; //entity.type === EntityTypeEnum.ITEM ? entity.item.type : entity.type;
 
             if (acc[type] === undefined) {
                 acc[type] = {
                     type,
                     count: 0,
-                    name:  entity.type === EntityTypeEnum.ITEM ? entity.item.name : entity.name,
+                    name:  entity.displayName, //entity.type === EntityTypeEnum.ITEM ? entity.item.name : entity.name,
                 };
             }
             acc[type].count++;

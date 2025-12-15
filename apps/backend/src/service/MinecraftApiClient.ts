@@ -1,3 +1,4 @@
+import EntityTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityTypeEnum';
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
 import EntityInterface from '@dasred/minecraft-entity-view-sdk/model/EntityInterface';
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
@@ -57,9 +58,28 @@ export default class MinecraftApiClient {
         const timestamp = (new Date()).getTime();
 
         return (entities ?? []).reduce((acc, entity) => {
+            let displayName         = entity.name;
+            let displayType: string = entity.type;
+
+            if (entity.type === EntityTypeEnum.ITEM) {
+                displayName = entity.item.name;
+                displayType = entity.item.type;
+            }
+            else if (entity.type === EntityTypeEnum.BLOCK_DISPLAY && entity.tags.includes('portals.block_display.portal.nether_portal')) {
+                displayName = 'Nether Portal';
+                displayType = EntityTypeEnum.NETHER_PORTAL_BLOCK;
+            }
+            else if (entity.type === EntityTypeEnum.ARMOR_STAND && entity.tags.includes('portals.portal')) {
+                displayName = 'Portals';
+                displayType = EntityTypeEnum.PORTALS_BLOCK;
+                delete entity.customName;
+            }
+
             acc[entity.uuid] = {
                 ...entity,
                 category: MobCategoryOriginalToMobCategoryEnum[entity.category],
+                displayName,
+                displayType,
                 stats:    {
                     firstSeenTimestamp: timestamp,
                     removeTimestamp:    null,

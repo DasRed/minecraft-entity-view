@@ -29,8 +29,8 @@ export default function TypeCountTable({statistic}: EntitiesCountTableOptionsInt
 
             <HistoryChart command={CommandEnum.PATCH_COUNT_HISTORY_TOTAL} history={statistic.count.history.total}/>
 
-            <div className="flex flex-col-reverse text-sm">
-                <div className="flex flex-row w-full font-bold border-b border-default order-last">
+            <div className="flex flex-col text-sm">
+                <div className="flex flex-row w-full font-bold border-b border-default order-first">
                     <span className="w-3/4">Type</span>
                     <span className="w-1/4 text-right">Count</span>
                 </div>

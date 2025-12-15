@@ -18,7 +18,7 @@ export default function HistoryChart({className, id = 'count', history: historyI
     const highlight = useHighlight([history], HighlightDuration.FAST);
 
     return (
-        <div className={cn('w-full h-50 transition-all duration-700', {'bg-value-update': highlight}, className)}>
+        <div className={cn('w-full h-50 transition-all duration-700', {'bg-value-update-default': highlight}, className)}>
             <ResponsiveLine
                 data={[{id, data: history}]}
                 margin={{top: 10, right: 0, bottom: 10, left: 40}}

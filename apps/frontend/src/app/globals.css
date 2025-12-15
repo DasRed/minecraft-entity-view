@@ -10,7 +10,9 @@
     --color-background: var(--background);
     --color-foreground: var(--foreground);
 
-    --color-value-update: theme(colors.orange.400 / 0.3);
+    --color-value-update-default: theme(colors.orange.400 / 0.3);
+    --color-value-update-second: theme(colors.amber.600 / 0.3);
+
     --color-value-new: theme(colors.green.500 / 0.3);
     --color-value-removed: theme(colors.red.500 / 0.3);
     --color-inactive: theme(colors.gray.300);

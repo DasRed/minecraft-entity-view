@@ -1,8 +1,10 @@
 import objectDeepDifference from '@/lib/objectDeepDifference';
 import DifferenceSenderBase from '@/service/differenceSender/Base';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
+import StatisticTypeCountInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/TypeCountInterface';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
 import StatisticTypeCountListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticTypeCountListInterface';
+import WS_PATCH_OBJECT_LIST from '@dasred/minecraft-entity-view-sdk/model/WS_PATCH_OBJECT_LIST';
 import {flatten} from 'flat';
 import {difference, intersection, isEmpty} from 'lodash-es';
 
@@ -15,12 +17,12 @@ export default class DifferenceSenderTypeCount extends DifferenceSenderBase {
         const entriesDeleted = difference(entriesBefore, entriesAfter);
         if (entriesAdded.length !== 0 || entriesDeleted.length !== 0) {
             this.send(CommandEnum.PATCH_TYPE_COUNT_LIST, {
-                add:    entriesAdded.reduce((acc, id) => {
+                ids: entriesAfter,
+                add: entriesAdded.reduce((acc, id) => {
                     acc[id] = dataAfter.entityTypeCount[id];
                     return acc;
                 }, {} as StatisticTypeCountListInterface),
-                remove: entriesDeleted,
-            });
+            } as WS_PATCH_OBJECT_LIST<StatisticTypeCountInterface>);
         }
 
         // test for update for one entry

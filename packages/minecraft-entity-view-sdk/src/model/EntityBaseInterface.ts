@@ -6,6 +6,8 @@ interface EntityBaseInterface {
     chunkLoaded: boolean,
     customName?: string;
     dimension: DimensionEnum;
+    displayName: string;
+    displayType: string;
     name: string;
     onGround: boolean;
     tags: string[];

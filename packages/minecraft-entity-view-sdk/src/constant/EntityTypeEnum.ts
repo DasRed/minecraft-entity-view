@@ -1,4 +1,7 @@
 enum EntityTypeEnum {
+    NETHER_PORTAL_BLOCK = 'minecraft.nether_portal_block',
+    PORTALS_BLOCK = 'protals.portal_block',
+
     // Creatures
     ALLAY                  = 'minecraft:allay',
     ARMADILLO              = 'minecraft:armadillo',
