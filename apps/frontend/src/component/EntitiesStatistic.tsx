@@ -10,7 +10,7 @@ import React, {ReactElement} from 'react';
 
 export default function EntitiesStatisticComponent(): ReactElement | null {
     return (
-        <WSSubscribe<StatisticsInterface> command={CommandEnum.FULL_STATISTIC} once={true}>
+        <WSSubscribe<StatisticsInterface> command={CommandEnum.FULL_STATISTIC}>
             {(statistic) => (
                 <div className="grid grid-cols-6 gap-3 mt-5">
                     <EntityTable statistic={statistic} category={MobCategoryEnum.MONSTER}/>

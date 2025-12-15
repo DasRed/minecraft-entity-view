@@ -2,7 +2,7 @@ import HighlightDuration from '@/constant/HighlightDuration';
 import {useEffect, useState} from 'react';
 
 export default function useHighlight(value: unknown, duration: HighlightDuration = HighlightDuration.NORMAL) {
-    const [highlight, setHighlight] = useState<boolean>(true);
+    const [highlight, setHighlight] = useState<boolean>(false);
 
     useEffect(() => {
         setHighlight(true);

@@ -34,3 +34,17 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+
+
+
+
+
+
+
+
+react-virtualized-auto-sizer.esm.js:244  GET http://localhost:7790/item/minecraft/minecraft.nether_portal_block.png 404 (Not Found)
+react-virtualized-auto-sizer.esm.js:244  GET http://localhost:7790/item/minecraft/protals.portal_block.png 404 (Not Found)
+react-virtualized-auto-sizer.esm.js:244  GET http://localhost:7790/item/minecraft/leash_knot.png 404 (Not Found)
+react-virtualized-auto-sizer.esm.js:244  GET http://localhost:7790/item/minecraft/friendsandfoes:rascal.png 404 (Not Found)

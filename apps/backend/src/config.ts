@@ -11,8 +11,11 @@ export default {
 
     entitiesStatisticUpdater: {
         interval: 250,
-        sendFullUpdateEvery: 60_000,
         removeEntityAfter: 2_000,
         preserveHistoryDataLength: 5_000,
+    },
+    fullUpdate: {
+        enabled: false,
+        every: 60_000,
     }
 } as const;

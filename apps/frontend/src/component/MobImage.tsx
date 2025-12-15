@@ -7,7 +7,7 @@ interface MobImageOptionsInterface {
 }
 
 export default function MobImage({type, className}: MobImageOptionsInterface): ReactElement {
-    const image = MobImages[type] ?? `/item/minecraft/${type.replace('minecraft:', '')}.png`;
+    const image = MobImages[type] ?? `/item/${type.replace(':', '/')}.png`;
 
     return (
         <object data-type={type} data={image.replace('{size}', '16x16')} type="image/png" className={className}>

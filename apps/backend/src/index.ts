@@ -9,6 +9,8 @@ await updater.start();
 wss.on(WebSocketServerEventEnum.CLIENT_CONNECTED, (ws) => wss.sendTo(ws, CommandEnum.FULL_STATISTIC, updater.getCurrentData()));
 sender.start();
 
-setInterval(() => wss.sendToAll(CommandEnum.FULL_STATISTIC, updater.getCurrentData()), config.entitiesStatisticUpdater.sendFullUpdateEvery);
+if (config.fullUpdate.enabled) {
+    setInterval(() => wss.sendToAll(CommandEnum.FULL_STATISTIC, updater.getCurrentData()), config.fullUpdate.every);
+}
 
 console.log(`> WebSocket on ws://localhost:${config.websocket.port}`);
