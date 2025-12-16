@@ -1,4 +1,5 @@
 import WebSocketServerEventEnum from '@/service/webSocketServer/EventEnum';
+import WebSocketMessageInterface from '@dasred/minecraft-entity-view-sdk/model/WebSocketMessageInterface';
 import EventEmitter from 'node:events';
 import {v4 as uuidv4} from 'uuid';
 import {WebSocket, WebSocketServer as WSS} from 'ws';
@@ -45,7 +46,7 @@ export default class WebSocketServer extends EventEmitter {
     }
 
     public sendTo(ws: WebSocket, type: string, data: any): this {
-        ws.send(JSON.stringify({type, data}));
+        ws.send(JSON.stringify({date: (new Date()).toISOString(), type, data} as WebSocketMessageInterface));
 
         return this;
     }

@@ -23,13 +23,13 @@ type WSSubscribeOptionInterface<T> = WSSubscribeWithInitialOptionInterface<T> | 
 function WSSubscriber<T = any>({command, initial, children}: WSSubscribeWithoutInitialOptionInterface<T>): ReactElement | string | null;
 function WSSubscriber<T = any>({command, initial, children}: WSSubscribeWithInitialOptionInterface<T>): ReactElement | string | null;
 function WSSubscriber<T = any>({command, initial, children}: WSSubscribeOptionInterface<T>): ReactElement | string | null {
+    const value = useWSS<T>(command, initial ?? null);
+
     if (initial === null || initial === undefined) {
-        const value = useWSS<T>(command, null);
         return value !== null ? (children as ChildrenWithoutInitial<T>)(value) : null;
     }
 
-    const value = useWSS<T>(command, initial);
-    return (children as ChildrenWithInitial<T>)(value, initial);
+    return (children as ChildrenWithInitial<T>)(value as T, initial);
 }
 
 const WSSubscribe = memo(WSSubscriber) as typeof WSSubscriber;

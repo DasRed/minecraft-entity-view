@@ -7,7 +7,6 @@ export default function useWSSHistoryPatch<T = any>(entitiesInitial: T[], comman
 
     useEffect(() => {
         if (modify !== null) {
-            // setValues((prev) => [...prev, ...modify]);
             setValues([...modify]);
         }
     }, [modify]);

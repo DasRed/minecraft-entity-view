@@ -10,7 +10,7 @@ const pageFont = PageFont({
 });
 
 export const metadata: Metadata = {
-    title: 'Minecraft Entity Stats',
+    title: 'Minecraft Entity Stats' + (process.env.NODE_ENV !== 'production' ? ' (develop)' : ''),
 };
 
 export default function RootLayout({children}: PropsWithChildren<any>): React.ReactElement {

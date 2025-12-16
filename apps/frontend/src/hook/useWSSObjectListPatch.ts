@@ -11,17 +11,18 @@ export default function useWSSObjectListPatch<T = any>(entitiesInitial: Record<s
             return;
         }
         setEntities((prev) => {
-            // add ids
-            let result = {...prev, ...modify.add};
+            const next: Record<string, T> = {};
 
-            // sync ids
-            Object.keys(result).forEach((id) => {
-                if (modify.ids.includes(id) === false) {
-                    delete result[id];
+            for (const id of modify.ids) {
+                if (modify.add[id]) {
+                    next[id] = modify.add[id];
                 }
-            });
+                else if (prev[id]) {
+                    next[id] = prev[id];
+                }
+            }
 
-            return result;
+            return next;
         });
     }, [modify]);
 
