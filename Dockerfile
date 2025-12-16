@@ -2,6 +2,7 @@ FROM node:25-alpine
 
 WORKDIR /var/www
 
+COPY ./apps /var/www/apps
 COPY ./packages /var/www/packages
 COPY ./package.json /var/www/package.json
 COPY ./package-lock.json /var/www/package-lock.json
