@@ -16,10 +16,6 @@
 
 /README.md
 /.git
-/build
-/tsconfig.json
-/next-env.d.ts
 /.gitignore
-/.env.example
 /.drone.yml
 /.dockerignore
