@@ -1,0 +1,5 @@
+import StatisticEntityInternalStateInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInternalStateInterface';
+
+type StatisticEntityInternalStateListInterface = Record<string, StatisticEntityInternalStateInterface>;
+
+export default StatisticEntityInternalStateListInterface;

@@ -1,3 +1,4 @@
+import EntityOrderTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityOrderTypeEnum';
 import EntityTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityTypeEnum';
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
 import EntityInterface from '@dasred/minecraft-entity-view-sdk/model/EntityInterface';
@@ -55,15 +56,19 @@ export default class MinecraftApiClient {
             return null;
         }
 
-        const timestamp = (new Date()).getTime();
-
         return (entities ?? []).reduce((acc, entity) => {
             let displayName         = entity.name;
             let displayType: string = entity.type;
 
+            delete entity.onGround;
+
             if (entity.type === EntityTypeEnum.ITEM) {
                 displayName = entity.item.name;
                 displayType = entity.item.type;
+
+                delete entity.item.age;
+                delete entity.item.lifespan;
+                delete entity.item.popTime;
             }
             else if (entity.type === EntityTypeEnum.BLOCK_DISPLAY && entity.tags.includes('portals.block_display.portal.nether_portal')) {
                 displayName = 'Nether Portal';
@@ -75,26 +80,20 @@ export default class MinecraftApiClient {
                 delete entity.customName;
             }
 
+            entity.x = Math.round(entity.x * 1000) / 1000;
+            entity.y = Math.round(entity.y * 1000) / 1000;
+            entity.z = Math.round(entity.z * 1000) / 1000;
+
             acc[entity.uuid] = {
                 ...entity,
                 category: MobCategoryOriginalToMobCategoryEnum[entity.category] ?? MobCategoryEnum.OTHER,
                 displayName,
                 displayType,
                 stats:    {
-                    firstSeenTimestamp: timestamp,
-                    removeTimestamp:    null,
-                    order:              {default: 0, name: 0, dimension: 0, position: 0},
-                    firstPosition:      {
-                        x: entity.x,
-                        y: entity.y,
-                        z: entity.z,
-                    },
-                    previousPosition:   {
-                        x: entity.x,
-                        y: entity.y,
-                        z: entity.z,
-                    },
-                    moved:              false,
+                    order:     Object.fromEntries(Object.values(EntityOrderTypeEnum).map((orderType) => [orderType, 0])),
+                    isMoved:   false,
+                    isDeleted: false,
+                    isNew:     false,
                 },
             } as StatisticEntityInterface;
             return acc;

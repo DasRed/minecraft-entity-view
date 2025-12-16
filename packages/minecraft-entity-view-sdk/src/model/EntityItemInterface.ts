@@ -5,10 +5,10 @@ interface EntityItemInterface extends EntityBaseInterface {
     item: {
         name: string;
         type: string;
-        age: number;
-        lifespan: number;
         count: number;
-        popTime: number;
+        age?: number;
+        lifespan?: number;
+        popTime?: number;
     };
     type: EntityTypeEnum.ITEM;
 }

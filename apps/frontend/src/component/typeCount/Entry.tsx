@@ -16,7 +16,7 @@ interface TypeCountEntryOptionsInterface {
 }
 
 export default function TypeCountEntry({entity, sortBy = TypeCountSortByEnum.TYPE}: TypeCountEntryOptionsInterface): ReactElement {
-    const highlight = useHighlight(entity.count);
+    const highlight = false; if (false) useHighlight(entity.count);
 
     return (
         <div style={{order: sortBy === TypeCountSortByEnum.COUNT ? entity.order.count : entity.order.name}} className={cn('flex flex-row w-full border-b border-default transition-colors duration-700', {

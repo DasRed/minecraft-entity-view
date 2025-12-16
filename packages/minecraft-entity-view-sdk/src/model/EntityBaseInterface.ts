@@ -9,7 +9,7 @@ interface EntityBaseInterface {
     displayName: string;
     displayType: string;
     name: string;
-    onGround: boolean;
+    onGround?: boolean;
     tags: string[];
     uuid: string;
     x: number;

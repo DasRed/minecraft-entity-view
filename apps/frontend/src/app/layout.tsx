@@ -1,6 +1,6 @@
 import type {Metadata} from 'next';
 import {Nunito as PageFont} from 'next/font/google';
-import './globals.css';
+import '../globals.css';
 import React, {PropsWithChildren} from 'react';
 
 const pageFont = PageFont({
@@ -16,6 +16,9 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: PropsWithChildren<any>): React.ReactElement {
     return (
         <html lang="en">
+        <head>
+            <link rel="icon" href="/favicon.ico" sizes="any" />
+        </head>
         <body className={`${pageFont.variable} antialiased`}>
         {children}
         </body>

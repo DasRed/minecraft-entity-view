@@ -9,7 +9,7 @@ export default function useWSS<T = any>(command: string, init?: T | null | undef
     useEffect(() => {
         wsc.on(command, setResult);
         return () => void wsc.off(command);
-    }, [command]);
+    }, [command, init]);
 
     return result;
 }

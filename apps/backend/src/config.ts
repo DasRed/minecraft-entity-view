@@ -1,3 +1,5 @@
+import UpdaterConfigInterface from '@/service/UpdaterConfigInterface';
+
 export default {
     minecraftServer: 'http://atlas.dasred.de:9874',
     // minecraftServer: 'http://atlas.dasred.de:9875',
@@ -9,13 +11,15 @@ export default {
         port:     7791,
     },
 
-    entitiesStatisticUpdater: {
-        interval: 250,
-        removeEntityAfter: 2_000,
+    updater:    <UpdaterConfigInterface>{
+        interval:                  250,
+        deleteEntityAfter:         2_000,
+        isNewEntityFor:            800,
+        isEntityReorderedFor:      300,
         preserveHistoryDataLength: 5_000,
     },
     fullUpdate: {
         enabled: false,
-        every: 60_000,
-    }
+        every:   60_000,
+    },
 } as const;

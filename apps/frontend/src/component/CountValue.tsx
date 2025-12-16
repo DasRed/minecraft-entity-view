@@ -12,7 +12,7 @@ export default function CountValue({value}: EntitySummaryValueOptionInterface): 
 
     return (
         <>
-            (<span className={cn({' bg-value-update-default': highlight})}>{numberFormatter.format(value)}</span>)
+            (<span className={cn({' bg-value-update': highlight})}>{numberFormatter.format(value)}</span>)
         </>
     );
 }
