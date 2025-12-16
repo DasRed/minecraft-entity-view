@@ -1,5 +1,4 @@
 import CountValue from '@/component/CountValue';
-import HistoryChart from '@/component/HistoryChart';
 import TypeCountEntry, {TypeCountSortByEnum} from '@/component/typeCount/Entry';
 import WSSubscribe from '@/component/WSSubscribe';
 import useWSSObjectListPatch from '@/hook/useWSSObjectListPatch';
@@ -40,8 +39,6 @@ export default function TypeCountTable({statistic}: EntitiesCountTableOptionsInt
                     </WSSubscribe>
                 </span>
             </h2>
-
-            <HistoryChart command={CommandEnum.PATCH_COUNT_HISTORY_TOTAL} history={statistic.count.history.total}/>
 
             <div className="flex flex-col text-sm">
                 <div className="flex flex-row w-full font-bold border-b border-default cursor-pointer">

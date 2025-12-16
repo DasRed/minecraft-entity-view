@@ -11,13 +11,15 @@ export default class DifferenceSenderCountAndHistory extends DifferenceSenderBas
 
             if (valueAfter !== valueBefore) {
                 this.send(summaryConfig.commandValue, valueAfter);
+            }
 
-                // send update for history
-                const historyAfter  = summaryConfig.get(dataAfter.count.history);
-                const historyBefore = summaryConfig.get(dataBefore.count.history);
+            // send update for history
+            const historyAfter  = summaryConfig.get(dataAfter.count.history);
+            const historyBefore = summaryConfig.get(dataBefore.count.history);
 
-                const diff = difference(historyAfter, historyBefore);
-                this.send(summaryConfig.commandHistory, diff);
+            const diff = difference(historyAfter, historyBefore);
+            if (diff.length !== 0) {
+                this.send(summaryConfig.commandHistory, historyAfter);
             }
         });
     }

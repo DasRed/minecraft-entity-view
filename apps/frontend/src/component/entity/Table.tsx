@@ -1,6 +1,5 @@
 import CountValue from '@/component/CountValue';
 import EntityEntry from '@/component/entity/Entry';
-import HistoryChart from '@/component/HistoryChart';
 import WSSubscribe from '@/component/WSSubscribe';
 import useWSSObjectListPatch from '@/hook/useWSSObjectListPatch';
 import cn from '@/lib/cn';
@@ -56,8 +55,6 @@ export default function EntityTable({statistic, category}: EntitiesTableOptionsI
                     </WSSubscribe>
                 </span>
             </h2>
-
-            <HistoryChart command={CommandEnum.PATCH_COUNT_HISTORY_MOB(category)} history={statistic.count.history.mobCategory[category]}/>
 
             <div className="flex flex-col text-sm">
                 <div className="w-full font-bold border-b border-default grid grid-cols-7 cursor-pointer">

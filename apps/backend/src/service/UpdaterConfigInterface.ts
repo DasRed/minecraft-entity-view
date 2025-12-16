@@ -4,6 +4,7 @@ interface UpdaterConfigInterface {
     isNewEntityFor: number;
     isEntityReorderedFor: number;
     preserveHistoryDataLength: number;
+    historyDeltaBetweenPoints: number;
 }
 
 export default UpdaterConfigInterface;

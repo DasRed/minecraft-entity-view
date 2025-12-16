@@ -4,7 +4,6 @@ import EntitiesStatisticUpdaterSorter from '@/service/entitiesStatisticUpdater/S
 import MinecraftApiClient from '@/service/MinecraftApiClient';
 import Store from '@/service/Store';
 import UpdaterConfigInterface from '@/service/UpdaterConfigInterface';
-import EntityOrderTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityOrderTypeEnum';
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
 import HistoryCountEntryInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountEntryInterface';
 import StatisticEntityListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityListInterface';
@@ -39,12 +38,12 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
     }
 
     handleHistory(prev: HistoryCountEntryInterface[], value: number): HistoryCountEntryInterface[] {
-        const result = [...prev];
-        if (prev.length === 0 || prev[prev.length - 1].y !== value) {
-            result.push({x: this.store.getDateNow().toISOString(), y: value});
+        const timestampLast = prev.length !== 0 ? (new Date(prev[prev.length - 1].x)).getTime() : 0;
+        if (this.store.getTimestampNow() < timestampLast + this.config.historyDeltaBetweenPoints) {
+            return [...prev];
         }
 
-        return result.slice(-1 * this.config.preserveHistoryDataLength);
+        return [...prev, {x: this.store.getDateNow().toISOString(), y: value}].slice(-1 * this.config.preserveHistoryDataLength);
     }
 
     protected async run(): Promise<this> {
