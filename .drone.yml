@@ -1,0 +1,17 @@
+kind: template
+load: nodeProject.jsonnet
+data:
+  config: |
+    {
+        "nodeVersion": 25,
+        "docker": {
+            "host": "atlas.dasred.de",
+            "ports": [7790, 7791],
+            "labels": {
+                "grafana.display": false,
+                "grafana.name": "minecraft-entity-view",
+                "homeassistant.enable": false,
+                "homeassistant.device_name": "minecraft-entity-view"
+            }
+        }
+    }

@@ -1,14 +1,21 @@
-import wsc from '@/lib/wsc';
+import config from '@/config';
+import WebSocketClient from '@/service/WebSocketClient';
 import {useEffect, useState} from 'react';
+
+let wsc: WebSocketClient | null = null;
 
 export default function useWSS<T>(command: string, init: T): T;
 export default function useWSS<T = any>(command: string, init?: null): T | null;
 export default function useWSS<T = any>(command: string, init?: T | null | undefined): T | null {
-    const [result, setResult] = useState<T | null>(init ?? null);
+    const [result, setResult]       = useState<T | null>(init ?? null);
 
     useEffect(() => {
+        if (wsc === null) {
+            wsc = new WebSocketClient(`${global.location.protocol === 'http:' ? 'ws' : 'wss'}://${global.location.hostname}:${config.websocket.port}`);
+        }
+
         wsc.on(command, setResult);
-        return () => void wsc.off(command);
+        return () => void wsc?.off(command);
     }, [command, init]);
 
     return result;

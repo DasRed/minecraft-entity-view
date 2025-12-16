@@ -8,7 +8,6 @@
         "esModuleInterop":   true,
         "module":            "esnext",
         "moduleResolution":  "bundler",
-        "type":              "module",
         "resolveJsonModule": true,
         "isolatedModules":   false,
         "incremental":       true,

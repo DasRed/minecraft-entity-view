@@ -1,0 +1,25 @@
+/node_modules/
+
+# OSX
+*.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Editors
+.idea
+.vscode
+*~
+
+# npm config
+/test.js
+
+/README.md
+/.git
+/build
+/tsconfig.json
+/next-env.d.ts
+/.gitignore
+/.env.example
+/.drone.yml
+/.dockerignore

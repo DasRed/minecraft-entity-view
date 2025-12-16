@@ -16,7 +16,7 @@ export default {
         deleteEntityAfter:         2_000,
         isNewEntityFor:            800,
         isEntityReorderedFor:      300,
-        // preserveHistoryDataLength: 2_000, // with once per seconds this are 33mins
+        preserveHistoryDataLength: 2_000, // with once per seconds this are 33mins
         historyDeltaBetweenPoints: 1000, // once per second
     },
     fullUpdate: {

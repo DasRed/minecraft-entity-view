@@ -7,7 +7,6 @@ interface WebSocketMessageInterface {
 
 export default class WebSocketClient extends EventEmitter {
     private readonly host: string;
-    private isConnected: boolean = false;
     // @ts-ignore
     private ws: WebSocket;
 
@@ -19,17 +18,13 @@ export default class WebSocketClient extends EventEmitter {
     }
 
     private connect(): this {
-        console.log('connecting websocket');
+        console.log('connecting websocket', this.host);
         this.ws = new WebSocket(this.host);
 
-        this.ws.addEventListener('open', () => {
-            console.log('websocket connected');
-            this.isConnected = true;
-        });
+        this.ws.addEventListener('open', () => console.log('websocket connected'));
         this.ws.addEventListener('error', (event) => console.error(`WebSocket ${this.host} error`, event));
         this.ws.addEventListener('message', (event) => this.handleMessage(event));
         this.ws.addEventListener('close', () => {
-            this.isConnected = false;
             console.log('connection closed');
             setTimeout(() => this.connect(), 1000);
         });

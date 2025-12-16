@@ -1,3 +1,5 @@
 export default {
-    websocket: 'ws://localhost:7791',
+    websocket: {
+        port: 7791,
+    },
 } as const;

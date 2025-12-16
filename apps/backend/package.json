@@ -6,7 +6,8 @@
     "author":          "Marco Starker",
     "license":         "MIT",
     "scripts":         {
-        "dev": "nodemon -e ts -x 'npx tsx src/index.ts' -w ./src"
+        "dev": "nodemon -e ts -x 'npx tsx src/index.ts' -w ./src",
+        "start": "npx tsx src/index.ts"
     },
     "dependencies":    {
         "@dasred/minecraft-entity-view-sdk": "*",
