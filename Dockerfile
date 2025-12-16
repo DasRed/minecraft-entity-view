@@ -2,7 +2,11 @@ FROM node:25-alpine
 
 WORKDIR /var/www
 
-COPY ./* /var/www/*
+COPY ./packages /var/www/packages
+COPY ./package.json /var/www/package.json
+COPY ./package-lock.json /var/www/package-lock.json
+COPY ./tsconfig.json /var/www/tsconfig.json
+COPY ./turbo.json /var/www/turbo.json
 
 ENV NODE_ENV=production
 
