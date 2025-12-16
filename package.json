@@ -29,16 +29,17 @@
         "semantic-release": "semantic-release",
         "wsc": "wsc -C ws://localhost:7791"
     },
+    "dependencies": {
+        "turbo": "^2.6.3",
+        "typescript": "^5.9.3"
+    },
     "devDependencies": {
-        "@saithodev/semantic-release-backmerge": "^4.0.1",
         "@semantic-release/commit-analyzer": "^13.0.1",
         "@semantic-release/git": "^10.0.1",
         "@semantic-release/github": "^12.0.0",
         "@semantic-release/npm": "^13.0.0",
         "semantic-release": "^25.0.0",
         "semantic-release-cli": "^5.4.6",
-        "turbo": "^2.6.3",
-        "typescript": "^5.9.3",
         "wsc": "^0.3.0"
     },
     "release": {
@@ -62,20 +63,7 @@
                     ]
                 }
             ],
-            "@semantic-release/github",
-            [
-                "@saithodev/semantic-release-backmerge",
-                {
-                    "backmergeBranches": [
-                        {
-                            "from": "main",
-                            "to": "develop"
-                        }
-                    ],
-                    "backmergeStrategy": "merge",
-                    "mergeMode": "theirs"
-                }
-            ]
+            "@semantic-release/github"
         ]
     }
 }
