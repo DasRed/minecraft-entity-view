@@ -4,6 +4,7 @@ import cn from '@/lib/cn';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 import HistoryCountMobCategoryInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountMobCategoryInterface';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
+import {DateTime} from 'luxon';
 import {ReactElement, useEffect, useRef} from 'react';
 import colors from 'tailwindcss/colors';
 import uPlot from 'uplot';
@@ -17,7 +18,18 @@ export default function MultipleHistoryChart({className, statistic}: MultipleHis
     const refChart  = useRef<HTMLDivElement>(null);
     const refLegend = useRef<HTMLDivElement>(null);
     const plotRef   = useRef<uPlot | null>(null);
-    const data      = useWSS<HistoryCountMobCategoryInterface>(CommandEnum.UPDATE_COUNT_HISTORY_MOB, statistic.count.history.mobCategory);
+    const data      = useWSS<HistoryCountMobCategoryInterface['timestamp'][]>(CommandEnum.UPDATE_COUNT_HISTORY_MOB, [
+        statistic.count.history.mobCategory.timestamp,
+        statistic.count.history.mobCategory.monster,
+        statistic.count.history.mobCategory.creature,
+        statistic.count.history.mobCategory.item,
+        statistic.count.history.mobCategory.misc,
+        statistic.count.history.mobCategory.other,
+    ]);
+
+    useEffect(() => {
+        plotRef.current?.setData(data as uPlot.AlignedData);
+    }, [data]);
 
     useEffect(() => {
         if (refChart.current === null || refLegend.current === null) {
@@ -29,7 +41,15 @@ export default function MultipleHistoryChart({className, statistic}: MultipleHis
                 width:  refChart.current.clientWidth,
                 height: refChart.current.clientHeight,
                 series: [
-                    {},
+                    {
+                        value: (u, v, sidx, didx) => {
+                            if (didx !== null) {
+                                return DateTime.fromSeconds(u.data[sidx][didx]!).toFormat('dd.MM.yyyy H:mm:ss.SSS');
+                            }
+
+                            return v;
+                        },
+                    },
                     {label: 'Monster', show: true, width: 1, stroke: colors.blue['400'], spanGaps: true},
                     {label: 'Creature', show: true, width: 1, stroke: colors.green['600'], spanGaps: true},
                     {label: 'Item', show: true, width: 1, stroke: colors.orange['400'], spanGaps: true},
@@ -56,16 +76,12 @@ export default function MultipleHistoryChart({className, statistic}: MultipleHis
                     mount: (self, element) => refLegend!.current!.appendChild(element),
                 },
             },
-            [data.timestamp, data.monster, data.creature, data.item, data.misc, data.other],
+            data as uPlot.AlignedData,
             refChart.current,
         );
 
         return () => plotRef.current?.destroy();
     }, []);
-
-    useEffect(() => {
-        plotRef.current?.setData([data.timestamp, data.monster, data.creature, data.item, data.misc, data.other]);
-    }, [data]);
 
     return (
         <div>

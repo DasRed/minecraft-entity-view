@@ -39,7 +39,7 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
     }
 
     handleHistory(historyAfter: HistoryCountInterface, historyBefore: HistoryCountInterface, count: StatisticCountInterface): HistoryCountInterface {
-        const timestampLast = historyBefore.mobCategory.timestamp.length !== 0 ? (new Date(historyBefore.mobCategory.timestamp[historyBefore.mobCategory.timestamp.length - 1])).getTime() : 0;
+        const timestampLast = historyBefore.mobCategory.timestamp.length !== 0 ? historyBefore.mobCategory.timestamp[historyBefore.mobCategory.timestamp.length - 1] * 1000 : 0;
         if (this.store.getTimestampNow() < timestampLast + this.config.historyDeltaBetweenPoints) {
             return historyBefore;
         }
