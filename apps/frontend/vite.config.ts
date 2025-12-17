@@ -6,7 +6,11 @@ import viteCompression from 'vite-plugin-compression';
 
 export default defineConfig({
     plugins: [
-        react(),
+        react({
+            babel: {
+                plugins: ['babel-plugin-react-compiler'],
+            },
+        }),
         tailwindcss(),
         viteCompression({algorithm: 'brotliCompress', verbose: false}),
         viteCompression({algorithm: 'gzip', verbose: false}),
