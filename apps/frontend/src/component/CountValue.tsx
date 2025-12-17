@@ -1,5 +1,3 @@
-'use client';
-
 import useHighlight from '@/hook/useHighlight';
 import useWSS from '@/hook/useWSS';
 import cn from '@/lib/cn';

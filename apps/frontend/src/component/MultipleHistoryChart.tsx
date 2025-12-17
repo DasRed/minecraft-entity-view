@@ -1,5 +1,3 @@
-'use client';
-
 import useWSSHistoryPatch from '@/hook/useWSSHistoryPatch';
 import cn from '@/lib/cn';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';

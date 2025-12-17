@@ -1,5 +1,3 @@
-'use client';
-
 import MobImage from '@/component/MobImage';
 import useHighlight from '@/hook/useHighlight';
 import useWSS from '@/hook/useWSS';

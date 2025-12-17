@@ -1,5 +1,3 @@
-'use client';
-
 import CountValue from '@/component/CountValue';
 import TypeCountEntry, {TypeCountSortByEnum} from '@/component/typeCount/Entry';
 import useWSSObjectListPatch from '@/hook/useWSSObjectListPatch';

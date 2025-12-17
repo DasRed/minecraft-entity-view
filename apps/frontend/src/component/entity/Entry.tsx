@@ -1,5 +1,3 @@
-'use client';
-
 import MobImage from '@/component/MobImage';
 import DimensionName from '@/constant/DimensionName';
 import useWSS from '@/hook/useWSS';

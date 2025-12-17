@@ -1,5 +1,3 @@
-'use client';
-
 import CountValue from '@/component/CountValue';
 import EntityEntry from '@/component/entity/Entry';
 import useWSSObjectListPatch from '@/hook/useWSSObjectListPatch';

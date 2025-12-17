@@ -12,10 +12,10 @@
         "isolatedModules":   false,
         "incremental":       true,
         "paths":             {
-            "@dasred/minecraft-entity-view-sdk":       ["packages/minecraft-entity-view-sdk/src/index.ts"],
-            "@dasred/minecraft-entity-view-sdk/*":     ["packages/minecraft-entity-view-sdk/src/*"],
-            "@dasred/minecraft-entity-view-backend":   ["packages/minecraft-entity-view-backend/src/index.ts"],
-            "@dasred/minecraft-entity-view-backend/*": ["packages/minecraft-entity-view-backend/src/*"]
+            "@dasred/minecraft-entity-view-sdk":       ["../../packages/minecraft-entity-view-sdk/src/index.ts"],
+            "@dasred/minecraft-entity-view-sdk/*":     ["../../packages/minecraft-entity-view-sdk/src/*"],
+            "@dasred/minecraft-entity-view-backend":   ["../../packages/minecraft-entity-view-backend/src/index.ts"],
+            "@dasred/minecraft-entity-view-backend/*": ["../../packages/minecraft-entity-view-backend/src/*"]
         }
     },
     "exclude":         ["node_modules"]

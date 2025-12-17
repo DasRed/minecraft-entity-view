@@ -1,5 +1,3 @@
-'use client';
-
 import EntityTable from '@/component/entity/Table';
 import MultipleHistoryChart from '@/component/MultipleHistoryChart';
 import TypeCountTable from '@/component/typeCount/Table';

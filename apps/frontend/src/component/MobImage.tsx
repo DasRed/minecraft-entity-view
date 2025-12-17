@@ -1,5 +1,3 @@
-'use client';
-
 import MobImages from '@/constant/MobImages';
 import {ReactElement} from 'react';
 

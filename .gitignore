@@ -1,8 +1,5 @@
 # dependencies
-/node_modules
-
-# next.js
-/apps/frontend/.next/
+node_modules
 
 # misc
 .DS_Store
@@ -14,5 +11,6 @@
 *.tsbuildinfo
 /apps/frontend/next-env.d.ts
 .idea
+dist
 .turbo
 next-env.d.ts
