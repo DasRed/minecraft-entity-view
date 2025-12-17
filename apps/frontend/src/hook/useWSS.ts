@@ -1,5 +1,3 @@
-'use client';
-
 import config from '@/config';
 import wssStore from '@/lib/wssStore';
 import WebSocketClient from '@/service/WebSocketClient';

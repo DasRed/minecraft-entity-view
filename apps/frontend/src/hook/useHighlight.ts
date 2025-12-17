@@ -1,5 +1,3 @@
-'use client';
-
 import HighlightDuration from '@/constant/HighlightDuration';
 import {useEffect, useState} from 'react';
 

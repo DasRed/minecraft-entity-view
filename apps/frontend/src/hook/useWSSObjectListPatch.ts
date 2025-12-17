@@ -1,5 +1,3 @@
-'use client';
-
 import useWSS from '@/hook/useWSS';
 import wssStore from '@/lib/wssStore';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
