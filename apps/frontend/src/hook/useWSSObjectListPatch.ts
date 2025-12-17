@@ -1,30 +1,36 @@
+'use client';
+
 import useWSS from '@/hook/useWSS';
+import wssStore from '@/lib/wssStore';
+import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
+import CommandType from '@dasred/minecraft-entity-view-sdk/model/CommandType';
 import WS_PATCH_OBJECT_LIST from '@dasred/minecraft-entity-view-sdk/model/WS_PATCH_OBJECT_LIST';
 import {useEffect, useState} from 'react';
 
-export default function useWSSObjectListPatch<T = any>(entitiesInitial: Record<string, T>, command: string): T[] {
-    const [entities, setEntities] = useState<Record<string, T>>(() => entitiesInitial);
-    const modify                  = useWSS<WS_PATCH_OBJECT_LIST<T>>(command);
+export default function useWSSObjectListPatch<T = any>(initial: Record<string, T>, command: CommandType): T[] {
+    const patch                  = useWSS<WS_PATCH_OBJECT_LIST<T>>(command);
+    const [entities, setEntities] = useState<Record<CommandType, T>>(initial);
 
     useEffect(() => {
-        if (modify === null) {
+        if (patch === null) {
             return;
         }
         setEntities((prev) => {
-            const next: Record<string, T> = {};
+            const next: Record<CommandType, T> = {};
 
-            for (const id of modify.ids) {
-                if (modify.add[id]) {
-                    next[id] = modify.add[id];
+            for (const id of patch.ids) {
+                if (patch.add[id]) {
+                    next[id] = patch.add[id];
                 }
                 else if (prev[id]) {
                     next[id] = prev[id];
                 }
             }
 
+            patch.remove.forEach((id) => wssStore.delete(CommandEnum.PATCH_ENTITIES_ID(id)));
             return next;
         });
-    }, [modify]);
+    }, [patch]);
 
     return Object.values(entities);
 }

@@ -1,6 +1,7 @@
+'use client';
+
 import CountValue from '@/component/CountValue';
 import EntityEntry from '@/component/entity/Entry';
-import WSSubscribe from '@/component/WSSubscribe';
 import useWSSObjectListPatch from '@/hook/useWSSObjectListPatch';
 import cn from '@/lib/cn';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
@@ -9,7 +10,6 @@ import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCateg
 import SortDirectionEnum from '@dasred/minecraft-entity-view-sdk/constant/SortDirectionEnum';
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
-import {set} from 'lodash-es';
 import {LucideChevronDown, LucideChevronUp} from 'lucide-react';
 import {ReactElement, useState} from 'react';
 
@@ -28,8 +28,8 @@ const MobCategoryTitle: Record<string, string> = {
 
 export default function EntityTable({statistic, category}: EntitiesTableOptionsInterface): ReactElement {
     const entities                          = useWSSObjectListPatch<StatisticEntityInterface>(statistic.entity[category], CommandEnum.PATCH_ENTITIES_LIST(category));
-    const [sortBy, setSortBy]               = useState<EntityOrderTypeEnum>(EntityOrderTypeEnum.DEFAULT);
-    const [sortDirection, setSortDirection] = useState<SortDirectionEnum>(SortDirectionEnum.DESC);
+    const [sortBy, setSortBy]               = useState<EntityOrderTypeEnum>(EntityOrderTypeEnum.NAME);
+    const [sortDirection, setSortDirection] = useState<SortDirectionEnum>(SortDirectionEnum.ASC);
 
     function handleSort(by: EntityOrderTypeEnum) {
         if (by === sortBy && sortDirection === SortDirectionEnum.ASC) {
@@ -50,9 +50,7 @@ export default function EntityTable({statistic, category}: EntitiesTableOptionsI
             <h2 className="font-extrabold text-xl">
                 <span>{(category ? MobCategoryTitle[category] : undefined)}</span>
                 <span className="text-sm font-normal pl-1">
-                    <WSSubscribe command={CommandEnum.UPDATE_COUNT_MOB(category)} initial={Object.values(entities).length}>
-                        {(value) => <CountValue value={value}/>}
-                    </WSSubscribe>
+                    <CountValue value={entities.length} command={CommandEnum.UPDATE_COUNT_MOB(category)}/>
                 </span>
             </h2>
 
@@ -85,14 +83,7 @@ export default function EntityTable({statistic, category}: EntitiesTableOptionsI
                     'flex-col':         sortDirection === SortDirectionEnum.ASC,
                     'flex-col-reverse': sortDirection === SortDirectionEnum.DESC,
                 })}>
-                    {entities.map((entity) => (
-                        <WSSubscribe key={entity.uuid} command={CommandEnum.PATCH_ENTITIES_ID(category, entity.uuid)} initial={entity}>
-                            {(entityDiff, entity) => {
-                                Object.entries(entityDiff).forEach(([path, value]) => set(entity, path, value));
-                                return <EntityEntry entity={entity} sortBy={sortBy}/>;
-                            }}
-                        </WSSubscribe>
-                    ))}
+                    {entities.map((entity) => <EntityEntry key={entity.uuid} entity={entity} sortBy={sortBy}/>)}
                 </div>
             </div>
         </div>

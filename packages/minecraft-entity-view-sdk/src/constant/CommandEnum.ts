@@ -15,7 +15,7 @@ const CommandEnum = {
     PATCH_TYPE_COUNT_ID:   (id: string): string => `patch type count entry [${id}]`,
 
     PATCH_ENTITIES_LIST: (category: MobCategoryEnum) => `modify entities list [${category}]`,
-    PATCH_ENTITIES_ID:   (category: MobCategoryEnum, id: string): string => `patch entities entry [${category}] [${id}]`,
+    PATCH_ENTITIES_ID:   (id: string): string => `patch entities entry [${id}]`,
 
 } as const;
 

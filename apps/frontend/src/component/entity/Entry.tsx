@@ -1,10 +1,15 @@
+'use client';
+
 import MobImage from '@/component/MobImage';
 import DimensionName from '@/constant/DimensionName';
+import useWSS from '@/hook/useWSS';
 import cn from '@/lib/cn';
 import numberFormatter from '@/lib/numberFormater';
+import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 import EntityOrderTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityOrderTypeEnum';
 import EntityTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityTypeEnum';
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
+import {set} from 'lodash-es';
 import React from 'react';
 
 interface EntityRowOptionsInterface {
@@ -12,7 +17,11 @@ interface EntityRowOptionsInterface {
     sortBy?: EntityOrderTypeEnum;
 }
 
-export default function EntityEntry({entity, sortBy = EntityOrderTypeEnum.DEFAULT}: EntityRowOptionsInterface): React.ReactElement {
+export default function EntityEntry({entity: entityInitial, sortBy = EntityOrderTypeEnum.DEFAULT}: EntityRowOptionsInterface): React.ReactElement {
+    const patch        = useWSS<Partial<StatisticEntityInterface>>(CommandEnum.PATCH_ENTITIES_ID(entityInitial.uuid), {});
+    const entity = {...entityInitial};
+    Object.entries(patch).forEach(([path, value]) => set(entity, path, value));
+
     return (
         <div style={{order: entity.stats.order[sortBy]}} className={cn('w-full border-b border-default grid grid-cols-7 opacity-100 overflow-hidden transition-all duration-700', {
             'opacity-inactive bg-inactive line-through': entity.chunkLoaded === false,

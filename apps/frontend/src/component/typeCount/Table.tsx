@@ -1,13 +1,13 @@
+'use client';
+
 import CountValue from '@/component/CountValue';
 import TypeCountEntry, {TypeCountSortByEnum} from '@/component/typeCount/Entry';
-import WSSubscribe from '@/component/WSSubscribe';
 import useWSSObjectListPatch from '@/hook/useWSSObjectListPatch';
 import cn from '@/lib/cn';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 import SortDirectionEnum from '@dasred/minecraft-entity-view-sdk/constant/SortDirectionEnum';
 import StatisticTypeCountInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/TypeCountInterface';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
-import {set} from 'lodash-es';
 import {LucideChevronDown, LucideChevronUp} from 'lucide-react';
 import {ReactElement, useState} from 'react';
 
@@ -17,8 +17,8 @@ interface EntitiesCountTableOptionsInterface {
 
 export default function TypeCountTable({statistic}: EntitiesCountTableOptionsInterface): ReactElement {
     const entities                          = useWSSObjectListPatch<StatisticTypeCountInterface>(statistic.entityTypeCount, CommandEnum.PATCH_TYPE_COUNT_LIST);
-    const [sortBy, setSortBy]               = useState<TypeCountSortByEnum>(TypeCountSortByEnum.COUNT);
-    const [sortDirection, setSortDirection] = useState<SortDirectionEnum>(SortDirectionEnum.DESC);
+    const [sortBy, setSortBy]               = useState<TypeCountSortByEnum>(TypeCountSortByEnum.TYPE);
+    const [sortDirection, setSortDirection] = useState<SortDirectionEnum>(SortDirectionEnum.ASC);
 
     function handleSort(by: TypeCountSortByEnum) {
         if (by === sortBy) {
@@ -34,9 +34,7 @@ export default function TypeCountTable({statistic}: EntitiesCountTableOptionsInt
             <h2 className="font-extrabold text-xl">
                 <span>Type Count</span>
                 <span className="text-sm font-normal pl-1">
-                    <WSSubscribe command={CommandEnum.UPDATE_COUNT_TOTAL} initial={statistic.count.total}>
-                        {(value) => <CountValue value={value}/>}
-                    </WSSubscribe>
+                    <CountValue value={statistic.count.total} command={CommandEnum.UPDATE_COUNT_TOTAL}/>
                 </span>
             </h2>
 
@@ -58,14 +56,7 @@ export default function TypeCountTable({statistic}: EntitiesCountTableOptionsInt
                     'flex-col':         sortDirection === SortDirectionEnum.ASC,
                     'flex-col-reverse': sortDirection === SortDirectionEnum.DESC,
                 })}>
-                    {entities.map((entity) => (
-                        <WSSubscribe key={entity.type} command={CommandEnum.PATCH_TYPE_COUNT_ID(entity.type)} initial={entity}>
-                            {(entityDiff, entity) => {
-                                Object.entries(entityDiff).forEach(([path, value]) => set(entity, path, value));
-                                return <TypeCountEntry entity={entity} sortBy={sortBy}/>;
-                            }}
-                        </WSSubscribe>
-                    ))}
+                    {entities.map((entity) => <TypeCountEntry key={entity.type} entity={entity} sortBy={sortBy}/>)}
                 </div>
             </div>
         </div>

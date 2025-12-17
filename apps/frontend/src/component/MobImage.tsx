@@ -1,3 +1,5 @@
+'use client';
+
 import MobImages from '@/constant/MobImages';
 import {ReactElement} from 'react';
 
@@ -15,4 +17,3 @@ export default function MobImage({type, className}: MobImageOptionsInterface): R
         </object>
     );
 }
-// <img data-type={type} src={image.replace('{size}', '16x16')} className={cn({'opacity-50': MobImages[type] === undefined}, className)} alt=""/>

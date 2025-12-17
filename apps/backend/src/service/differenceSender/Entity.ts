@@ -26,11 +26,12 @@ export default class DifferenceSenderEntity extends DifferenceSenderBase {
         const entriesDeleted = difference(entriesBefore, entriesAfter);
         if (entriesAdded.length !== 0 || entriesDeleted.length !== 0) {
             this.send(CommandEnum.PATCH_ENTITIES_LIST(this.key), {
-                ids: entriesAfter,
-                add: entriesAdded.reduce((acc, id) => {
+                ids:    entriesAfter,
+                add:    entriesAdded.reduce((acc, id) => {
                     acc[id] = dataAfter.entity[this.key][id];
                     return acc;
                 }, {} as StatisticEntityListInterface),
+                remove: entriesDeleted,
             } as WS_PATCH_OBJECT_LIST<StatisticEntityInterface>);
         }
 
@@ -41,7 +42,7 @@ export default class DifferenceSenderEntity extends DifferenceSenderBase {
 
             const diff = objectDeepDifference(entryAfter, entryBefore);
             if (isEmpty(diff) === false) {
-                this.send(CommandEnum.PATCH_ENTITIES_ID(this.key, id), flatten(diff));
+                this.send(CommandEnum.PATCH_ENTITIES_ID(id), flatten(diff));
             }
         });
     }

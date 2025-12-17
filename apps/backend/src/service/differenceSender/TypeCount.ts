@@ -17,11 +17,12 @@ export default class DifferenceSenderTypeCount extends DifferenceSenderBase {
         const entriesDeleted = difference(entriesBefore, entriesAfter);
         if (entriesAdded.length !== 0 || entriesDeleted.length !== 0) {
             this.send(CommandEnum.PATCH_TYPE_COUNT_LIST, {
-                ids: entriesAfter,
-                add: entriesAdded.reduce((acc, id) => {
+                ids:    entriesAfter,
+                add:    entriesAdded.reduce((acc, id) => {
                     acc[id] = dataAfter.entityTypeCount[id];
                     return acc;
                 }, {} as StatisticTypeCountListInterface),
+                remove: entriesDeleted,
             } as WS_PATCH_OBJECT_LIST<StatisticTypeCountInterface>);
         }
 

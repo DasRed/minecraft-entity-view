@@ -103,7 +103,7 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
         const result = this.updateEntity(this.store.createNewStatistic(), entitiesAfter, entitiesBefore);
 
         // create type count list
-        result.entityTypeCount = this.updateEntityTypeCount(entitiesAfter);
+        result.entityTypeCount = this.updateEntityTypeCount(entitiesAfter, dataBefore.entityTypeCount);
 
         // update history entries
         result.count.history.total  = this.handleHistory(dataBefore.count.history.total, result.count.total);
@@ -141,26 +141,33 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
         return result;
     }
 
-    private updateEntityTypeCount(entitiesAfter: StatisticEntityListInterface): StatisticTypeCountListInterface {
+    private updateEntityTypeCount(entitiesAfter: StatisticEntityListInterface, resultBefore: StatisticTypeCountListInterface): StatisticTypeCountListInterface {
         const result = Object.values(entitiesAfter).reduce((acc, entityAfter) => {
-            const entityInternalState = this.store.getEntityInternalState(entityAfter);
-            if (entityInternalState.removeTimestamp !== null) {
+                const entityInternalState = this.store.getEntityInternalState(entityAfter);
+                if (entityInternalState.removeTimestamp !== null) {
+                    return acc;
+                }
+
+                const type = entityAfter.displayType;
+                if (acc[type] === undefined) {
+                    acc[type] = {
+                        type,
+                        count: 0,
+                        name:  entityAfter.displayName,
+                        order: {count: 0, name: 0},
+                    };
+                }
+
+                acc[type].count++;
                 return acc;
-            }
-
-            const type = entityAfter.displayType;
-            if (acc[type] === undefined) {
-                acc[type] = {
-                    type,
-                    count: 0,
-                    name:  entityAfter.displayName,
-                    order: {count: 0, name: 0},
-                };
-            }
-
-            acc[type].count++;
-            return acc;
-        }, {} as StatisticTypeCountListInterface);
+            },
+            Object.fromEntries(
+                Object.entries(resultBefore)
+                      .map(
+                          ([key, value]) => ([key, {...value, count: 0}]),
+                      ),
+            ),
+        );
 
         // do sort by count
         Object.values(result)
