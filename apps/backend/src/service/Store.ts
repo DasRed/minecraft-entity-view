@@ -1,5 +1,5 @@
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
-import HistoryCountEntryInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountEntryInterface';
+import HistoryCountMobCategoryInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountMobCategoryInterface';
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
 import StatisticEntityInternalStateInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInternalStateInterface';
 import StatisticEntityInternalStateListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInternalStateListInterface';
@@ -26,7 +26,6 @@ export default class Store {
         return {
             count: {
                 total:  0,
-                active: 0,
 
                 mobCategory: Object.values(MobCategoryEnum).reduce((acc, mobCategory) => {
                     acc[mobCategory] = 0;
@@ -34,12 +33,10 @@ export default class Store {
                 }, {} as Record<MobCategoryEnum, number>),
 
                 history: {
-                    total:       [],
-                    active:      [],
                     mobCategory: Object.values(MobCategoryEnum).reduce((acc, mobCategory) => {
                         acc[mobCategory] = [];
                         return acc;
-                    }, {} as Record<MobCategoryEnum, HistoryCountEntryInterface[]>),
+                    }, {timestamp: []} as unknown as HistoryCountMobCategoryInterface),
                 },
             },
 

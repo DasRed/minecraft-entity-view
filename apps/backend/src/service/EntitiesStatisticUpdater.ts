@@ -5,7 +5,8 @@ import MinecraftApiClient from '@/service/MinecraftApiClient';
 import Store from '@/service/Store';
 import UpdaterConfigInterface from '@/service/UpdaterConfigInterface';
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
-import HistoryCountEntryInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountEntryInterface';
+import StatisticCountInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/CountInterface';
+import HistoryCountInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountInterface';
 import StatisticEntityListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityListInterface';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
 import StatisticTypeCountListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticTypeCountListInterface';
@@ -37,13 +38,18 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
         return this;
     }
 
-    handleHistory(prev: HistoryCountEntryInterface[], value: number): HistoryCountEntryInterface[] {
-        const timestampLast = prev.length !== 0 ? (new Date(prev[prev.length - 1].x)).getTime() : 0;
+    handleHistory(historyAfter: HistoryCountInterface, historyBefore: HistoryCountInterface, count: StatisticCountInterface): HistoryCountInterface {
+        const timestampLast = historyBefore.mobCategory.timestamp.length !== 0 ? (new Date(historyBefore.mobCategory.timestamp[historyBefore.mobCategory.timestamp.length - 1])).getTime() : 0;
         if (this.store.getTimestampNow() < timestampLast + this.config.historyDeltaBetweenPoints) {
-            return [...prev];
+            return historyBefore;
         }
 
-        return [...prev, {x: this.store.getDateNow().toISOString(), y: value}].slice(-1 * this.config.preserveHistoryDataLength);
+        historyAfter.mobCategory.timestamp = [...historyBefore.mobCategory.timestamp, this.store.getTimestampNow() / 1000].slice(-1 * this.config.preserveHistoryDataLength);
+        Object.values(MobCategoryEnum).forEach((category) => {
+            historyAfter.mobCategory[category] = [...historyBefore.mobCategory[category], count.mobCategory[category]].slice(-1 * this.config.preserveHistoryDataLength);
+        });
+
+        return historyAfter;
     }
 
     protected async run(): Promise<this> {
@@ -100,17 +106,13 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
         });
 
         // collect update information
-        const result = this.updateEntity(this.store.createNewStatistic(), entitiesAfter, entitiesBefore);
+        const dataAfter = this.updateEntity(this.store.createNewStatistic(), entitiesAfter, entitiesBefore);
 
         // create type count list
-        result.entityTypeCount = this.updateEntityTypeCount(entitiesAfter, dataBefore.entityTypeCount);
+        dataAfter.entityTypeCount = this.updateEntityTypeCount(entitiesAfter, dataBefore.entityTypeCount);
+        dataAfter.count.history   = this.handleHistory(dataAfter.count.history, dataBefore.count.history, dataAfter.count);
 
-        // update history entries
-        result.count.history.total  = this.handleHistory(dataBefore.count.history.total, result.count.total);
-        result.count.history.active = this.handleHistory(dataBefore.count.history.active, result.count.active);
-        Object.values(MobCategoryEnum).forEach((category) => result.count.history.mobCategory[category] = this.handleHistory(dataBefore.count.history.mobCategory[category], result.count.mobCategory[category]));
-
-        this.store.setStatistic(result).setEntities(entitiesAfter);
+        this.store.setStatistic(dataAfter).setEntities(entitiesAfter);
 
         return this;
     }
@@ -127,7 +129,6 @@ export default class EntitiesStatisticUpdater extends EventEmitter {
             entityInternalState.previousPosition.z = entityAfter.z;
 
             if (entityInternalState.removeTimestamp === null) {
-                result.count.active += Number(entityAfter.chunkLoaded);
                 result.count.total++;
                 result.count.mobCategory[entityAfter.category]++;
             }

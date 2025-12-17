@@ -1,10 +1,7 @@
-import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
-import HistoryCountEntryInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountEntryInterface';
+import HistoryCountMobCategoryInterface from './HistoryCountMobCategoryInterface';
 
 interface HistoryCountInterface {
-    active: HistoryCountEntryInterface[];
-    mobCategory: Record<MobCategoryEnum, HistoryCountEntryInterface[]>;
-    total: HistoryCountEntryInterface[];
+    mobCategory: HistoryCountMobCategoryInterface;
 }
 
 export default HistoryCountInterface;
