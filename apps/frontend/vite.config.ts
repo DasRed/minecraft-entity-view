@@ -6,11 +6,7 @@ import viteCompression from 'vite-plugin-compression';
 
 export default defineConfig({
     plugins: [
-        react({
-            babel: {
-                plugins: ['babel-plugin-react-compiler'],
-            },
-        }),
+        react(),
         tailwindcss(),
         viteCompression({algorithm: 'brotliCompress', verbose: false}),
         viteCompression({algorithm: 'gzip', verbose: false}),
@@ -21,6 +17,6 @@ export default defineConfig({
         },
     },
     preview: {
-        allowedHosts: ['entity-minecraft.dasred.de']
-    }
+        allowedHosts: ['entity-minecraft.dasred.de'],
+    },
 });
