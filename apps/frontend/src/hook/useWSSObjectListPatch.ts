@@ -2,11 +2,11 @@ import useWSS from '@/hook/useWSS';
 import wssStore from '@/lib/wssStore';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 import CommandType from '@dasred/minecraft-entity-view-sdk/model/CommandType';
-import WS_PATCH_OBJECT_LIST from '@dasred/minecraft-entity-view-sdk/model/WS_PATCH_OBJECT_LIST';
+import WebsocketPatchObjectList from '@dasred/minecraft-entity-view-sdk/model/WebsocketPatchObjectList';
 import {useEffect, useState} from 'react';
 
 export default function useWSSObjectListPatch<T = any>(initial: Record<string, T>, command: CommandType): T[] {
-    const patch                  = useWSS<WS_PATCH_OBJECT_LIST<T>>(command);
+    const patch                  = useWSS<WebsocketPatchObjectList<T>>(command);
     const [entities, setEntities] = useState<Record<CommandType, T>>(initial);
 
     useEffect(() => {

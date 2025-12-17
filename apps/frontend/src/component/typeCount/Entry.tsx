@@ -4,29 +4,25 @@ import useWSS from '@/hook/useWSS';
 import cn from '@/lib/cn';
 import numberFormatter from '@/lib/numberFormater';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
+import TypeCountOrderTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/TypeCountOrderTypeEnum';
 import StatisticTypeCountInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/TypeCountInterface';
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
 import {set} from 'lodash-es';
 import {ReactElement} from 'react';
 
-export enum TypeCountSortByEnum {
-    TYPE,
-    COUNT,
-}
-
 interface TypeCountEntryOptionsInterface {
     entity: StatisticTypeCountInterface;
-    sortBy?: TypeCountSortByEnum;
+    sortBy?: TypeCountOrderTypeEnum;
 }
 
-export default function TypeCountEntry({entity: entityInitial, sortBy = TypeCountSortByEnum.TYPE}: TypeCountEntryOptionsInterface): ReactElement {
+export default function TypeCountEntry({entity: entityInitial, sortBy = TypeCountOrderTypeEnum.TYPE}: TypeCountEntryOptionsInterface): ReactElement {
     const patch  = useWSS<Partial<StatisticEntityInterface>>(CommandEnum.PATCH_TYPE_COUNT_ID(entityInitial.type), {});
     const entity = {...entityInitial};
     Object.entries(patch).forEach(([path, value]) => set(entity, path, value));
     const highlight = useHighlight(entity.count);
 
     return (
-        <div style={{order: sortBy === TypeCountSortByEnum.COUNT ? entity.order.count : entity.order.name}} className={cn('flex flex-row w-full border-b border-default transition-colors duration-700', {
+        <div style={{order: sortBy === TypeCountOrderTypeEnum.COUNT ? entity.order.count : entity.order.name}} className={cn('flex flex-row w-full border-b border-default transition-colors duration-700', {
             'bg-red-500/30': highlight,
         })}>
             <div className="w-3/4 flex flex-row items-center">

@@ -1,18 +1,18 @@
-import EventEmitter from 'eventemitter0';
+import CommandType from '@dasred/minecraft-entity-view-sdk/model/CommandType';
+
+type Callback = (type: CommandType, data: any) => void;
 
 interface WebSocketMessageInterface {
     data: any;
     type: string;
 }
 
-export default class WebSocketClient extends EventEmitter {
+export default class WebSocketClient {
+    private callbacks = new Set<Callback>();
     private readonly host: string;
-    // @ts-ignore
-    private ws: WebSocket;
+    private ws!: WebSocket;
 
     constructor(host: string) {
-        super({});
-
         this.host = host;
         this.connect();
     }
@@ -35,10 +35,22 @@ export default class WebSocketClient extends EventEmitter {
     private async handleMessage(event: MessageEvent) {
         try {
             const message: WebSocketMessageInterface = JSON.parse(event.data);
-            await this.emit(message.type, message.data);
+            this.callbacks.forEach((callback) => callback(message.type, message.data));
         }
         catch (exception) {
             console.error(`WebSocket ${this.host} send invalid message`, exception, event);
         }
+    }
+
+    public register(callback: Callback): this {
+        this.callbacks.add(callback);
+
+        return this;
+    }
+
+    public unregister(callback: Callback): this {
+        this.callbacks.delete(callback);
+
+        return this;
     }
 }

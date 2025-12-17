@@ -13,7 +13,7 @@ export default function useWSS<T = any>(command: CommandType, initial: T | null)
 export default function useWSS<T = any>(command: CommandType, initial?: T | null | undefined): T | null {
     if (wsc === null) {
         wsc = new WebSocketClient(config.websocket);
-        wsc.on('*', (command, data) => wssStore.set(command, data));
+        wsc.register((command, data) => wssStore.set(command, data));
     }
 
     const subscribe   = useCallback((callback: () => void) => wssStore.subscribe(command, callback), [command]);

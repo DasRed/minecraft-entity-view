@@ -1,4 +1,4 @@
-import useWSSHistoryPatch from '@/hook/useWSSHistoryPatch';
+import useWSS from '@/hook/useWSS';
 import cn from '@/lib/cn';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
@@ -13,11 +13,11 @@ interface MultipleHistoryChartOptionsInterface {
 }
 
 export default function MultipleHistoryChart({className, statistic}: MultipleHistoryChartOptionsInterface): ReactElement {
-    const historyMonsters = useWSSHistoryPatch<HistoryCountEntryInterface>(statistic.count.history.mobCategory[MobCategoryEnum.MONSTER], CommandEnum.PATCH_COUNT_HISTORY_MOB(MobCategoryEnum.MONSTER));
-    const historyCreatures = useWSSHistoryPatch<HistoryCountEntryInterface>(statistic.count.history.mobCategory[MobCategoryEnum.CREATURE], CommandEnum.PATCH_COUNT_HISTORY_MOB(MobCategoryEnum.CREATURE));
-    const historyItems = useWSSHistoryPatch<HistoryCountEntryInterface>(statistic.count.history.mobCategory[MobCategoryEnum.ITEM], CommandEnum.PATCH_COUNT_HISTORY_MOB(MobCategoryEnum.ITEM));
-    const historyMisc = useWSSHistoryPatch<HistoryCountEntryInterface>(statistic.count.history.mobCategory[MobCategoryEnum.MISC], CommandEnum.PATCH_COUNT_HISTORY_MOB(MobCategoryEnum.MISC));
-    const historyOthers = useWSSHistoryPatch<HistoryCountEntryInterface>(statistic.count.history.mobCategory[MobCategoryEnum.OTHER], CommandEnum.PATCH_COUNT_HISTORY_MOB(MobCategoryEnum.OTHER));
+    const historyMonsters = useWSS<HistoryCountEntryInterface[]>(CommandEnum.PATCH_COUNT_HISTORY_MOB(MobCategoryEnum.MONSTER), statistic.count.history.mobCategory[MobCategoryEnum.MONSTER]);
+    const historyCreatures = useWSS<HistoryCountEntryInterface[]>(CommandEnum.PATCH_COUNT_HISTORY_MOB(MobCategoryEnum.CREATURE), statistic.count.history.mobCategory[MobCategoryEnum.CREATURE]);
+    const historyItems = useWSS<HistoryCountEntryInterface[]>(CommandEnum.PATCH_COUNT_HISTORY_MOB(MobCategoryEnum.ITEM), statistic.count.history.mobCategory[MobCategoryEnum.ITEM]);
+    const historyMisc = useWSS<HistoryCountEntryInterface[]>(CommandEnum.PATCH_COUNT_HISTORY_MOB(MobCategoryEnum.MISC), statistic.count.history.mobCategory[MobCategoryEnum.MISC]);
+    const historyOthers = useWSS<HistoryCountEntryInterface[]>(CommandEnum.PATCH_COUNT_HISTORY_MOB(MobCategoryEnum.OTHER), statistic.count.history.mobCategory[MobCategoryEnum.OTHER]);
 
     return (
         <div className={cn('w-full h-150', className)}>

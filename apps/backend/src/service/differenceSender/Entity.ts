@@ -6,7 +6,7 @@ import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCateg
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
 import StatisticEntityListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityListInterface';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
-import WS_PATCH_OBJECT_LIST from '@dasred/minecraft-entity-view-sdk/model/WS_PATCH_OBJECT_LIST';
+import WebsocketPatchObjectList from '@dasred/minecraft-entity-view-sdk/model/WebsocketPatchObjectList';
 import {flatten} from 'flat';
 import {difference, intersection, isEmpty} from 'lodash-es';
 
@@ -32,7 +32,7 @@ export default class DifferenceSenderEntity extends DifferenceSenderBase {
                     return acc;
                 }, {} as StatisticEntityListInterface),
                 remove: entriesDeleted,
-            } as WS_PATCH_OBJECT_LIST<StatisticEntityInterface>);
+            } as WebsocketPatchObjectList<StatisticEntityInterface>);
         }
 
         // test for update for one entry
