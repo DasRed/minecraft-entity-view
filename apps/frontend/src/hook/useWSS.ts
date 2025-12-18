@@ -1,7 +1,7 @@
 import WSContext from '@/context/WSContext';
 import wssStore from '@/lib/wssStore';
 import CommandType from '@dasred/minecraft-entity-view-sdk/model/CommandType';
-import {useCallback, useContext, useEffect, useSyncExternalStore} from 'react';
+import {useContext, useEffect, useSyncExternalStore} from 'react';
 
 export default function useWSS<T = any>(command: CommandType): T | null;
 export default function useWSS<T>(command: CommandType, initial: T): T;
@@ -18,8 +18,13 @@ export default function useWSS<T = any>(command: CommandType, initial?: T | null
         return () => ctx.releaseClient();
     }, [ctx]);
 
-    const subscribe   = useCallback((callback: () => void) => wssStore.subscribe(command, callback), [command]);
-    const getSnapshot = useCallback(() => (wssStore.get(command) ?? initial ?? null) as T | null, [command]);
+    function subscribe(callback: () => void) {
+        return wssStore.subscribe(command, callback);
+    }
+
+    function getSnapshot() {
+        return (wssStore.get(command) ?? initial ?? null) as T | null;
+    }
 
     // @ts-ignore
     return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
