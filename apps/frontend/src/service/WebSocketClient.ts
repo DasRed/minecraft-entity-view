@@ -8,13 +8,22 @@ interface WebSocketMessageInterface {
 }
 
 export default class WebSocketClient {
-    private callbacks = new Set<Callback>();
+    private callbacks              = new Set<Callback>();
+    private closedByClose: boolean = false;
     private readonly host: string;
     private ws!: WebSocket;
 
     constructor(host: string) {
         this.host = host;
         this.connect();
+    }
+
+    public close(): this {
+        this.callbacks.clear();
+        this.closedByClose = true;
+        this.ws.close();
+
+        return this;
     }
 
     private connect(): this {
@@ -25,8 +34,14 @@ export default class WebSocketClient {
         this.ws.addEventListener('error', (event) => console.error(`WebSocket ${this.host} error`, event));
         this.ws.addEventListener('message', (event) => this.handleMessage(event));
         this.ws.addEventListener('close', () => {
-            console.log('connection closed');
-            setTimeout(() => this.connect(), 1000);
+            if (this.closedByClose) {
+                this.closedByClose = false;
+                console.log('connection closed.');
+            }
+            else {
+                console.log('connection closed by error, reconnecting...');
+                setTimeout(() => this.connect(), 1000);
+            }
         });
 
         return this;
@@ -44,12 +59,6 @@ export default class WebSocketClient {
 
     public register(callback: Callback): this {
         this.callbacks.add(callback);
-
-        return this;
-    }
-
-    public unregister(callback: Callback): this {
-        this.callbacks.delete(callback);
 
         return this;
     }
