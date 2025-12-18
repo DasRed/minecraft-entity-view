@@ -22,9 +22,14 @@ export default function TypeCountEntry({entity: entityInitial, sortBy = TypeCoun
     const highlight = useHighlight(entity.count);
 
     return (
-        <div style={{order: sortBy === TypeCountOrderTypeEnum.COUNT ? entity.order.count : entity.order.name}} className={cn('flex flex-row w-full border-b border-default transition-colors duration-700', {
-            'bg-red-500/30': highlight,
-        })}>
+        <div
+            key={`count-${entity.type}`}
+            data-type={entity.type}
+            style={{order: sortBy === TypeCountOrderTypeEnum.COUNT ? entity.order.count : entity.order.name}}
+            className={cn('flex flex-row w-full border-b border-default transition-colors duration-700', {
+                'bg-red-500/30': highlight,
+            })}
+        >
             <div className="w-3/4 flex flex-row items-center">
                 <MobImage type={entity.type} className="w-4 h-4 mr-1"/>
                 {entity.name}

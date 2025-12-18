@@ -83,6 +83,7 @@ const MobImages: Record<string, string> = {
     [EntityTypeEnum.WOLF]:             '/entity/wolf/{size}/spotted.png',
     [EntityTypeEnum.ZOGLIN]:           '/entity/zoglin/{size}/zoglin.png',
     [EntityTypeEnum.ZOMBIE]:           '/entity/zombie/{size}/zombie.png',
+    [EntityTypeEnum.ZOMBIE_HORSE]:     '/entity/horse/{size}/zombie.png',
     [EntityTypeEnum.ZOMBIE_VILLAGER]:  '/entity/zombie_villager/{size}/zombie_villager.png',
     [EntityTypeEnum.ZOMBIFIED_PIGLIN]: '/entity/piglin/{size}/zombified_piglin.png',
 } as const;

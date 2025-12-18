@@ -7,11 +7,15 @@ interface MobImageOptionsInterface {
 }
 
 export default function MobImage({type, className}: MobImageOptionsInterface): ReactElement {
-    const image = MobImages[type] ?? `/item/${type.replace(':', '/')}.png`;
+    const image = (MobImages[type] ?? `/item/${type.replace(':', '/')}.png`).replace('{size}', '16x16');
 
     return (
-        <object data-type={type} data={image.replace('{size}', '16x16')} type="image/png" className={className}>
-            <img src="/unknown.png" alt=""/>
-        </object>
+        <img
+            data-image={image}
+            src={image}
+            alt=""
+            className={className}
+            onError={(event) => event.currentTarget.src = '/unknown.png'}
+        />
     );
 }

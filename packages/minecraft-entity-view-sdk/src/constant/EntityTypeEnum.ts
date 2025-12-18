@@ -120,6 +120,7 @@ enum EntityTypeEnum {
     XP_ORB                 = 'minecraft:experience_orb',
     ZOGLIN                 = 'minecraft:zoglin',
     ZOMBIE                 = 'minecraft:zombie',
+    ZOMBIE_HORSE                 = 'minecraft:zombie_horse',
     ZOMBIE_VILLAGER        = 'minecraft:zombie_villager',
     ZOMBIFIED_PIGLIN       = 'minecraft:zombified_piglin',
 }

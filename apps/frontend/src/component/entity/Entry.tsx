@@ -21,11 +21,17 @@ export default function EntityEntry({entity: entityInitial, sortBy = EntityOrder
     Object.entries(patch).forEach(([path, value]) => set(entity, path, value));
 
     return (
-        <div style={{order: entity.stats.order[sortBy]}} className={cn('w-full border-b border-default grid grid-cols-7 opacity-100 overflow-hidden transition-all duration-700', {
+        <div
+            key={entity.uuid}
+            data-id={entity.uuid}
+            data-type={entity.type}
+            style={{order: entity.stats.order[sortBy]}}
+            className={cn('w-full border-b border-default grid grid-cols-7 opacity-100 overflow-hidden transition-all duration-700', {
             'opacity-inactive bg-inactive line-through': entity.chunkLoaded === false,
             'bg-value-new':                              entity.stats.isNew,
             'bg-value-removed opacity-removed':          entity.stats.isDeleted,
-        })}>
+        })}
+        >
             <div className="col-span-3 overflow-hidden text-ellipsis flex flex-row flex-nowrap items-center text-nowrap">
                 <MobImage type={entity.displayType} className="w-4 h-4 mr-1"/>
                 {entity.type === EntityTypeEnum.ITEM && `${entity.item.count}x `}{entity.customName ?? entity.displayName}
