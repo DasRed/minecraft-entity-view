@@ -1,5 +1,5 @@
 import objectDeepDifference from '@/lib/objectDeepDifference';
-import EntitiesStatisticDifferenceSenderBase from '@/service/entitiesStatistic/differenceSender/Base';
+import DifferenceHandlerAbstract from '@/service/differenceHandler/Abstract';
 import WebSocketServer from '@/service/WebSocketServer';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
@@ -10,7 +10,7 @@ import WebsocketPatchObjectList from '@dasred/minecraft-entity-view-sdk/model/We
 import {flatten} from 'flat';
 import {difference, intersection, isEmpty} from 'lodash-es';
 
-export default class EntitiesStatisticDifferenceSenderEntity extends EntitiesStatisticDifferenceSenderBase {
+export default class EntitiesStatisticDifferenceSenderEntity extends DifferenceHandlerAbstract {
     private key: MobCategoryEnum;
 
     constructor(wss: WebSocketServer, key: MobCategoryEnum) {

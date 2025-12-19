@@ -1,15 +1,18 @@
+import DifferenceHandlerAbstract from '@/service/differenceHandler/Abstract';
 import MinecraftApiClient from '@/service/MinecraftApiClient';
 import Store from '@/service/Store';
 import UpdaterAbstract from '@/service/updater/Abstract';
 import {clearTimeout} from 'node:timers';
 
 export default abstract class UpdaterIntervalAbstract extends UpdaterAbstract {
+    protected differenceHandler: DifferenceHandlerAbstract[];
     protected interval: number;
     protected timer: NodeJS.Timeout | undefined;
 
-    constructor(client: MinecraftApiClient, store: Store, interval: number) {
+    constructor(client: MinecraftApiClient, store: Store, interval: number, differenceHandler: DifferenceHandlerAbstract[] = []) {
         super(client, store);
-        this.interval = interval;
+        this.interval          = interval;
+        this.differenceHandler = differenceHandler;
     }
 
     protected clearTimer(): this {
@@ -21,18 +24,14 @@ export default abstract class UpdaterIntervalAbstract extends UpdaterAbstract {
         return this;
     }
 
-    protected getDataOnUpdate(): unknown {
-        return this.getCurrentData();
-    }
-
-    protected abstract getEventOnUpdate(): string;
-
     protected async run(): Promise<this> {
         this.clearTimer();
 
-        const dataBefore = this.getDataOnUpdate();
+        const dataBefore = this.getCurrentData();
         await this.update();
-        this.emit(this.getEventOnUpdate(), this.getDataOnUpdate(), dataBefore);
+        const dataAfter = this.getCurrentData();
+
+        this.differenceHandler.forEach((handler) => handler.handle(dataAfter, dataBefore));
 
         this.timer = setTimeout(() => this.run(), this.interval);
 

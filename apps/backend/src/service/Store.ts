@@ -1,5 +1,6 @@
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
 import APIDimensionInterface from '@dasred/minecraft-entity-view-sdk/model/api/DimensionInterface';
+import APIPlayersInterface from '@dasred/minecraft-entity-view-sdk/model/api/PlayersInterface';
 import HistoryCountMobCategoryInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountMobCategoryInterface';
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
 import StatisticEntityInternalStateInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInternalStateInterface';
@@ -9,19 +10,18 @@ import StatisticMobListInterface from '@dasred/minecraft-entity-view-sdk/model/S
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
 
 export default class Store {
-    private dateNow: Date;
-    private dimensions: APIDimensionInterface[] = [];
-    private entities: StatisticEntityListInterface;
-    private entitiesInternalState: StatisticEntityInternalStateListInterface;
-    private statistic: StatisticsInterface;
-    private timestampNow: number;
+    protected dateNow: Date;
+    protected dimensions: APIDimensionInterface[]                              = [];
+    protected entities: StatisticEntityListInterface                           = {};
+    protected entitiesInternalState: StatisticEntityInternalStateListInterface = {};
+    protected players: APIPlayersInterface                                     = {max: 0, players: []};
+    protected statistic: StatisticsInterface;
+    protected timestampNow: number;
 
     constructor() {
-        this.statistic             = this.createNewStatistic();
-        this.entities              = {};
-        this.entitiesInternalState = {};
-        this.dateNow               = new Date();
-        this.timestampNow          = this.dateNow.getTime();
+        this.statistic    = this.createNewStatistic();
+        this.dateNow      = new Date();
+        this.timestampNow = this.dateNow.getTime();
     }
 
     public createNewStatistic(): StatisticsInterface {
@@ -76,6 +76,10 @@ export default class Store {
         return this.entitiesInternalState[entity.uuid];
     }
 
+    public getPlayers(): APIPlayersInterface {
+        return this.players;
+    }
+
     public getStatistic(): StatisticsInterface {
         return this.statistic;
     }
@@ -97,6 +101,12 @@ export default class Store {
 
     public setEntities(entities: StatisticEntityListInterface): this {
         this.entities = entities;
+        return this;
+    }
+
+    public setPlayers(players: APIPlayersInterface): this {
+        this.players = players;
+
         return this;
     }
 

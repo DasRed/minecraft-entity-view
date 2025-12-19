@@ -1,5 +1,5 @@
 import objectDeepDifference from '@/lib/objectDeepDifference';
-import EntitiesStatisticDifferenceSenderBase from '@/service/entitiesStatistic/differenceSender/Base';
+import DifferenceHandlerAbstract from '@/service/differenceHandler/Abstract';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 import StatisticTypeCountInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/TypeCountInterface';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
@@ -8,7 +8,7 @@ import WebsocketPatchObjectList from '@dasred/minecraft-entity-view-sdk/model/We
 import {flatten} from 'flat';
 import {difference, intersection, isEmpty} from 'lodash-es';
 
-export default class EntitiesStatisticDifferenceSenderTypeCount extends EntitiesStatisticDifferenceSenderBase {
+export default class EntitiesStatisticDifferenceSenderTypeCount extends DifferenceHandlerAbstract {
     public handle(dataBefore: StatisticsInterface, dataAfter: StatisticsInterface): void {
         const entriesBefore = Object.keys(dataBefore.entityTypeCount);
         const entriesAfter  = Object.keys(dataAfter.entityTypeCount);

@@ -1,9 +1,9 @@
-import EntitiesStatisticDifferenceSenderBase from '@/service/entitiesStatistic/differenceSender/Base';
+import DifferenceHandlerAbstract from '@/service/differenceHandler/Abstract';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
 import {difference} from 'lodash-es';
 
-export default class EntitiesStatisticDifferenceSenderHistory extends EntitiesStatisticDifferenceSenderBase {
+export default class EntitiesStatisticDifferenceSenderHistory extends DifferenceHandlerAbstract {
     public handle(dataBefore: StatisticsInterface, dataAfter: StatisticsInterface): void {
         const diff = difference(dataAfter.count.history.mobCategory.timestamp, dataBefore.count.history.mobCategory.timestamp);
         if (diff.length !== 0) {

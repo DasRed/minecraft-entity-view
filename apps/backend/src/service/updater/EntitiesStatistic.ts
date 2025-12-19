@@ -1,6 +1,6 @@
 import collator from '@/lib/collator';
+import DifferenceHandlerAbstract from '@/service/differenceHandler/Abstract';
 import EntitiesStatisticUpdaterConfigInterface from '@/service/entitiesStatistic/ConfigInterface';
-import EntitiesStatisticUpdaterEventEnum from '@/service/entitiesStatistic/EventEnum';
 import EntitiesStatisticUpdaterSorter from '@/service/entitiesStatistic/Sorter';
 import MinecraftApiClient from '@/service/MinecraftApiClient';
 import Store from '@/service/Store';
@@ -19,8 +19,8 @@ export default class EntitiesStatisticUpdater extends UpdaterIntervalAbstract {
     private config: EntitiesStatisticUpdaterConfigInterface;
     private sorter: EntitiesStatisticUpdaterSorter;
 
-    constructor(client: MinecraftApiClient, store: Store, config: EntitiesStatisticUpdaterConfigInterface, sorter: EntitiesStatisticUpdaterSorter) {
-        super(client, store, config.interval);
+    constructor(client: MinecraftApiClient, store: Store, config: EntitiesStatisticUpdaterConfigInterface, sorter: EntitiesStatisticUpdaterSorter, differenceHandler: DifferenceHandlerAbstract[]) {
+        super(client, store, config.interval, differenceHandler);
         this.sorter = sorter;
         this.config = config;
     }
@@ -31,10 +31,6 @@ export default class EntitiesStatisticUpdater extends UpdaterIntervalAbstract {
 
     public getCurrentData(): unknown {
         return this.store.getStatistic();
-    }
-
-    public getEventOnUpdate(): string {
-        return EntitiesStatisticUpdaterEventEnum.UPDATE;
     }
 
     handleHistory(historyAfter: HistoryCountInterface, historyBefore: HistoryCountInterface, count: StatisticCountInterface): HistoryCountInterface {
