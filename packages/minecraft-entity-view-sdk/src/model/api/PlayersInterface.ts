@@ -2,7 +2,7 @@ import APIPlayerInterface from './players/PlayerInterface';
 
 interface APIPlayersInterface {
     max: number;
-    players: APIPlayerInterface[];
+    players: Record<string, APIPlayerInterface>;
 }
 
 export default APIPlayersInterface;

@@ -31,7 +31,7 @@ export default abstract class UpdaterIntervalAbstract extends UpdaterAbstract {
         await this.update();
         const dataAfter = this.getCurrentData();
 
-        this.differenceHandler.forEach((handler) => handler.handle(dataAfter, dataBefore));
+        this.differenceHandler.forEach((handler) => handler.handle(dataBefore, dataAfter));
 
         this.timer = setTimeout(() => this.run(), this.interval);
 

@@ -1,48 +1,39 @@
 import objectDeepDifference from '@/lib/objectDeepDifference';
 import DifferenceHandlerAbstract from '@/service/differenceHandler/Abstract';
-import WebSocketServer from '@/service/WebSocketServer';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
-import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
-import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
-import StatisticEntityListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityListInterface';
+import StatisticTypeCountInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/TypeCountInterface';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
+import StatisticTypeCountListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticTypeCountListInterface';
 import WebsocketPatchObjectList from '@dasred/minecraft-entity-view-sdk/model/WebsocketPatchObjectList';
 import {flatten} from 'flat';
 import {difference, intersection, isEmpty} from 'lodash-es';
 
-export default class EntitiesStatisticDifferenceSenderEntity extends DifferenceHandlerAbstract {
-    private key: MobCategoryEnum;
-
-    constructor(wss: WebSocketServer, key: MobCategoryEnum) {
-        super(wss);
-        this.key = key;
-    }
-
+export default class EntitiesStatisticDifferenceHandlerTypeCount extends DifferenceHandlerAbstract {
     public handle(dataBefore: StatisticsInterface, dataAfter: StatisticsInterface): void {
-        const entriesBefore = Object.keys(dataBefore.entity[this.key]);
-        const entriesAfter  = Object.keys(dataAfter.entity[this.key]);
+        const entriesBefore = Object.keys(dataBefore.entityTypeCount);
+        const entriesAfter  = Object.keys(dataAfter.entityTypeCount);
 
         const entriesAdded   = difference(entriesAfter, entriesBefore);
         const entriesDeleted = difference(entriesBefore, entriesAfter);
         if (entriesAdded.length !== 0 || entriesDeleted.length !== 0) {
-            this.send(CommandEnum.STATISTIC_PATCH_ENTITIES_LIST(this.key), {
+            this.send(CommandEnum.STATISTIC_PATCH_TYPE_COUNT_LIST, {
                 ids:    entriesAfter,
                 add:    entriesAdded.reduce((acc, id) => {
-                    acc[id] = dataAfter.entity[this.key][id];
+                    acc[id] = dataAfter.entityTypeCount[id];
                     return acc;
-                }, {} as StatisticEntityListInterface),
+                }, {} as StatisticTypeCountListInterface),
                 remove: entriesDeleted,
-            } as WebsocketPatchObjectList<StatisticEntityInterface>);
+            } as WebsocketPatchObjectList<StatisticTypeCountInterface>);
         }
 
         // test for update for one entry
         intersection(entriesBefore, entriesAfter).forEach((id) => {
-            const entryBefore = dataBefore.entity[this.key][id];
-            const entryAfter  = dataAfter.entity[this.key][id];
+            const entryBefore = dataBefore.entityTypeCount[id];
+            const entryAfter  = dataAfter.entityTypeCount[id];
 
             const diff = objectDeepDifference(entryAfter, entryBefore);
             if (isEmpty(diff) === false) {
-                this.send(CommandEnum.STATISTIC_PATCH_ENTITIES_ID(id), flatten(diff));
+                this.send(CommandEnum.STATISTIC_PATCH_TYPE_COUNT_ID(id), flatten(diff));
             }
         });
     }

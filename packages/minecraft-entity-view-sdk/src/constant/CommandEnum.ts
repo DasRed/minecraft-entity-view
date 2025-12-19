@@ -2,7 +2,10 @@ import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCateg
 
 const CommandEnum = {
     DIMENSIONS_FULL: '[DIMENSIONS] full',
+
     PLAYERS_FULL:    '[PLAYERS] full',
+    PLAYERS_PATCH_LIST: '[PLAYERS] patch list',
+    PLAYERS_PATCH_ID: (id: string): string => `[PLAYERS] patch id ${id}`,
 
     STATISTIC_FULL: '[STATISTIC] full',
 

@@ -3,7 +3,7 @@ import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum'
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
 
-export default class EntitiesStatisticDifferenceSenderCount extends DifferenceHandlerAbstract {
+export default class EntitiesStatisticDifferenceHandlerCount extends DifferenceHandlerAbstract {
     public handle(dataBefore: StatisticsInterface, dataAfter: StatisticsInterface): void {
         // total
         if (dataAfter.count.total !== dataBefore.count.total) {

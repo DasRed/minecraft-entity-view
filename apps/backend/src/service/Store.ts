@@ -14,7 +14,7 @@ export default class Store {
     protected dimensions: APIDimensionInterface[]                              = [];
     protected entities: StatisticEntityListInterface                           = {};
     protected entitiesInternalState: StatisticEntityInternalStateListInterface = {};
-    protected players: APIPlayersInterface                                     = {max: 0, players: []};
+    protected players: APIPlayersInterface                                     = {max: 0, players: {}};
     protected statistic: StatisticsInterface;
     protected timestampNow: number;
 
