@@ -25,7 +25,7 @@ export default function useWSSObjectListPatch<T = any>(initial: Record<string, T
                 }
             }
 
-            patch.remove.forEach((id) => wssStore.delete(CommandEnum.PATCH_ENTITIES_ID(id)));
+            patch.remove.forEach((id) => wssStore.delete(CommandEnum.STATISTIC_PATCH_ENTITIES_ID(id)));
             return next;
         });
     }, [patch]);

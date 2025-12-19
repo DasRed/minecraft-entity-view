@@ -1,17 +1,17 @@
 import config from '@/config';
-import sender from '@/lib/sender';
-import store from '@/lib/store';
-import updater from '@/lib/updater';
+import differenceSender from '@/lib/differenceSender';
+import updaters from '@/lib/updater';
 import wss from '@/lib/wss';
 import WebSocketServerEventEnum from '@/service/webSocketServer/EventEnum';
-import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 
-await updater.start();
-wss.on(WebSocketServerEventEnum.CLIENT_CONNECTED, (ws) => wss.sendTo(ws, CommandEnum.FULL_STATISTIC, store.getStatistic()));
-sender.start();
+await Promise.all(updaters.map((updater) => updater.start()));
 
-if (config.fullUpdate.enabled) {
-    setInterval(() => wss.sendToAll(CommandEnum.FULL_STATISTIC, store.getStatistic()), config.fullUpdate.every);
-}
+wss.on(WebSocketServerEventEnum.CLIENT_CONNECTED, (ws) =>
+    updaters.forEach((updater) =>
+        wss.sendTo(ws, updater.getCommandOnClientConnect(), updater.getDataOnClientConnect()),
+    ),
+);
+
+differenceSender.start();
 
 console.log(`> WebSocket on ws://localhost:${config.websocket.port}`);

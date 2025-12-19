@@ -1,7 +1,9 @@
 import EntityOrderTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityOrderTypeEnum';
 import EntityTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityTypeEnum';
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
-import EntityInterface from '@dasred/minecraft-entity-view-sdk/model/EntityInterface';
+import APIDimensionInterface from '@dasred/minecraft-entity-view-sdk/model/api/DimensionInterface';
+import APIEntityInterface from '@dasred/minecraft-entity-view-sdk/model/api/EntityInterface';
+import APIPlayersInterface from '@dasred/minecraft-entity-view-sdk/model/api/PlayersInterface';
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
 import StatisticEntityListInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityListInterface';
 
@@ -50,8 +52,12 @@ export default class MinecraftApiClient {
         }
     }
 
+    public getDimensions(): Promise<APIDimensionInterface[]> {
+        return this.fetch('GET', '/dimensions');
+    }
+
     public async getEntities(): Promise<StatisticEntityListInterface | null> {
-        const entities: EntityInterface[] = await this.fetch('GET', '/entities');
+        const entities: APIEntityInterface[] = await this.fetch('GET', '/entities');
         if (entities === null) {
             return null;
         }
@@ -98,5 +104,9 @@ export default class MinecraftApiClient {
             } as StatisticEntityInterface;
             return acc;
         }, {} as StatisticEntityListInterface);
+    }
+
+    public getPlayers(): Promise<APIPlayersInterface> {
+        return this.fetch('GET', '/players');
     }
 }

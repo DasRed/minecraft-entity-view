@@ -16,7 +16,7 @@ interface TypeCountEntryOptionsInterface {
 }
 
 export default function TypeCountEntry({entity: entityInitial, sortBy = TypeCountOrderTypeEnum.TYPE}: TypeCountEntryOptionsInterface): ReactElement {
-    const patch  = useWSS<Partial<StatisticEntityInterface>>(CommandEnum.PATCH_TYPE_COUNT_ID(entityInitial.type), {});
+    const patch  = useWSS<Partial<StatisticEntityInterface>>(CommandEnum.STATISTIC_PATCH_TYPE_COUNT_ID(entityInitial.type), {});
     const entity = {...entityInitial};
     Object.entries(patch).forEach(([path, value]) => set(entity, path, value));
     const highlight = useHighlight(entity.count);

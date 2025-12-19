@@ -17,8 +17,8 @@ interface MultipleHistoryChartOptionsInterface {
 export default function MultipleHistoryChart({className, statistic}: MultipleHistoryChartOptionsInterface): ReactElement {
     const refChart  = useRef<HTMLDivElement>(null);
     const refLegend = useRef<HTMLDivElement>(null);
-    const plotRef   = useRef<uPlot | null>(null);
-    const data      = useWSS<HistoryCountMobCategoryInterface['timestamp'][]>(CommandEnum.UPDATE_COUNT_HISTORY_MOB, [
+    const refPlot   = useRef<uPlot | null>(null);
+    const data      = useWSS<HistoryCountMobCategoryInterface['timestamp'][]>(CommandEnum.STATISTIC_UPDATE_COUNT_HISTORY_MOB, [
         statistic.count.history.mobCategory.timestamp,
         statistic.count.history.mobCategory.monster,
         statistic.count.history.mobCategory.creature,
@@ -28,7 +28,7 @@ export default function MultipleHistoryChart({className, statistic}: MultipleHis
     ]);
 
     useEffect(() => {
-        plotRef.current?.setData(data as uPlot.AlignedData);
+        refPlot.current?.setData(data as uPlot.AlignedData);
     }, [data]);
 
     useEffect(() => {
@@ -36,7 +36,7 @@ export default function MultipleHistoryChart({className, statistic}: MultipleHis
             return;
         }
 
-        plotRef.current = new uPlot(
+        refPlot.current = new uPlot(
             {
                 width:  refChart.current.clientWidth,
                 height: refChart.current.clientHeight,
@@ -80,7 +80,7 @@ export default function MultipleHistoryChart({className, statistic}: MultipleHis
             refChart.current,
         );
 
-        return () => plotRef.current?.destroy();
+        return () => refPlot.current?.destroy();
     }, []);
 
     return (

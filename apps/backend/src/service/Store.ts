@@ -1,4 +1,5 @@
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
+import APIDimensionInterface from '@dasred/minecraft-entity-view-sdk/model/api/DimensionInterface';
 import HistoryCountMobCategoryInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountMobCategoryInterface';
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
 import StatisticEntityInternalStateInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInternalStateInterface';
@@ -9,6 +10,7 @@ import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/Statist
 
 export default class Store {
     private dateNow: Date;
+    private dimensions: APIDimensionInterface[] = [];
     private entities: StatisticEntityListInterface;
     private entitiesInternalState: StatisticEntityInternalStateListInterface;
     private statistic: StatisticsInterface;
@@ -25,7 +27,7 @@ export default class Store {
     public createNewStatistic(): StatisticsInterface {
         return {
             count: {
-                total:  0,
+                total: 0,
 
                 mobCategory: Object.values(MobCategoryEnum).reduce((acc, mobCategory) => {
                     acc[mobCategory] = 0;
@@ -51,6 +53,10 @@ export default class Store {
 
     public getDateNow(): Date {
         return this.dateNow;
+    }
+
+    public getDimensions(): APIDimensionInterface[] {
+        return this.dimensions;
     }
 
     public getEntities(): StatisticEntityListInterface {
@@ -80,6 +86,12 @@ export default class Store {
 
     public removeEntityInternalState(id: string): this {
         delete this.entitiesInternalState[id];
+        return this;
+    }
+
+    public setDimensions(dimensions: APIDimensionInterface[]): this {
+        this.dimensions = dimensions;
+
         return this;
     }
 

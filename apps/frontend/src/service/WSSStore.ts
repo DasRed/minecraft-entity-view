@@ -7,27 +7,19 @@ export default class WSSStore {
     private listeners = new Map<CommandType, Set<Listener>>();
 
     private cleanUp() {
-        let cleanB = 0;
         this.data.forEach((data, command: CommandType) => {
             if (this.listeners.size === 0) {
                 this.listeners.delete(command);
                 this.data.delete(command);
-                cleanB++;
             }
         });
 
-        let cleanA = 0;
         this.listeners.forEach((listeners, command: CommandType) => {
             if (listeners.size === 0) {
                 this.listeners.delete(command);
                 this.data.delete(command);
-                cleanA++;
             }
         });
-
-        if (cleanA !== 0 || cleanB !== 0) {
-            console.log('data', this.data.size, 'listenerTypes',this.listeners.size, 'cleanA', cleanA, 'cleanB', cleanB);
-        }
     }
 
     public delete(command: CommandType) {

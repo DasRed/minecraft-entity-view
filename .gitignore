@@ -14,3 +14,5 @@ node_modules
 dist
 .turbo
 next-env.d.ts
+routeTree.gen.ts
+.tanstack

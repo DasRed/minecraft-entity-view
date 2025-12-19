@@ -15,7 +15,7 @@ interface EntitiesCountTableOptionsInterface {
 }
 
 export default function TypeCountTable({statistic}: EntitiesCountTableOptionsInterface): ReactElement {
-    const entities                          = useWSSObjectListPatch<StatisticTypeCountInterface>(statistic.entityTypeCount, CommandEnum.PATCH_TYPE_COUNT_LIST);
+    const entities                          = useWSSObjectListPatch<StatisticTypeCountInterface>(statistic.entityTypeCount, CommandEnum.STATISTIC_PATCH_TYPE_COUNT_LIST);
     const [sortBy, setSortBy]               = useState<TypeCountOrderTypeEnum>(TypeCountOrderTypeEnum.TYPE);
     const [sortDirection, setSortDirection] = useState<SortDirectionEnum>(SortDirectionEnum.ASC);
 
@@ -33,7 +33,7 @@ export default function TypeCountTable({statistic}: EntitiesCountTableOptionsInt
             <h2 className="font-extrabold text-xl">
                 <span>Type Count</span>
                 <span className="text-sm font-normal pl-1">
-                    <CountValue value={statistic.count.total} command={CommandEnum.UPDATE_COUNT_TOTAL}/>
+                    <CountValue value={statistic.count.total} command={CommandEnum.STATISTIC_UPDATE_COUNT_TOTAL}/>
                 </span>
             </h2>
 

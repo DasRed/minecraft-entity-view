@@ -1,17 +1,20 @@
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
 
 const CommandEnum = {
-    FULL_STATISTIC: 'full statistic',
+    DIMENSIONS_FULL: '[DIMENSIONS] full',
+    PLAYERS_FULL:    '[PLAYERS] full',
 
-    UPDATE_COUNT_TOTAL:       'update count total',
-    UPDATE_COUNT_MOB:         (category: MobCategoryEnum) => `update count mob ${category}`,
-    UPDATE_COUNT_HISTORY_MOB: 'update count history mob',
+    STATISTIC_FULL: '[STATISTIC] full',
 
-    PATCH_TYPE_COUNT_LIST: 'patch type count list',
-    PATCH_TYPE_COUNT_ID:   (id: string): string => `patch type count entry [${id}]`,
+    STATISTIC_UPDATE_COUNT_TOTAL:       '[STATISTIC] update count total',
+    STATISTIC_UPDATE_COUNT_MOB:         (category: MobCategoryEnum) => `[STATISTIC] update count mob ${category}`,
+    STATISTIC_UPDATE_COUNT_HISTORY_MOB: '[STATISTIC] update count history mob',
 
-    PATCH_ENTITIES_LIST: (category: MobCategoryEnum) => `modify entities list [${category}]`,
-    PATCH_ENTITIES_ID:   (id: string): string => `patch entities entry [${id}]`,
+    STATISTIC_PATCH_TYPE_COUNT_LIST: '[STATISTIC] patch type count list',
+    STATISTIC_PATCH_TYPE_COUNT_ID:   (id: string): string => `[STATISTIC] patch type count entry [${id}]`,
+
+    STATISTIC_PATCH_ENTITIES_LIST: (category: MobCategoryEnum) => `[STATISTIC] modify entities list [${category}]`,
+    STATISTIC_PATCH_ENTITIES_ID:   (id: string): string => `[STATISTIC] patch entities entry [${id}]`,
 
 } as const;
 

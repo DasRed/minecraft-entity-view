@@ -25,7 +25,7 @@ const MobCategoryTitle: Record<string, string> = {
 };
 
 export default function EntityTable({statistic, category}: EntitiesTableOptionsInterface): ReactElement {
-    const entities                          = useWSSObjectListPatch<StatisticEntityInterface>(statistic.entity[category], CommandEnum.PATCH_ENTITIES_LIST(category));
+    const entities                          = useWSSObjectListPatch<StatisticEntityInterface>(statistic.entity[category], CommandEnum.STATISTIC_PATCH_ENTITIES_LIST(category));
     const [sortBy, setSortBy]               = useState<EntityOrderTypeEnum>(EntityOrderTypeEnum.NAME);
     const [sortDirection, setSortDirection] = useState<SortDirectionEnum>(SortDirectionEnum.ASC);
 
@@ -48,7 +48,7 @@ export default function EntityTable({statistic, category}: EntitiesTableOptionsI
             <h2 className="font-extrabold text-xl">
                 <span>{(category ? MobCategoryTitle[category] : undefined)}</span>
                 <span className="text-sm font-normal pl-1">
-                    <CountValue value={entities.length} command={CommandEnum.UPDATE_COUNT_MOB(category)}/>
+                    <CountValue value={entities.length} command={CommandEnum.STATISTIC_UPDATE_COUNT_MOB(category)}/>
                 </span>
             </h2>
 

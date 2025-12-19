@@ -1,7 +1,7 @@
 import EntityOrderTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityOrderTypeEnum';
-import EntityInterface from '@dasred/minecraft-entity-view-sdk/model/EntityInterface';
+import APIEntityInterface from './api/EntityInterface';
 
-interface StatisticEntityInterface extends EntityInterface {
+interface StatisticEntityInterface extends APIEntityInterface {
     stats: {
         order: Record<EntityOrderTypeEnum, number>;
         isMoved: boolean;

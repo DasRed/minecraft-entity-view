@@ -16,7 +16,7 @@ interface EntityRowOptionsInterface {
 }
 
 export default function EntityEntry({entity: entityInitial, sortBy = EntityOrderTypeEnum.DEFAULT}: EntityRowOptionsInterface): React.ReactElement {
-    const patch        = useWSS<Partial<StatisticEntityInterface>>(CommandEnum.PATCH_ENTITIES_ID(entityInitial.uuid), {});
+    const patch        = useWSS<Partial<StatisticEntityInterface>>(CommandEnum.STATISTIC_PATCH_ENTITIES_ID(entityInitial.uuid), {});
     const entity = {...entityInitial};
     Object.entries(patch).forEach(([path, value]) => set(entity, path, value));
 

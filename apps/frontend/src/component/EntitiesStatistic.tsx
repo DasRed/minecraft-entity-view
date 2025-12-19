@@ -8,7 +8,7 @@ import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/Statist
 import React, {ReactElement} from 'react';
 
 export default function EntitiesStatisticComponent(): ReactElement | null {
-    const statistic = useWSS<StatisticsInterface>(CommandEnum.FULL_STATISTIC);
+    const statistic = useWSS<StatisticsInterface>(CommandEnum.STATISTIC_FULL);
     if (statistic === null) {
         return null;
     }
