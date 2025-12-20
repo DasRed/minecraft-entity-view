@@ -1,4 +1,4 @@
-import MapLayerContainer from '@/component/map/LayerContainer';
+import MapControlContainer from '@/component/map/ControlContainer';
 import useDimension from '@/component/map/useDimension';
 import useMap from '@/component/map/useMap';
 import cn from '@/lib/cn';
@@ -44,7 +44,7 @@ export default function MapSpawnIcon({dimensions}: MapSpawnIconOptionsInterface)
             <div ref={refIcon} className={cn('bg-transparent border-none transition-opacity opacity-100', {'opacity-0': showSpawn === false})}>
                 <LucideMapPin absoluteStrokeWidth={true} strokeWidth={3} className="w-6 h-6 text-fuchsia-400"/>
             </div>
-            <MapLayerContainer className="left-2 top-24 flex flex-col gap-1 items-center overflow-hidden transition-all w-8 hover:w-30">
+            <MapControlContainer>
                 <div
                     onClick={() => setShowSpawn(!showSpawn)}
                     className={cn('flex flex-row flex-nowrap items-center text-nowrap w-full pl-2 py-1 cursor-pointer transition-all', {
@@ -55,7 +55,7 @@ export default function MapSpawnIcon({dimensions}: MapSpawnIconOptionsInterface)
                     <img src="/map/spawn.png" alt=""/>
                     <span className="ml-2">Spawn</span>
                 </div>
-            </MapLayerContainer>
+            </MapControlContainer>
         </>
     );
 }

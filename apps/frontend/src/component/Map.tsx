@@ -1,4 +1,5 @@
 import MapCoordinates from '@/component/map/Coordinates';
+import DimensionBackground from '@/component/map/DimensionBackground';
 import MapDimensionControls from '@/component/map/DimensionControls';
 import MapProvider from '@/component/map/Provider';
 import MapSpawnIcon from '@/component/map/SpawnIcon';
@@ -23,10 +24,15 @@ export default function Map(): ReactElement | null {
     return (
         <div className="absolute left-0 top-0 right-0 bottom-0 overflow-hidden">
             <MapProvider host={config.squaremapBackend} dimensions={dimensions}>
-                <MapCoordinates/>
-                <MapZoomControls/>
-                <MapDimensionControls dimensions={dimensions}/>
-                <MapSpawnIcon dimensions={dimensions}/>
+                <DimensionBackground dimensions={dimensions}/>
+                <div className="absolute inset-0 pointer-events-none">
+                    <MapCoordinates/>
+                    <div className="absolute z-2 left-2 top-2 w-30 flex flex-col gap-3 items-start text-sm pointer-events-none">
+                        <MapZoomControls/>
+                        <MapDimensionControls dimensions={dimensions}/>
+                        <MapSpawnIcon dimensions={dimensions}/>
+                    </div>
+                </div>
             </MapProvider>
         </div>
     );

@@ -1,4 +1,4 @@
-import MapLayerContainer from '@/component/map/LayerContainer';
+import MapControlContainer from '@/component/map/ControlContainer';
 import useMap from '@/component/map/useMap';
 import cn from '@/lib/cn';
 import {LucideMinus, LucidePlus} from 'lucide-react';
@@ -14,7 +14,7 @@ export default function MapZoomControls(): ReactElement {
     }, [leafletMap]);
 
     return (
-        <MapLayerContainer className="left-2 top-2 w-8 flex flex-col gap-1 items-center">
+        <MapControlContainer expandable={false}>
             <div onClick={() => leafletMap.zoomIn()} className={cn('pl-2 pt-2 w-8 h-8 hover:bg-orange-400/50 transition-colors cursor-pointer', {
                 'opacity-25 hover:bg-transparent': leafletMap.getZoom() >= leafletMap.getMaxZoom(),
             })}>
@@ -25,6 +25,6 @@ export default function MapZoomControls(): ReactElement {
             })}>
                 <LucideMinus className="w-4 h-6"/>
             </div>
-        </MapLayerContainer>
+        </MapControlContainer>
     );
 }

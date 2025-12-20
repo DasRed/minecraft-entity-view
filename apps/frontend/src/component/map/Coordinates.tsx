@@ -1,10 +1,9 @@
-import MapLayerContainer from '@/component/map/LayerContainer';
 import useMap from '@/component/map/useMap';
 import {Point} from 'leaflet';
 import {ReactElement, useEffect, useState} from 'react';
 
 export default function MapCoordinates(): ReactElement {
-    const map                = useMap();
+    const map                           = useMap();
     const [coordinates, setCoordinates] = useState<Point | null>(null);
 
     useEffect(() => {
@@ -13,8 +12,8 @@ export default function MapCoordinates(): ReactElement {
     }, [map]);
 
     return (
-        <MapLayerContainer className="left-2 bottom-2 py-1 px-2">
+        <div className="border border-gray-600 bg-white/75 rounded text-sm transition-all absolute z-2 left-2 bottom-2 py-1 px-2 pointer-events-none">
             Coordinates: {coordinates?.x ?? '--'} / {coordinates?.y ?? '--'}
-        </MapLayerContainer>
+        </div>
     );
 }

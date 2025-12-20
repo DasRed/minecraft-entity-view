@@ -42,9 +42,7 @@ export default function MapProvider({host, dimensions, className, children}: Pro
 
             {ready && containerRef.current && (
                 <MapContext.Provider value={mapRef.current}>
-                    <div className="absolute inset-0 pointer-events-none">
-                        {children}
-                    </div>
+                    {children}
                 </MapContext.Provider>
             )}
         </>
