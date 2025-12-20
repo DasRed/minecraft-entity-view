@@ -12,7 +12,10 @@ export default class PlayersUpdater extends UpdaterIntervalAbstract {
     }
 
     public async update(): Promise<this> {
-        this.store.setPlayers(await this.client.getPlayers());
+        const data = await this.client.getPlayers();
+        if (data !== null) {
+            this.store.setPlayers(data);
+        }
 
         return this;
     }

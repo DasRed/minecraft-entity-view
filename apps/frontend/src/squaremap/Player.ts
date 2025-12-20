@@ -93,7 +93,7 @@ export default class SquaremapPlayer {
     removeMarker() {
         this.marker.remove();
         this.squaremap.playerList.markers.delete(this.uuid);
-        this.squaremap.map.removeLayer(this.marker);
+        this.squaremap.leafletMap.removeLayer(this.marker);
         this.squaremap.layerControl.playersLayer.removeLayer(this.marker);
     }
 

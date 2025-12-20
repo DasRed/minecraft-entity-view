@@ -23,18 +23,18 @@ export default class SquaremapLayerControl {
         this.playersLayer = new SquaremapPlayerLayerGroup();
 
         this.controls = new Control.Layers({}, {}, {
-            position:   'topleft',
+            position:   'bottomright',
             sortLayers: true,
             // @ts-ignore
             sortFunction: (a: SquaremapBaseLayerGroup, b: SquaremapBaseLayerGroup) => a.order - b.order,
         })
-            .addTo(this.squaremap.map);
+            .addTo(this.squaremap.leafletMap);
     }
 
     addOverlay(name: string, layer: SquaremapBaseLayerGroup, hide: boolean) {
         this.controls.addOverlay(layer, name);
         if (this.shouldHide(layer, hide) !== true) {
-            layer.addTo(this.squaremap.map);
+            layer.addTo(this.squaremap.leafletMap);
         }
     }
 
@@ -46,7 +46,7 @@ export default class SquaremapLayerControl {
             errorTileUrl:  '/images/clear.png',
         });
 
-        layer.addTo(this.squaremap.map)
+        layer.addTo(this.squaremap.leafletMap)
             // when all tiles are loaded, switch to this layer
              .addEventListener('load', () => this.switchTileLayer());
 
@@ -70,10 +70,10 @@ export default class SquaremapLayerControl {
         // setup the map tile layers
         // we need 2 layers to swap between for seamless refreshing
         if (this.tileLayer1 != null) {
-            this.squaremap.map.removeLayer(this.tileLayer1);
+            this.squaremap.leafletMap.removeLayer(this.tileLayer1);
         }
         if (this.tileLayer2 != null) {
-            this.squaremap.map.removeLayer(this.tileLayer2);
+            this.squaremap.leafletMap.removeLayer(this.tileLayer2);
         }
         this.tileLayer1 = this.createTileLayer(world);
         this.tileLayer2 = this.createTileLayer(world);

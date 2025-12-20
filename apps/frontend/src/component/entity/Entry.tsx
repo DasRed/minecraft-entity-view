@@ -1,3 +1,4 @@
+import DimensionImage from '@/component/DimensionImage';
 import MobImage from '@/component/MobImage';
 import DimensionName from '@/constant/DimensionName';
 import useWSS from '@/hook/useWSS';
@@ -36,7 +37,9 @@ export default function EntityEntry({entity: entityInitial, sortBy = EntityOrder
                 <MobImage type={entity.displayType} className="w-4 h-4 mr-1"/>
                 {entity.type === EntityTypeEnum.ITEM && `${entity.item.count}x `}{entity.customName ?? entity.displayName}
             </div>
-            <div className="overflow-hidden text-ellipsis">{DimensionName[entity.dimension]}</div>
+            <div className="overflow-hidden text-ellipsis flex flex-col flex-nowrap items-center text-nowrap" title={DimensionName[entity.dimension]}>
+                <DimensionImage dimension={entity.dimension} className="w-4 h-4 mr-1"/>
+            </div>
             <div className={cn('text-right overflow-hidden text-ellipsis transition-all duration-700', {'bg-value-update': entity.stats.isMoved})}>
                 {numberFormatter.format(entity.x)}
             </div>

@@ -12,7 +12,10 @@ export default class DimensionsUpdater extends UpdaterAbstract {
     }
 
     public async update(): Promise<this> {
-        this.store.setDimensions(await this.client.getDimensions());
+        const data = await this.client.getDimensions();
+        if (data !== null) {
+            this.store.setDimensions(data);
+        }
 
         return this;
     }

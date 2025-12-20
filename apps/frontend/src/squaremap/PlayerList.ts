@@ -21,7 +21,7 @@ export default class SquaremapPlayerList {
         this.firstTick = true;
         this.label     = json.player_list_label;
 
-        this.squaremap.map.createPane('nameplate').style.zIndex = '1000';
+        this.squaremap.leafletMap.createPane('nameplate').style.zIndex = '1000';
     }
 
     addToList(player: SquaremapPlayer) {
@@ -89,7 +89,7 @@ export default class SquaremapPlayerList {
             return false;
         }
 
-        this.squaremap.worldList.showWorld(player.world, () => this.squaremap.map.panTo(this.squaremap.toLatLng(player.x, player.z)));
+        this.squaremap.worldList.showWorld(player.world, () => this.squaremap.leafletMap.panTo(this.squaremap.toLatLng(player.x, player.z)));
 
         return true;
     }
@@ -171,11 +171,11 @@ export default class SquaremapPlayerList {
             if (player != null && this.squaremap.worldList.curWorld != null) {
                 if (player.world !== this.squaremap.worldList.curWorld.name) {
                     this.squaremap.worldList.showWorld(player.world, () => {
-                        this.squaremap.map.panTo(this.squaremap.toLatLng(player.x, player.z));
+                        this.squaremap.leafletMap.panTo(this.squaremap.toLatLng(player.x, player.z));
                     });
                 }
                 else {
-                    this.squaremap.map.panTo(this.squaremap.toLatLng(player.x, player.z));
+                    this.squaremap.leafletMap.panTo(this.squaremap.toLatLng(player.x, player.z));
                 }
             }
         }

@@ -1,6 +1,7 @@
 import SquaremapSettingsInterface from '@/squaremap/interfaces/SettingsInterface';
 
-export default <SquaremapSettingsInterface>{
+/** @deprecated */
+const settings: SquaremapSettingsInterface = {
     ui:     {
         sidebar:     {
             player_list_label: 'Players ({cur}/{max})',
@@ -32,3 +33,5 @@ export default <SquaremapSettingsInterface>{
         },
     ],
 };
+
+export default settings;

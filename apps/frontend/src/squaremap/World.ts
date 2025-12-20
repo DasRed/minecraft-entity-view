@@ -53,7 +53,7 @@ export default class SquaremapWorld {
             `tiles/${this.name}/settings.json`,
             (json: SquaremapWorldSettings) => {
                 // @ts-ignore
-                if (this.squaremap.map._mapPane === undefined) {
+                if (this.squaremap.leafletMap._mapPane === undefined) {
                     return;
                 }
                 this.player_tracker         = json.player_tracker;
