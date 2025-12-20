@@ -1,7 +1,7 @@
 import SquaremapBaseLayerGroup from '@/squaremap/layerGroup/BaseGroup';
 import SquaremapPlayerLayerGroup from '@/squaremap/layerGroup/PlayerGroup';
 import SquaremapMap from '@/squaremap/Map';
-import SquaremapTileLayer from '@/squaremap/TileLayer';
+import MapTileLayer from '@dasred/minecraft-entity-view-frontend/src/service/map/TileLayer';
 import SquaremapWorld from '@/squaremap/World';
 import {Control, Layer} from 'leaflet';
 
@@ -11,8 +11,8 @@ export default class SquaremapLayerControl {
     ignoreLayer: Layer | null             = null;
     playersLayer: SquaremapPlayerLayerGroup;
     squaremap: SquaremapMap;
-    tileLayer1: SquaremapTileLayer | null = null;
-    tileLayer2: SquaremapTileLayer | null = null;
+    tileLayer1: MapTileLayer | null = null;
+    tileLayer2: MapTileLayer | null = null;
     updateInterval: number;
 
     constructor(squaremap: SquaremapMap) {
@@ -21,25 +21,25 @@ export default class SquaremapLayerControl {
         this.updateInterval = 60;
 
         this.playersLayer = new SquaremapPlayerLayerGroup();
-
-        this.controls = new Control.Layers({}, {}, {
-            position:   'bottomright',
-            sortLayers: true,
-            // @ts-ignore
-            sortFunction: (a: SquaremapBaseLayerGroup, b: SquaremapBaseLayerGroup) => a.order - b.order,
-        })
-            .addTo(this.squaremap.leafletMap);
+        //
+        // this.controls = new Control.Layers({}, {}, {
+        //     position:   'bottomright',
+        //     sortLayers: true,
+        //     // @ts-ignore
+        //     sortFunction: (a: SquaremapBaseLayerGroup, b: SquaremapBaseLayerGroup) => a.order - b.order,
+        // })
+        //     .addTo(this.squaremap.leafletMap);
     }
 
     addOverlay(name: string, layer: SquaremapBaseLayerGroup, hide: boolean) {
-        this.controls.addOverlay(layer, name);
+        // this.controls.addOverlay(layer, name);
         if (this.shouldHide(layer, hide) !== true) {
             layer.addTo(this.squaremap.leafletMap);
         }
     }
 
-    createTileLayer(world: SquaremapWorld): SquaremapTileLayer {
-        const layer = new SquaremapTileLayer(`${this.squaremap.host}/tiles/${world.name}/{z}/{x}_{y}.png`, {
+    createTileLayer(world: SquaremapWorld): MapTileLayer {
+        const layer = new MapTileLayer(`${this.squaremap.host}/tiles/${world.name}/{z}/{x}_{y}.png`, {
             tileSize:      512,
             minNativeZoom: 0,
             maxNativeZoom: world.zoom!.max,
@@ -61,7 +61,7 @@ export default class SquaremapLayerControl {
 
     removeOverlay(layer: Layer) {
         this.ignoreLayer = layer;
-        this.controls.removeLayer(layer);
+        // this.controls.removeLayer(layer);
         layer.remove();
         this.ignoreLayer = null;
     }

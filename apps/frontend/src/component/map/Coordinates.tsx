@@ -1,5 +1,5 @@
 import MapLayerContainer from '@/component/map/LayerContainer';
-import useMap from '@/hook/useMap';
+import useMap from '@/component/map/useMap';
 import {Point} from 'leaflet';
 import {ReactElement, useEffect, useState} from 'react';
 

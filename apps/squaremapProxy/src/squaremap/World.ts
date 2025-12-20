@@ -36,17 +36,6 @@ export default class SquaremapWorld {
         this.staticNeedsMarkerTick  = false;
     }
 
-    getBackground() {
-        switch (this.type) {
-            case 'nether':
-                return 'url(\'images/nether_sky.png\')';
-            case 'the_end':
-                return 'url(\'images/end_sky.png\')';
-            case 'normal':
-            default:
-                return 'url(\'images/overworld_sky.png\')';
-        }
-    }
 
     load(callback: (world: SquaremapWorld) => void) {
         this.squaremap.getJSON(
@@ -70,9 +59,6 @@ export default class SquaremapWorld {
                 this.squaremap.centerOn(this.spawn.x, this.spawn.z, this.zoom.def)
                     .setMinZoom(0) // extra zoom out doesn't work :(
                     .setMaxZoom(this.zoom.max + this.zoom.extra);
-
-                // setup background
-                this.squaremap.element.style.background = this.getBackground();
 
                 // setup tile layers
                 this.squaremap.layerControl.setupTileLayers(this);
@@ -156,7 +142,7 @@ export default class SquaremapWorld {
         const keys = Array.from(this.markerLayers.keys());
         for (let i = 0; i < keys.length; i++) {
             const layer = this.markerLayers.get(keys[i]);
-            this.squaremap.layerControl.controls.removeLayer(layer!);
+            // this.squaremap.layerControl.controls.removeLayer(layer!);
             layer!.remove();
             this.markerLayers.delete(keys[i]);
         }

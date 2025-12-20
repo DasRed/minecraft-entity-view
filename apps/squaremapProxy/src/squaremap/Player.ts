@@ -94,7 +94,7 @@ export default class SquaremapPlayer {
         this.marker.remove();
         this.squaremap.playerList.markers.delete(this.uuid);
         this.squaremap.leafletMap.removeLayer(this.marker);
-        this.squaremap.layerControl.playersLayer.removeLayer(this.marker);
+        // this.squaremap.layerControl.playersLayer.removeLayer(this.marker);
     }
 
     setNameplateContent(player: SquaremapPlayerDataInterface) {

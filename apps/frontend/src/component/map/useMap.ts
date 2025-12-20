@@ -1,8 +1,8 @@
-import MapContext from '@/context/MapContext';
-import SquaremapMap from '@/squaremap/Map';
+import MapContext from '@/component/map/Context';
+import Map from '@/service/Map';
 import {useContext} from 'react';
 
-export default function useMap(): SquaremapMap {
+export default function useMap(): Map {
     const ctx = useContext(MapContext);
 
     if (!ctx) {

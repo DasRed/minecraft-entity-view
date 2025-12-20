@@ -1,6 +1,6 @@
-import MapContext from '@/context/MapContext';
+import MapContext from '@/component/map/Context';
 import cn from '@/lib/cn';
-import SquaremapMap from '@/squaremap/Map';
+import Map from '@/service/Map';
 import APIDimensionInterface from '@dasred/minecraft-entity-view-sdk/model/api/DimensionInterface';
 import {PropsWithChildren, ReactNode, useEffect, useRef, useState} from 'react';
 
@@ -13,7 +13,7 @@ interface MapProviderOptionsInterface {
 
 export default function MapProvider({host, dimensions, className, children}: PropsWithChildren<MapProviderOptionsInterface>) {
     const containerRef      = useRef<HTMLDivElement>(null);
-    const mapRef            = useRef<SquaremapMap | null>(null);
+    const mapRef            = useRef<Map | null>(null);
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
@@ -21,10 +21,10 @@ export default function MapProvider({host, dimensions, className, children}: Pro
             return;
         }
 
-        mapRef.current = new SquaremapMap({
-            element:  containerRef.current,
-            host,
+        mapRef.current = new Map({
+            element:     containerRef.current,
             dimensions,
+            urlTemplate: `${host}/tiles/{dimensionId}/{z}/{x}_{y}.png`,
         });
 
         setReady(true);
@@ -38,11 +38,11 @@ export default function MapProvider({host, dimensions, className, children}: Pro
 
     return (
         <>
-            <div ref={containerRef} className={cn('absolute inset-0 z-1', className)}/>
+            <div ref={containerRef} className={cn('bg-transparent! absolute inset-0 z-1', className)}/>
 
             {ready && containerRef.current && (
                 <MapContext.Provider value={mapRef.current}>
-                    <div className="absolute inset-0 z-2 pointer-events-none">
+                    <div className="absolute inset-0 pointer-events-none">
                         {children}
                     </div>
                 </MapContext.Provider>

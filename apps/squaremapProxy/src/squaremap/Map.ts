@@ -1,5 +1,5 @@
-import SquaremapBaseLayerGroup from '@/squaremap/layerGroup/BaseGroup';
 import settings from '@/squaremap/settings';
+import MapTileLayerHandler from '@dasred/minecraft-entity-view-frontend/src/service/map/TileLayerHandler';
 import DimensionEnum from '@dasred/minecraft-entity-view-sdk/constant/DimensionEnum';
 import APIDimensionInterface from '@dasred/minecraft-entity-view-sdk/model/api/DimensionInterface';
 import {CRS, LatLng, Map as LeafletMap, Point} from 'leaflet';
@@ -22,15 +22,21 @@ export default class SquaremapMap {
     protected dimension: DimensionEnum;
     protected dimensions: APIDimensionInterface[];
     protected element: HTMLElement;
+    protected tileLayerHandler: MapTileLayerHandler;
 
     /** @deprecated */
     public host: string;
+    /** @deprecated */
     public layerControl: SquaremapLayerControl;
     public leafletMap: LeafletMap;
+    /** @deprecated */
     public playerList: SquaremapPlayerList;
     public scale: number      = 1;
+    /** @deprecated */
     public sidebar: SquaremapSidebar;
+    /** @deprecated */
     public tick_count: number = 1;
+    /** @deprecated */
     public worldList: SquaremapWorldList;
 
     constructor(options: SquaremapOptionsInterface) {
@@ -48,17 +54,26 @@ export default class SquaremapMap {
             zoomControl:        false,
         });
 
-        this.layerControl = new SquaremapLayerControl(this);
-        this.sidebar      = new SquaremapSidebar(this, settings.ui.sidebar, true);
-        this.playerList   = new SquaremapPlayerList(this, settings.ui.sidebar);
-        this.worldList    = new SquaremapWorldList(this, settings.worlds);
-        this.leafletMap
-            .on('overlayadd', (e) => this.layerControl.showLayer(e.layer as SquaremapBaseLayerGroup))
-            .on('overlayremove', (e) => this.layerControl.hideLayer(e.layer as SquaremapBaseLayerGroup))
-            .on('click', () => this.playerList.followPlayerMarker(null))
-            .on('dblclick', () => this.playerList.followPlayerMarker(null));
+        this.tileLayerHandler = new MapTileLayerHandler({
+            leafletMap:  this.leafletMap,
+            dimensionId: this.dimension,
+            urlTemplate: `${options.host}/tiles/{dimension}/{z}/{x}_{y}.png`,
+        });
+        // this.layerControl = new SquaremapLayerControl(this);
+        // this.sidebar      = new SquaremapSidebar(this, settings.ui.sidebar, true);
+        // this.playerList   = new SquaremapPlayerList(this, settings.ui.sidebar);
+        // this.worldList    = new SquaremapWorldList(this, settings.worlds);
+        // this.leafletMap
+        //     .on('overlayadd', (e) => this.layerControl.showLayer(e.layer as SquaremapBaseLayerGroup))
+        //     .on('overlayremove', (e) => this.layerControl.hideLayer(e.layer as SquaremapBaseLayerGroup))
+        //     .on('click', () => this.playerList.followPlayerMarker(null))
+        //     .on('dblclick', () => this.playerList.followPlayerMarker(null));
 
-        this.worldList.loadInitialWorld(settings, () => this.loop());
+        // this.worldList.loadInitialWorld(settings, () => this.loop());
+        this.leafletMap.whenReady(() => {
+            this.tileLayerHandler.update();
+            this.loop();
+        });
     }
 
     /**
@@ -152,6 +167,7 @@ export default class SquaremapMap {
 
     public setDimension(dimension: DimensionEnum): this {
         this.dimension = dimension;
+        this.tileLayerHandler.setDimensionId(dimension);
 
         return this;
     }
@@ -165,10 +181,13 @@ export default class SquaremapMap {
      * @deprecated
      */
     public tick() {
+        if (this.tick_count % 60 === 0) {
+            this.tileLayerHandler.redraw();
+        }
         // tick player tracker
-        this.playerList.tick();
+        // this.playerList.tick();
         // tick world
-        this.worldList.curWorld!.tick();
+        // this.worldList.curWorld!.tick();
     }
 
     public toLatLng(x: number, z: number): LatLng {

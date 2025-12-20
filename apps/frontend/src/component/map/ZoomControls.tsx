@@ -1,5 +1,5 @@
 import MapLayerContainer from '@/component/map/LayerContainer';
-import useMap from '@/hook/useMap';
+import useMap from '@/component/map/useMap';
 import cn from '@/lib/cn';
 import {LucideMinus, LucidePlus} from 'lucide-react';
 import {ReactElement, useEffect, useState} from 'react';
