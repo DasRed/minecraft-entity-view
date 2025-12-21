@@ -16,9 +16,9 @@ export default function MapControlEntities({players, statistic}: MapEntitiesIcon
     const [showPlayers, setShowPlayers]   = useState<boolean>(false);
     const [showMonster, setShowMonster]   = useState<boolean>(false);
     const [showCreature, setShowCreature] = useState<boolean>(false);
-    const [showItem, setShowItem]         = useState<boolean>(true);
-    const [showMisc, setShowMisc]         = useState<boolean>(false);
-    const [showOther, setShowOther]       = useState<boolean>(false);
+    const [showItem, setShowItem]         = useState<boolean>(false);
+    const [showMisc, setShowMisc]         = useState<boolean>(true);
+    const [showOther, setShowOther]       = useState<boolean>(true);
 
     return (
         <MapControlContainer>

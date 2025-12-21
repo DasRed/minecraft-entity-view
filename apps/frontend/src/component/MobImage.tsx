@@ -1,4 +1,4 @@
-import MobImages from '@/constant/MobImages';
+import getMobImageByType from '@/lib/getMobImageByType';
 import {ReactElement} from 'react';
 
 interface MobImageOptionsInterface {
@@ -7,7 +7,7 @@ interface MobImageOptionsInterface {
 }
 
 export default function MobImage({type, className}: MobImageOptionsInterface): ReactElement {
-    const image = (MobImages[type] ?? `/item/${type.replace(':', '/')}.png`).replace('{size}', '16x16');
+    const image = getMobImageByType(type);
 
     return (
         <img

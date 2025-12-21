@@ -1,8 +1,8 @@
 import EntitiesStatisticUpdaterConfigInterface from '@/service/entitiesStatistic/ConfigInterface';
 
 export default {
-    // minecraftServer: 'http://atlas.dasred.de:9874',
-    minecraftServer: 'http://atlas.dasred.de:9875',
+    minecraftServer: 'http://atlas.dasred.de:9874',
+    // minecraftServer: 'http://atlas.dasred.de:9875',
     // minecraftServer: 'http://localhost:9874',
 
     websocket: {
@@ -12,7 +12,7 @@ export default {
     },
 
     entitiesStatisticUpdater: <EntitiesStatisticUpdaterConfigInterface>{
-        interval:             250,
+        interval:             50,
         deleteEntityAfter:    2_000,
         isNewEntityFor:       800,
         isEntityReorderedFor: 300,

@@ -17,6 +17,8 @@ export default function MapMarkerPlayerEntry({player: playerInitial, layerGroup}
     const map               = useMap();
     const dimension         = useDimension();
     const player            = useWSSPatch<APIPlayerInterface>(playerInitial, CommandEnum.PLAYERS_PATCH_ID(playerInitial.uuid));
+    const refTooltipElement = useRef<HTMLDivElement>(null);
+    const refTooltip        = useRef<Tooltip>(null);
     const refMarker         = useRef<MapMarkerPlayer>(new MapMarkerPlayer({
         rotationAngle: 180 + player.yHeadRot,
         latlng:        map.toLatLng(player.x, player.z),
@@ -28,8 +30,6 @@ export default function MapMarkerPlayerEntry({player: playerInitial, layerGroup}
             className:     'bg-transparent border-none',
         }),
     }));
-    const refTooltipElement = useRef<HTMLDivElement>(null);
-    const refTooltip        = useRef<Tooltip>(null);
 
     useEffect(() => {
         if (dimension.id === player.dimension) {
@@ -59,7 +59,7 @@ export default function MapMarkerPlayerEntry({player: playerInitial, layerGroup}
             direction: 'right',
             offset:    [5, 0],
             content:   refTooltipElement.current!,
-            className: 'bg-black/60! border-gray-800/75! before:content-none!'
+            className: 'bg-black/60! border-gray-800/75! before:content-none!',
         });
 
         refMarker.current.bindTooltip(refTooltip.current);
