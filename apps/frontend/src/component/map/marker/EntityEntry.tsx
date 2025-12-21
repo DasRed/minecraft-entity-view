@@ -61,7 +61,7 @@ export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}
 
     return (
         <div className="hidden">
-            <div ref={refIconElement} style={{width: `${size}px`, height: `${size}px`}} className="drop-shadow drop-shadow-red-300/25">
+            <div ref={refIconElement} style={{width: `${size}px`, height: `${size}px`}} className="shadow shadow-yellow-300/25">
                 <img src={getMobImageByType(entity.displayType)} alt="" style={{width: `${size}px`, height: `${size}px`}} />
             </div>
         </div>
