@@ -1,12 +1,12 @@
-import MapControlContainer from '@/component/map/ControlContainer';
-import useMap from '@/component/map/useMap';
+import MapControlContainer from '@/component/map/control/Container';
+import useMap from '@/component/map/provider/map/use';
 import cn from '@/lib/cn';
 import {LucideMinus, LucidePlus} from 'lucide-react';
 import {ReactElement, useEffect, useState} from 'react';
 
-export default function MapZoomControls(): ReactElement {
+export default function MapControlZoom(): ReactElement {
     const {leafletMap} = useMap();
-    const [, setZoom]  = useState<number>(1);
+    const [, setZoom]  = useState<number>(leafletMap.getZoom());
 
     useEffect(() => {
         leafletMap.on('zoom', (event) => setZoom(event.target._zoom));
@@ -15,15 +15,15 @@ export default function MapZoomControls(): ReactElement {
 
     return (
         <MapControlContainer expandable={false}>
-            <div onClick={() => leafletMap.zoomIn()} className={cn('pl-2 pt-2 w-8 h-8 hover:bg-orange-400/50 transition-colors cursor-pointer', {
+            <div onClick={() => leafletMap.zoomIn()} className={cn('pl-3 pt-1 w-12 h-8 hover:bg-orange-400/50 transition-colors cursor-pointer', {
                 'opacity-25 hover:bg-transparent': leafletMap.getZoom() >= leafletMap.getMaxZoom(),
             })}>
-                <LucidePlus className="w-4 h-4"/>
+                <LucidePlus className="w-6 h-6"/>
             </div>
-            <div onClick={() => leafletMap.zoomOut()} className={cn('pl-2 py-1 w-8 h-8 hover:bg-orange-400/50 transition-colors cursor-pointer', {
+            <div onClick={() => leafletMap.zoomOut()} className={cn('pl-3 py-1 w-12 h-8 hover:bg-orange-400/50 transition-colors cursor-pointer', {
                 'opacity-25 hover:bg-transparent': leafletMap.getZoom() <= leafletMap.getMinZoom(),
             })}>
-                <LucideMinus className="w-4 h-6"/>
+                <LucideMinus className="w-6 h-6"/>
             </div>
         </MapControlContainer>
     );

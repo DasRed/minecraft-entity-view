@@ -1,8 +1,8 @@
-import APIPlayerInterface from './players/PlayerInterface';
+import APIPlayerListInterface from './players/PlayerListInterface';
 
 interface APIPlayersInterface {
     max: number;
-    players: Record<string, APIPlayerInterface>;
+    players: APIPlayerListInterface;
 }
 
 export default APIPlayersInterface;

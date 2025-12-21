@@ -1,13 +1,11 @@
 import MobImage from '@/component/MobImage';
 import useHighlight from '@/hook/useHighlight';
-import useWSS from '@/hook/useWSS';
+import useWSSPatch from '@/hook/useWSSPatch';
 import cn from '@/lib/cn';
 import numberFormatter from '@/lib/numberFormater';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 import TypeCountOrderTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/TypeCountOrderTypeEnum';
 import StatisticTypeCountInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/TypeCountInterface';
-import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
-import {set} from 'lodash-es';
 import {ReactElement} from 'react';
 
 interface TypeCountEntryOptionsInterface {
@@ -16,9 +14,7 @@ interface TypeCountEntryOptionsInterface {
 }
 
 export default function TypeCountEntry({entity: entityInitial, sortBy = TypeCountOrderTypeEnum.TYPE}: TypeCountEntryOptionsInterface): ReactElement {
-    const patch  = useWSS<Partial<StatisticEntityInterface>>(CommandEnum.STATISTIC_PATCH_TYPE_COUNT_ID(entityInitial.type), {});
-    const entity = {...entityInitial};
-    Object.entries(patch).forEach(([path, value]) => set(entity, path, value));
+    const entity    = useWSSPatch<StatisticTypeCountInterface>(entityInitial, CommandEnum.STATISTIC_PATCH_TYPE_COUNT_ID(entityInitial.type));
     const highlight = useHighlight(entity.count);
 
     return (

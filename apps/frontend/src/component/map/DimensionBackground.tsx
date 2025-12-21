@@ -1,15 +1,10 @@
-import useDimension from '@/component/map/useDimension';
+import useDimension from '@/component/map/provider/dimension/use';
 import cn from '@/lib/cn';
 import DimensionEnum from '@dasred/minecraft-entity-view-sdk/constant/DimensionEnum';
-import APIDimensionInterface from '@dasred/minecraft-entity-view-sdk/model/api/DimensionInterface';
 import {ReactElement} from 'react';
 
-interface DimensionBackgroundOptionsInterface {
-    dimensions: APIDimensionInterface[];
-}
-
-export default function DimensionBackground({dimensions}: DimensionBackgroundOptionsInterface): ReactElement {
-    const {dimension} = useDimension(dimensions);
+export default function DimensionBackground(): ReactElement {
+    const dimension = useDimension();
 
     return (
         <div className={cn('absolute inset-0 -z-1 bg-black bg-repeat', {

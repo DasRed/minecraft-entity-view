@@ -1,4 +1,4 @@
-import useMap from '@/component/map/useMap';
+import useMap from '@/component/map/provider/map/use';
 import {Point} from 'leaflet';
 import {ReactElement, useEffect, useState} from 'react';
 

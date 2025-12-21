@@ -56,12 +56,8 @@ export default class Map {
         return this;
     }
 
-    protected getCurrentDimension(): APIDimensionInterface {
+    public getCurrentDimension(): APIDimensionInterface {
         return this.dimensions.find(({id}) => id === this.dimensionId) ?? this.dimensions.find(({id}) => id === DimensionEnum.OVERWORLD)!;
-    }
-
-    public getDimensionId(): DimensionEnum {
-        return this.dimensionId;
     }
 
     public metersToPixels(num: number): number {
@@ -81,7 +77,6 @@ export default class Map {
 
     protected setViewToSpawn(): this {
         const dimension = this.getCurrentDimension();
-        console.log(dimension);
         this.leafletMap.setView(this.toLatLng(dimension.spawn.x, dimension.spawn.z));
 
         return this;
