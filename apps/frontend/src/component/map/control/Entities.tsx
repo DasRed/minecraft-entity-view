@@ -14,11 +14,11 @@ interface MapEntitiesIconOptionsInterface {
 
 export default function MapControlEntities({players, statistic}: MapEntitiesIconOptionsInterface): ReactElement {
     const [showPlayers, setShowPlayers]   = useState<boolean>(false);
-    const [showMonster, setShowMonster]   = useState<boolean>(false);
-    const [showCreature, setShowCreature] = useState<boolean>(false);
+    const [showMonster, setShowMonster]   = useState<boolean>(true);
+    const [showCreature, setShowCreature] = useState<boolean>(true);
     const [showItem, setShowItem]         = useState<boolean>(false);
-    const [showMisc, setShowMisc]         = useState<boolean>(true);
-    const [showOther, setShowOther]       = useState<boolean>(true);
+    const [showMisc, setShowMisc]         = useState<boolean>(false);
+    const [showOther, setShowOther]       = useState<boolean>(false);
 
     return (
         <MapControlContainer>
