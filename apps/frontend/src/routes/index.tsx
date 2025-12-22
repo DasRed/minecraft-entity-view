@@ -1,6 +1,8 @@
-import EntitiesStatisticComponent from '@/component/EntitiesStatistic';
-import {createFileRoute} from '@tanstack/react-router';
+import {createFileRoute, Outlet, redirect} from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({
-    component: EntitiesStatisticComponent,
+    component:  () => <Outlet/>,
+    beforeLoad: () => {
+        throw redirect({to: '/map'});
+    },
 });

@@ -4,6 +4,14 @@ import APIDimensionInterface from '@dasred/minecraft-entity-view-sdk/model/api/D
 import {CRS, LatLng, Map as LeafletMap, Point} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
+interface MapZoomOptionsInterface {
+    current?: number;
+    max?: number;
+    min?: number;
+    nativeMax?: number;
+    nativeMin?: number;
+}
+
 interface MapOptionsInterface {
     dimensionId?: DimensionEnum;
     dimensions: APIDimensionInterface[];
@@ -11,9 +19,7 @@ interface MapOptionsInterface {
     nativeZoomMax?: number;
     nativeZoomMin?: number;
     urlTemplate?: string;
-    zoom?: number;
-    zoomMax?: number;
-    zoomMin?: number;
+    zoom?: MapZoomOptionsInterface;
 }
 
 export default class Map {
@@ -24,7 +30,6 @@ export default class Map {
     protected tileLayerHandler: MapTileLayerHandler;
 
     protected get scale(): number {
-        // return 1 / Math.pow(2, this.leafletMap.getMaxZoom());
         return 1 / Math.pow(2, this.tileLayerHandler.nativeZoomMax);
     }
 
@@ -36,20 +41,20 @@ export default class Map {
         this.leafletMap = new LeafletMap(this.element, {
             crs:                CRS.Simple,
             center:             [0, 0],
-            zoom:               options.zoom ?? 0,
+            zoom:               options.zoom?.current ?? 0,
             attributionControl: false,
             preferCanvas:       false,
             zoomControl:        false,
-            minZoom:            options.zoomMin ?? 0,
-            maxZoom:            options.zoomMax ?? 3,
+            minZoom:            options.zoom?.min ?? 0,
+            maxZoom:            options.zoom?.max ?? 3,
         });
 
         this.tileLayerHandler = new MapTileLayerHandler({
             leafletMap:    this.leafletMap,
             dimensionId:   this.dimensionId,
             urlTemplate:   options.urlTemplate,
-            nativeZoomMin: options.nativeZoomMin ?? 0,
-            nativeZoomMax: options.nativeZoomMax ?? 3,
+            nativeZoomMin: options.zoom?.nativeMin ?? 0,
+            nativeZoomMax: options.zoom?.nativeMax ?? 3,
         });
 
         this.leafletMap.whenReady(() => this.setViewToSpawn());

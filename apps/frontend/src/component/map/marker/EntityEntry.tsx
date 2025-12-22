@@ -18,7 +18,7 @@ interface MapMarkerEntityEntryOptionsInterface {
 const DURATION_ALIVE_WARNING = 30 * 60 * 1000;
 
 export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}: MapMarkerEntityEntryOptionsInterface): ReactElement {
-    const [durationAlive, setDurationAlive]                               = useState(Date.now() - entityInitial.stats.firstSeen);
+    const [durationAlive, setDurationAlive]           = useState(Date.now() - entityInitial.stats.firstSeen);
     const [tooltipIsPermanent, setTooltipIsPermanent] = useState(false);
     const map                                         = useMap();
     const dimension                                   = useDimension();
@@ -46,14 +46,6 @@ export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}
 
         refMarker.current.setIcon(refIcon.current);
 
-        refTooltip.current = new Tooltip({
-            direction: 'right',
-            offset:    [5, 0],
-            content:   refTooltipElement.current!,
-            className: 'bg-black/90! border-gray-500/85! before:content-none! rounded!',
-        });
-
-        refMarker.current.bindTooltip(refTooltip.current);
         const interval = setInterval(() => setDurationAlive(Date.now() - entity.stats.firstSeen), 1000);
         return () => clearInterval(interval);
     }, []);
@@ -76,7 +68,13 @@ export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}
     }, [entity.x, entity.z]);
 
     useEffect(() => {
-        refMarker.current?.unbindTooltip();
+        if (refTooltip.current?.options.permanent === tooltipIsPermanent) {
+            return;
+        }
+
+        refMarker.current.unbindTooltip();
+        // @ts-ignore
+        refMarker.current.removeFrom(layerGroup);
         refTooltip.current?.remove();
 
         refTooltip.current = new Tooltip({
@@ -86,7 +84,15 @@ export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}
             content:   refTooltipElement.current!,
             className: 'bg-black/90! border-gray-500/85! before:content-none! rounded!',
         });
+
         refMarker.current.bindTooltip(refTooltip.current);
+        if (dimension.id === entity.dimension && entity.stats.isDeleted === false) {
+            refMarker.current.addTo(layerGroup);
+        }
+        else {
+            // @ts-ignore
+            refMarker.current.removeFrom(layerGroup);
+        }
     }, [tooltipIsPermanent]);
 
     return (
@@ -103,10 +109,14 @@ export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}
             >
                 <ContourImage src={getMobImageByType(entity.displayType)} type={durationAlive < DURATION_ALIVE_WARNING ? ContourType.DEFAULT : ContourType.ERROR} width={size} height={size}/>
             </div>
-            <div ref={refTooltipElement} className="text-white flex-row w-max flex gap-1 items-start justify-center flex-nowrap font-sans text-sm leading-4">
+            <div
+                ref={refTooltipElement}
+                data-uuid={entity.uuid}
+                className="text-white flex-row w-max flex gap-1 items-start justify-center flex-nowrap font-sans text-sm leading-4 pointer-events-auto"
+            >
                 <img src={getMobImageByType(entity.displayType)} alt="" className="w-8 h-8"/>
                 <div className="flex flex-col">
-                    <div className="font-bold">{entity.displayName}</div>
+                    <div className="font-bold">{entity.customName ?? entity.displayName}</div>
                     <div className="text-gray-300 flex flex-row gap-1 items-center">
                         <LucideMapPin className="w-3 h-3"/> <span>{Math.floor(entity.x)} / {Math.floor(entity.y)} / {Math.floor(entity.z)}</span>
                     </div>

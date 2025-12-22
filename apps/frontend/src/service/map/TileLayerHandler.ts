@@ -74,7 +74,8 @@ export default class MapTileLayerHandler {
 
             // create the new layers
             layer = new MapTileLayer(this.urlTemplate.replace('{dimensionId}', this.dimensionId.replace(':', '_')), {
-                tileSize: this.tileSize,
+                id:            `tileLayer-${index}`,
+                tileSize:      this.tileSize,
                 minNativeZoom: this.nativeZoomMin,
                 maxNativeZoom: this.nativeZoomMax,
                 errorTileUrl:  this.fallbackImage,

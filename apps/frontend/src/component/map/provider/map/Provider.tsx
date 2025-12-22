@@ -1,6 +1,7 @@
 import MapProviderDimension from '@/component/map/provider/dimension/Provider';
 import MapProviderDimensions from '@/component/map/provider/dimensions/Provider';
 import MapContextMap from '@/component/map/provider/map/Context';
+import config from '@/config';
 import useWSS from '@/hook/useWSS';
 import cn from '@/lib/cn';
 import setting from '@/lib/setting';
@@ -29,11 +30,12 @@ export default function MapProviderMap({host, className, children}: PropsWithChi
 
         mapRef.current = new Map({
             element:     containerRef.current,
-            dimensions,
-            dimensionId: setting.get('dimension', DimensionEnum.OVERWORLD),
             urlTemplate: `${host}/tiles/{dimensionId}/{z}/{x}_{y}.png`,
 
-            zoomMax: 8,
+            dimensions,
+            dimensionId: setting.get('dimension', DimensionEnum.OVERWORLD),
+
+            zoom: config.map.zoom,
         });
 
         mapRef.current.leafletMap.whenReady(() => setReady(true));

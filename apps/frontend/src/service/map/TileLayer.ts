@@ -2,27 +2,28 @@ import {Coords, DomEvent, DoneCallback, TileLayer as BaseTileLayer, Util} from '
 
 export default class MapTileLayer extends BaseTileLayer {
     protected createTile(coords: Coords, done: DoneCallback): HTMLElement {
-        const tile = document.createElement('img');
+        const element = document.createElement('img');
+         element.style.imageRendering = 'pixelated';
 
         //Once image has loaded revoke the object URL as we don't need it anymore
-        DomEvent.on(tile, 'load', () => {
-            URL.revokeObjectURL(tile.src);
-            this._tileOnLoad(done, tile);
+        DomEvent.on(element, 'load', () => {
+            URL.revokeObjectURL(element.src);
+            this._tileOnLoad(done, element);
         });
-        DomEvent.on(tile, 'error', Util.bind(this._tileOnError, this, done, tile));
+        DomEvent.on(element, 'error', Util.bind(this._tileOnError, this, done, element));
 
         if (this.options.crossOrigin || this.options.crossOrigin === '') {
-            tile.crossOrigin = this.options.crossOrigin === true ? '' : this.options.crossOrigin;
+            element.crossOrigin = this.options.crossOrigin === true ? '' : this.options.crossOrigin;
         }
 
-        tile.alt = '';
-        tile.setAttribute('role', 'presentation');
+        element.alt = '';
+        element.setAttribute('role', 'presentation');
 
         this.fetch(coords)
-            .then((src) => tile.src = src)
-            .catch((error) => this._tileOnError(done, tile, error));
+            .then((src) => element.src = src)
+            .catch((error) => this._tileOnError(done, element, error));
 
-        return tile;
+        return element;
     }
 
     protected async fetch(coords: Coords): Promise<string> {
