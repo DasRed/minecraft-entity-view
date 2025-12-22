@@ -14,7 +14,7 @@ import {ReactElement} from 'react';
 
 export default function Map(): ReactElement | null {
     const statistic = useWSS<StatisticsInterface>(CommandEnum.STATISTIC_FULL);
-    const players = useWSS<APIPlayersInterface>(CommandEnum.PLAYERS_FULL);
+    const players   = useWSS<APIPlayersInterface>(CommandEnum.PLAYERS_FULL);
     if (players === null || statistic === null) {
         return null;
     }
