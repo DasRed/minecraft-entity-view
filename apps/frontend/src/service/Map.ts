@@ -8,6 +8,8 @@ interface MapOptionsInterface {
     dimensionId?: DimensionEnum;
     dimensions: APIDimensionInterface[];
     element: HTMLElement;
+    nativeZoomMax?: number;
+    nativeZoomMin?: number;
     urlTemplate?: string;
     zoom?: number;
     zoomMax?: number;
@@ -22,7 +24,8 @@ export default class Map {
     protected tileLayerHandler: MapTileLayerHandler;
 
     protected get scale(): number {
-        return 1 / Math.pow(2, this.leafletMap.getMaxZoom());
+        // return 1 / Math.pow(2, this.leafletMap.getMaxZoom());
+        return 1 / Math.pow(2, this.tileLayerHandler.nativeZoomMax);
     }
 
     constructor(options: MapOptionsInterface) {
@@ -42,9 +45,11 @@ export default class Map {
         });
 
         this.tileLayerHandler = new MapTileLayerHandler({
-            leafletMap:  this.leafletMap,
-            dimensionId: this.dimensionId,
-            urlTemplate: options.urlTemplate,
+            leafletMap:    this.leafletMap,
+            dimensionId:   this.dimensionId,
+            urlTemplate:   options.urlTemplate,
+            nativeZoomMin: options.nativeZoomMin ?? 0,
+            nativeZoomMax: options.nativeZoomMax ?? 3,
         });
 
         this.leafletMap.whenReady(() => this.setViewToSpawn());

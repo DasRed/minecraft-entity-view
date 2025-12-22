@@ -2,10 +2,11 @@ import MapControlContainer from '@/component/map/control/Container';
 import MapControlToggleIcon from '@/component/map/control/ToggleIcon';
 import MapLayerEntities from '@/component/map/layer/Entities';
 import MapLayerPlayers from '@/component/map/layer/Players';
+import setting from '@/lib/setting';
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
 import APIPlayersInterface from '@dasred/minecraft-entity-view-sdk/model/api/PlayersInterface';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
-import {ReactElement, useState} from 'react';
+import {ReactElement, useEffect, useState} from 'react';
 
 interface MapEntitiesIconOptionsInterface {
     players: APIPlayersInterface;
@@ -13,12 +14,19 @@ interface MapEntitiesIconOptionsInterface {
 }
 
 export default function MapControlEntities({players, statistic}: MapEntitiesIconOptionsInterface): ReactElement {
-    const [showPlayers, setShowPlayers]   = useState<boolean>(false);
-    const [showMonster, setShowMonster]   = useState<boolean>(true);
-    const [showCreature, setShowCreature] = useState<boolean>(true);
-    const [showItem, setShowItem]         = useState<boolean>(false);
-    const [showMisc, setShowMisc]         = useState<boolean>(false);
-    const [showOther, setShowOther]       = useState<boolean>(false);
+    const [showPlayers, setShowPlayers]   = useState<boolean>(setting.get('players.visible', false));
+    const [showMonster, setShowMonster]   = useState<boolean>(setting.get('monsters.visible', true));
+    const [showCreature, setShowCreature] = useState<boolean>(setting.get('creatures.visible', true));
+    const [showItem, setShowItem]         = useState<boolean>(setting.get('items.visible', false));
+    const [showMisc, setShowMisc]         = useState<boolean>(setting.get('misc.visible', false));
+    const [showOther, setShowOther]       = useState<boolean>(setting.get('other.visible', false));
+
+    useEffect(() => void setting.set('players.visible', showPlayers), [showPlayers]);
+    useEffect(() => void setting.set('monsters.visible', showMonster), [showMonster]);
+    useEffect(() => void setting.set('creatures.visible', showCreature), [showCreature]);
+    useEffect(() => void setting.set('items.visible', showItem), [showItem]);
+    useEffect(() => void setting.set('misc.visible', showMisc), [showMisc]);
+    useEffect(() => void setting.set('other.visible', showOther), [showOther]);
 
     return (
         <MapControlContainer>

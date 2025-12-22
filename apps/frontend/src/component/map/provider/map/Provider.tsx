@@ -3,8 +3,10 @@ import MapProviderDimensions from '@/component/map/provider/dimensions/Provider'
 import MapContextMap from '@/component/map/provider/map/Context';
 import useWSS from '@/hook/useWSS';
 import cn from '@/lib/cn';
+import setting from '@/lib/setting';
 import Map from '@/service/Map';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
+import DimensionEnum from '@dasred/minecraft-entity-view-sdk/constant/DimensionEnum';
 import APIDimensionInterface from '@dasred/minecraft-entity-view-sdk/model/api/DimensionInterface';
 import {PropsWithChildren, ReactNode, useEffect, useRef, useState} from 'react';
 
@@ -28,7 +30,10 @@ export default function MapProviderMap({host, className, children}: PropsWithChi
         mapRef.current = new Map({
             element:     containerRef.current,
             dimensions,
+            dimensionId: setting.get('dimension', DimensionEnum.OVERWORLD),
             urlTemplate: `${host}/tiles/{dimensionId}/{z}/{x}_{y}.png`,
+
+            zoomMax: 8,
         });
 
         mapRef.current.leafletMap.whenReady(() => setReady(true));

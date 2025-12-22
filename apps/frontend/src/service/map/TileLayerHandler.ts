@@ -6,6 +6,8 @@ interface MapTileLayerHandlerOptions {
     dimensionId: DimensionEnum;
     fallbackImage?: string;
     leafletMap: LeafletMap;
+    nativeZoomMax: number;
+    nativeZoomMin: number;
     refreshInterval?: number;
     tileSize?: number;
     urlTemplate?: string;
@@ -18,6 +20,8 @@ export default class MapTileLayerHandler {
     protected layerCurrentIndex: number;
     protected layers: (MapTileLayer | null)[];
     protected leafletMap: LeafletMap;
+    public nativeZoomMax: number;
+    protected nativeZoomMin: number;
     protected tileSize: number;
     protected urlTemplate: string;
 
@@ -27,6 +31,8 @@ export default class MapTileLayerHandler {
         this.layerCurrentIndex = 0;
         this.layers            = [null, null]; // pre init with default 2 layers, we need 2 layers to swap between for seamless refreshing for image updates from server
         this.leafletMap        = options.leafletMap;
+        this.nativeZoomMax     = options.nativeZoomMax;
+        this.nativeZoomMin     = options.nativeZoomMin;
         this.tileSize          = options.tileSize ?? 512;
         this.urlTemplate       = options.urlTemplate ?? '/tiles/{dimensionId}/{z}/{x}_{y}.png';
 
@@ -68,9 +74,9 @@ export default class MapTileLayerHandler {
 
             // create the new layers
             layer = new MapTileLayer(this.urlTemplate.replace('{dimensionId}', this.dimensionId.replace(':', '_')), {
-                tileSize:      this.tileSize,
-                minNativeZoom: this.leafletMap.getMinZoom(),
-                maxNativeZoom: this.leafletMap.getMaxZoom(),
+                tileSize: this.tileSize,
+                minNativeZoom: this.nativeZoomMin,
+                maxNativeZoom: this.nativeZoomMax,
                 errorTileUrl:  this.fallbackImage,
             });
 

@@ -7,7 +7,13 @@ export default function MapCoordinates(): ReactElement {
     const [coordinates, setCoordinates] = useState<Point | null>(null);
 
     useEffect(() => {
-        map.leafletMap.on('mousemove', (event) => setCoordinates(map.toPoint(event.latlng)));
+        map.leafletMap.on('mousemove', (event) => {
+            const point = map.toPoint(event.latlng);
+            point.x = Math.floor(point.x);
+            point.y = Math.floor(point.y);
+
+            setCoordinates(point);
+        });
         return () => void map.leafletMap.off('mousemove');
     }, [map]);
 

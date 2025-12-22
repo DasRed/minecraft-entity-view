@@ -96,6 +96,7 @@ export default class MinecraftApiClient {
                 displayName,
                 displayType,
                 stats:    {
+                    firstSeen: 0,
                     order:     Object.fromEntries(Object.values(EntityOrderTypeEnum).map((orderType) => [orderType, 0])),
                     isMoved:   false,
                     isDeleted: false,

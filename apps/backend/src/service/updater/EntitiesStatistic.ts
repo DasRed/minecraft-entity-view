@@ -96,6 +96,7 @@ export default class EntitiesStatisticUpdater extends UpdaterIntervalAbstract {
             const entityBefore        = entitiesBefore[entityAfter.uuid];
             const entityInternalState = this.store.getEntityInternalState(entityBefore ?? entityAfter);
 
+            entityAfter.stats.firstSeen            = entityInternalState.firstSeenTimestamp;
             entityAfter.stats.isNew                = this.store.getTimestampNow() < (entityInternalState.firstSeenTimestamp + this.config.isNewEntityFor);
             entityAfter.stats.isMoved              = entityAfter.x !== entityInternalState.previousPosition.x || entityAfter.y !== entityInternalState.previousPosition.y || entityAfter.z !== entityInternalState.previousPosition.z;
             entityInternalState.previousPosition.x = entityAfter.x;

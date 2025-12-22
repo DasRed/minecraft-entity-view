@@ -59,7 +59,7 @@ export default function MapMarkerPlayerEntry({player: playerInitial, layerGroup}
             direction: 'right',
             offset:    [5, 0],
             content:   refTooltipElement.current!,
-            className: 'bg-black/60! border-gray-800/75! before:content-none!',
+            className: 'bg-black/90! border-gray-500/85! before:content-none! rounded!',
         });
 
         refMarker.current.bindTooltip(refTooltip.current);
@@ -71,8 +71,10 @@ export default function MapMarkerPlayerEntry({player: playerInitial, layerGroup}
     }, []);
 
     return (
-        <div ref={refTooltipElement} className="text-white flex-row font-bold">
-            <PlayerLabel uuid={player.uuid} name={player.name} level={player.experienceLevel} isInvisible={player.isInvisible}/>
+        <div className="hidden">
+            <div ref={refTooltipElement} className="text-white flex-row font-bold">
+                <PlayerLabel uuid={player.uuid} name={player.name} level={player.experienceLevel} isInvisible={player.isInvisible}/>
+            </div>
         </div>
     );
 }

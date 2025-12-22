@@ -34,8 +34,10 @@ export default function MapLayerSpawn({visible}: MapLayerSpawnOptionsInterface):
     }, [layerGroup, dimension]);
 
     return (
-        <div ref={refIcon} className={cn('bg-transparent border-none transition-opacity opacity-100 pointer-events-none', {'hidden': visible === false})}>
-            <LucideMapPin absoluteStrokeWidth={true} strokeWidth={3} className="w-6 h-6 text-fuchsia-400"/>
+        <div className="hidden">
+            <div ref={refIcon} className={cn('bg-transparent border-none transition-opacity opacity-100 pointer-events-none', {'hidden': visible === false})}>
+                <LucideMapPin absoluteStrokeWidth={true} strokeWidth={3} className="w-6 h-6 text-fuchsia-400"/>
+            </div>
         </div>
     );
 }
