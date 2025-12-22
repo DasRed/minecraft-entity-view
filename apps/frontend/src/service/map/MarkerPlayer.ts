@@ -1,26 +1,21 @@
 import {Icon, LatLngExpression, Marker, Point, PointTuple} from 'leaflet';
 
 interface MapMarkerPlayerOptionsInterface {
-    icon: Icon;
     latlng: LatLngExpression;
     rotationAngle: number;
+    anchor: PointTuple;
 }
 
 export default class MapMarkerPlayer extends Marker {
-    icon: Icon;
     rotationAngle: number;
     rotationOrigin: string;
 
-    constructor({rotationAngle, latlng, icon}: MapMarkerPlayerOptionsInterface) {
+    constructor({rotationAngle, latlng, anchor}: MapMarkerPlayerOptionsInterface) {
         super(latlng, {
-            icon,
             interactive: false,
             keyboard:    false,
         });
 
-        const anchor = icon.options.iconAnchor as PointTuple;
-
-        this.icon           = icon;
         this.rotationAngle  = rotationAngle;
         this.rotationOrigin = anchor[0] + 'px ' + anchor[1] + 'px';
 

@@ -107,19 +107,7 @@ export default class MinecraftApiClient {
         }, {} as StatisticEntityListInterface);
     }
 
-    public async getPlayers(): Promise<APIPlayersInterface | null> {
-        const result: APIPlayersInterface | null = await this.fetch('GET', '/players');
-        if (result === null) {
-            return null;
-        }
-
-        Object.values(result.players).forEach((player) => {
-            player.x        = Math.floor(player.x);
-            player.y        = Math.floor(player.y);
-            player.z        = Math.floor(player.z);
-            player.yHeadRot = Math.floor(player.yHeadRot);
-        });
-
-        return result;
+    public getPlayers(): Promise<APIPlayersInterface | null> {
+        return this.fetch('GET', '/players');
     }
 }

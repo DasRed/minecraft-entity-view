@@ -1,4 +1,5 @@
 import ContourImage, {ContourType} from '@/component/ContourImage';
+import Coordinates from '@/component/Coordinates';
 import useDimension from '@/component/map/provider/dimension/use';
 import useMap from '@/component/map/provider/map/use';
 import useWSSPatch from '@/hook/useWSSPatch';
@@ -112,13 +113,13 @@ export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}
             <div
                 ref={refTooltipElement}
                 data-uuid={entity.uuid}
-                className="text-white flex-row w-max flex gap-1 items-start justify-center flex-nowrap font-sans text-sm leading-4 pointer-events-auto"
+                className="text-white flex-row w-max flex gap-1 items-start flex-nowrap font-sans text-sm leading-4 pointer-events-auto"
             >
                 <img src={getMobImageByType(entity.displayType)} alt="" className="w-8 h-8"/>
                 <div className="flex flex-col">
                     <div className="font-bold">{entity.customName ?? entity.displayName}</div>
                     <div className="text-gray-300 flex flex-row gap-1 items-center">
-                        <LucideMapPin className="w-3 h-3"/> <span>{Math.floor(entity.x)} / {Math.floor(entity.y)} / {Math.floor(entity.z)}</span>
+                        <LucideMapPin className="w-3 h-3"/> <Coordinates x={entity.x} y={entity.y} z={entity.z} />
                     </div>
                     <div className="text-gray-300 flex flex-row gap-1 items-center">
                         <LucideClock className="w-3 h-3"/> <span>{Duration.fromMillis(durationAlive).toFormat('hh:mm:ss')}</span>

@@ -2,6 +2,7 @@ import useLayerGroup from '@/component/map/hook/useLayerGroup';
 import MapMarkerEntityEntry from '@/component/map/marker/EntityEntry';
 import useWSSObjectListPatch from '@/hook/useWSSObjectListPatch';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
+import EntityTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityTypeEnum';
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
@@ -19,7 +20,7 @@ export default function MapLayerEntities({statistic, category, visible}: MapLaye
 
     return (
         <div className="hidden">
-            {entities.map((entity) => <MapMarkerEntityEntry key={entity.uuid} entity={entity} layerGroup={layerGroup}/>)}
+            {entities.map((entity) => entity.displayType !== EntityTypeEnum.PLAYER && <MapMarkerEntityEntry key={entity.uuid} entity={entity} layerGroup={layerGroup}/>)}
         </div>
     );
 }
