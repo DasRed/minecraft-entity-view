@@ -1,4 +1,3 @@
-import MapControlContainer from '@/component/map/control/Container';
 import MapControlToggleIcon from '@/component/map/control/ToggleIcon';
 import useDimensionUpdate from '@/component/map/provider/dimension/useUpdate';
 import useDimensions from '@/component/map/provider/dimensions/use';
@@ -18,7 +17,7 @@ export default function MapControlDimension(): ReactElement {
     const {dimension, setDimension} = useDimensionUpdate();
 
     return (
-        <MapControlContainer>
+        <>
             {dimensions.sort((dimensionA, dimensionB) => (ORDER[dimensionA.id] ?? 99) - (ORDER[dimensionB.id] ?? 99)).map((entry) => (
                 <MapControlToggleIcon
                     key={entry.id}
@@ -29,6 +28,6 @@ export default function MapControlDimension(): ReactElement {
                     disabled={dimension.id === entry.id}
                 />
             ))}
-        </MapControlContainer>
+        </>
     );
 }

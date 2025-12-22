@@ -20,7 +20,7 @@ export default function MapControlToggleIcon({title, icon, active = true, disabl
             })}
         >
             <img src={icon} alt=""/>
-            <span className="ml-2">{title}</span>
+            <span className="px-2">{title}</span>
         </div>
     );
 }
