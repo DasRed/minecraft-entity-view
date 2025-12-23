@@ -3,7 +3,7 @@ load: nodeProject.jsonnet
 data:
   config: |
     {
-        "environmentVariables": ["RCON_HOST", "RCON_PORT", "RCON_PASSWORD"],
+        "environmentVariables": ["RCON_PASSWORD"],
         "nodeVersion":          25,
         "docker":               {
             "host":   "atlas.dasred.de",
