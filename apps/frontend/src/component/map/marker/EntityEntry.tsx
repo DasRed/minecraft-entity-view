@@ -3,11 +3,12 @@ import Coordinates from '@/component/Coordinates';
 import useDimension from '@/component/map/provider/dimension/use';
 import useMap from '@/component/map/provider/map/use';
 import useWSSPatch from '@/hook/useWSSPatch';
+import useWSSSend from '@/hook/useWSSSend';
 import getMobImageByType from '@/lib/getMobImageByType';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
 import {DivIcon, LayerGroup, Marker, Tooltip} from 'leaflet';
-import {LucideClock, LucideMapPin} from 'lucide-react';
+import {LucideClock, LucideMapPin, LucideSkull} from 'lucide-react';
 import {Duration} from 'luxon';
 import {ReactElement, useEffect, useRef, useState} from 'react';
 
@@ -19,6 +20,7 @@ interface MapMarkerEntityEntryOptionsInterface {
 const DURATION_ALIVE_WARNING = 30 * 60 * 1000;
 
 export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}: MapMarkerEntityEntryOptionsInterface): ReactElement {
+    const wssSend                                     = useWSSSend();
     const [durationAlive, setDurationAlive]           = useState(Date.now() - entityInitial.stats.firstSeen);
     const [tooltipIsPermanent, setTooltipIsPermanent] = useState(false);
     const map                                         = useMap();
@@ -117,9 +119,15 @@ export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}
             >
                 <img src={getMobImageByType(entity.displayType)} alt="" className="w-8 h-8"/>
                 <div className="flex flex-col">
-                    <div className="font-bold">{entity.customName ?? entity.displayName}</div>
+                    <div className="flex flex-row gap-5">
+                        <div className="font-bold">{entity.customName ?? entity.displayName}</div>
+                        <div className="flex-1"/>
+                        <div>
+                            <LucideSkull className="w-3 h-3 cursor-pointer hover:text-red-500" onClick={() => wssSend(CommandEnum.KILL_ENTITY, entity)}/>
+                        </div>
+                    </div>
                     <div className="text-gray-300 flex flex-row gap-1 items-center">
-                        <LucideMapPin className="w-3 h-3"/> <Coordinates x={entity.x} y={entity.y} z={entity.z} />
+                        <LucideMapPin className="w-3 h-3"/> <Coordinates x={entity.x} y={entity.y} z={entity.z}/>
                     </div>
                     <div className="text-gray-300 flex flex-row gap-1 items-center">
                         <LucideClock className="w-3 h-3"/> <span>{Duration.fromMillis(durationAlive).toFormat('hh:mm:ss')}</span>

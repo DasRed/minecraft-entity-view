@@ -62,4 +62,10 @@ export default class WebSocketClient {
 
         return this;
     }
+
+    public send(type: CommandType, data: unknown): this {
+        this.ws.send(JSON.stringify({type, data, date: new Date()} as WebSocketMessageInterface));
+
+        return this;
+    }
 }

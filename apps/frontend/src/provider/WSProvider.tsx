@@ -2,6 +2,7 @@ import config from '@/config';
 import WSContext from '@/context/WSContext';
 import wssStore from '@/lib/wssStore';
 import WebSocketClient from '@/service/WebSocketClient';
+import CommandType from '@dasred/minecraft-entity-view-sdk/model/CommandType';
 import {PropsWithChildren, useEffect, useRef} from 'react';
 
 export default function WSProvider({children}: PropsWithChildren) {
@@ -38,6 +39,14 @@ export default function WSProvider({children}: PropsWithChildren) {
         }
     }
 
+    function send(type: CommandType, data: unknown) :void {
+        if (clientRef.current === null) {
+            throw new Error('Websocket client not created');
+        }
+
+        clientRef.current.send(type, data);
+    }
+
     useEffect(() => {
         return () => {
             if (closeTimer.current !== null) {
@@ -48,7 +57,7 @@ export default function WSProvider({children}: PropsWithChildren) {
     }, []);
 
     return (
-        <WSContext.Provider value={{ensureClient, releaseClient}}>
+        <WSContext.Provider value={{ensureClient, releaseClient, send}}>
             {children}
         </WSContext.Provider>
     );

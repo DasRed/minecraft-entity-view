@@ -1,3 +1,4 @@
+import MessageHandlerAbstract from '@/service/messageHandler/Abstract';
 import WebSocketServerEventEnum from '@/service/webSocketServer/EventEnum';
 import CommandType from '@dasred/minecraft-entity-view-sdk/model/CommandType';
 import WebSocketMessageInterface from '@dasred/minecraft-entity-view-sdk/model/WebSocketMessageInterface';
@@ -7,13 +8,15 @@ import {WebSocket, WebSocketServer as WSS} from 'ws';
 
 export default class WebSocketServer extends EventEmitter {
     protected readonly clients: Record<string, WebSocket>;
+    protected readonly messageHandlers: MessageHandlerAbstract[];
     protected readonly wss: WSS;
 
-    constructor(port: number) {
+    constructor(port: number, messageHandlers: MessageHandlerAbstract[] = []) {
         super();
 
-        this.wss     = new WSS({port});
-        this.clients = {};
+        this.wss             = new WSS({port});
+        this.clients         = {};
+        this.messageHandlers = messageHandlers;
 
         this.wss.on('connection', (ws: WebSocket) => this.handleConnect(ws));
     }
@@ -30,15 +33,23 @@ export default class WebSocketServer extends EventEmitter {
 
         console.log(`new client with id ${id}.`);
 
-        ws.on('message', async (message) => {
-            console.log(`message from client ${id}`, message.toString());
-            this.emit(WebSocketServerEventEnum.CLIENT_MESSAGE, message.toString());
+        ws.on('message', (message) => {
+            const data: WebSocketMessageInterface = JSON.parse(message.toString());
+
+            this.messageHandlers.forEach(async (messageHandler) => {
+                if (messageHandler.getType() !== data.type) {
+                    return;
+                }
+                const result = await messageHandler.handle(ws, data.data);
+                if (result !== null) {
+                    this.sendTo(ws, result.type, result.data);
+                }
+            });
         });
 
         ws.on('close', () => {
             delete this.clients[id];
             console.log(`client with id ${id} removed.`);
-            this.emit(WebSocketServerEventEnum.CLIENT_DISCONNECTED, ws);
         });
 
         this.emit(WebSocketServerEventEnum.CLIENT_CONNECTED, ws);
@@ -46,13 +57,13 @@ export default class WebSocketServer extends EventEmitter {
         return this;
     }
 
-    public sendTo(ws: WebSocket, type: CommandType, data: any): this {
+    public sendTo(ws: WebSocket, type: CommandType, data: unknown): this {
         ws.send(JSON.stringify({date: (new Date()).toISOString(), type, data} as WebSocketMessageInterface));
 
         return this;
     }
 
-    public sendToAll(type: CommandType, data: any): this {
+    public sendToAll(type: CommandType, data: unknown): this {
         Object.values(this.clients).forEach((ws) => this.sendTo(ws, type, data));
 
         return this;
