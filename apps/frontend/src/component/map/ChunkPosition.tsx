@@ -25,7 +25,7 @@ export default function MapChunkPosition(): ReactElement {
     const maxZ = coordinates ? Math.floor(coordinates.y / 16 + 1) * 16 - 1 : undefined;
 
     return (
-        <div className="border border-gray-600 bg-white/75 rounded text-sm transition-all absolute z-2 right-2 bottom-2 py-1 px-2 pointer-events-none">
+        <div className="border border-gray-600 bg-white/75 rounded text-sm transition-all py-1 px-2">
             Chunk: [<Coordinates className="px-1" x={minX} z={minZ} />] - [<Coordinates className="px-1" x={maxX} z={maxZ} />]
         </div>
     );

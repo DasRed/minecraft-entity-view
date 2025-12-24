@@ -1,3 +1,4 @@
+import MapChunkLegend from '@/component/map/ChunkLegend';
 import MapChunkPosition from '@/component/map/ChunkPosition';
 import MapControlBlendTiles from '@/component/map/control/BlendTiles';
 import MapControlChunkStatus from '@/component/map/control/ChunkStatus';
@@ -12,7 +13,6 @@ import MapProviderMap from '@/component/map/provider/map/Provider';
 import config from '@/config';
 import useWSS from '@/hook/useWSS';
 import setting from '@/lib/setting';
-import ChunkStatusEnum from '@dasred/minecraft-entity-view-sdk/constant/ChunkStatusEnum';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 import APIChunkListInterface from '@dasred/minecraft-entity-view-sdk/model/api/ChunkListInterface';
 import APIPlayersInterface from '@dasred/minecraft-entity-view-sdk/model/api/PlayersInterface';
@@ -34,19 +34,16 @@ export default function Map(): ReactElement | null {
             <MapProviderMap host={config.squaremapBackend}>
                 <DimensionBackground/>
                 <div className="absolute inset-0 pointer-events-none">
-                    <MapCoordinates/>
-                    <MapChunkPosition/>
+                    <div className="absolute z-2 left-16 top-2 pointer-events-none flex flex-row gap-3">
+                        <MapCoordinates/>
+                        <MapChunkPosition/>
+                    </div>
 
-                    {isChunkStatusActive && <div className="border border-gray-600 bg-white/25 rounded text-sm absolute z-2 right-2 top-2 py-1 px-2 pointer-events-none flex flex-row gap-2 items-center">
-                        <div className="pr-2">Legend</div>
-                        <div data-chukn-status={ChunkStatusEnum.ENTITY_TICKING} className="border border-gray-600 bg-green-500/25 px-1 py-0.5 rounded">Full active</div>
-                        <div data-chukn-status={ChunkStatusEnum.BLOCK_TICKING} className="border border-gray-600 bg-yellow-500/25 px-1 py-0.5 rounded">Redstone</div>
-                        <div data-chukn-status={ChunkStatusEnum.FULL} className="border border-gray-600 bg-orange-500/25 px-1 py-0.5 rounded">Inactive</div>
-                        <div data-chukn-status={ChunkStatusEnum.INACCESSIBLE} className="border border-gray-600 bg-red-500/25 px-1 py-0.5 rounded">Unloaded</div>
-                        {/*<div data-chukn-status={ChunkStatusEnum.UNKNOWN} className="border border-gray-600 bg-fuchsia-400/25 px-1 py-0.5 rounded">Unknown</div>*/}
+                    {isChunkStatusActive && <div className="absolute z-2 right-2 top-2 flex flex-col gap-3 items-start pointer-events-none">
+                        <MapChunkLegend/>
                     </div>}
 
-                    <div className="absolute z-2 left-2 top-2 flex flex-col gap-3 items-start text-sm pointer-events-none">
+                    <div className="absolute z-2 left-2 top-2 flex flex-col gap-3 items-start pointer-events-none">
                         <MapControlContainer expandable={false}>
                             <MapControlZoom/>
                         </MapControlContainer>

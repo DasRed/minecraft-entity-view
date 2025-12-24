@@ -19,7 +19,7 @@ export default function MapCoordinates(): ReactElement {
     }, [map]);
 
     return (
-        <div className="border border-gray-600 bg-white/75 rounded text-sm transition-all absolute z-2 left-2 bottom-2 py-1 px-2 pointer-events-none">
+        <div className="border border-gray-600 bg-white/75 rounded text-sm transition-all py-1 px-2">
             Coordinates: <Coordinates x={coordinates?.x} z={coordinates?.y} />
         </div>
     );
