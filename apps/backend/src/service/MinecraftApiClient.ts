@@ -66,15 +66,9 @@ export default class MinecraftApiClient {
             let displayName         = entity.name;
             let displayType: string = entity.type;
 
-            delete entity.onGround;
-
             if (entity.type === EntityTypeEnum.ITEM) {
                 displayName = entity.item.name;
                 displayType = entity.item.type;
-
-                delete entity.item.age;
-                delete entity.item.lifespan;
-                delete entity.item.popTime;
             }
             else if (entity.type === EntityTypeEnum.BLOCK_DISPLAY && entity.tags.includes('portals.block_display.portal.nether_portal')) {
                 displayName = 'Nether Portal';
@@ -96,7 +90,6 @@ export default class MinecraftApiClient {
                 displayName,
                 displayType,
                 stats:    {
-                    firstSeen: 0,
                     order:     Object.fromEntries(Object.values(EntityOrderTypeEnum).map((orderType) => [orderType, 0])),
                     isMoved:   false,
                     isDeleted: false,

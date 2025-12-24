@@ -67,7 +67,6 @@ export default class Store {
         if (this.entitiesInternalState[entity.uuid] === undefined) {
             this.entitiesInternalState[entity.uuid] = {
                 firstPosition:      {x: entity.x, y: entity.y, z: entity.z},
-                firstSeenTimestamp: this.timestampNow,
                 previousPosition:   {x: entity.x, y: entity.y, z: entity.z},
                 removeTimestamp:    null,
             };

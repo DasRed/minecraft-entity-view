@@ -10,7 +10,7 @@ import EntitiesStatisticUpdaterSorter from '@/service/entitiesStatistic/Sorter';
 import EntityOrderTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityOrderTypeEnum';
 
 const sorter = new EntitiesStatisticUpdaterSorter(new EntitiesStatisticComparatorUUID(), {
-    [EntityOrderTypeEnum.DEFAULT]:   [new EntitiesStatisticComparatorRemove(store), new EntitiesStatisticComparatorItemCount(), new EntitiesStatisticComparatorFirstSeen(store), new EntitiesStatisticComparatorName(), new EntitiesStatisticComparatorDimension(), new EntitiesStatisticComparatorPosition()],
+    [EntityOrderTypeEnum.DEFAULT]:   [new EntitiesStatisticComparatorRemove(store), new EntitiesStatisticComparatorItemCount(), new EntitiesStatisticComparatorFirstSeen(), new EntitiesStatisticComparatorName(), new EntitiesStatisticComparatorDimension(), new EntitiesStatisticComparatorPosition()],
     [EntityOrderTypeEnum.NAME]:      [new EntitiesStatisticComparatorName(), new EntitiesStatisticComparatorDimension(), new EntitiesStatisticComparatorPosition()],
     [EntityOrderTypeEnum.DIMENSION]: [new EntitiesStatisticComparatorDimension(), new EntitiesStatisticComparatorName(), new EntitiesStatisticComparatorPosition()],
     [EntityOrderTypeEnum.POSITION]:  [new EntitiesStatisticComparatorPosition(), new EntitiesStatisticComparatorName(), new EntitiesStatisticComparatorDimension()],

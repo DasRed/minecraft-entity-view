@@ -1,15 +1,21 @@
 import DimensionEnum from '../../../constant/DimensionEnum';
 import MobCategoryEnum from '../../../constant/MobCategoryEnum';
+import APIEntityChunkInterface from './ChunkInterface';
 
 interface APIEntityBaseInterface {
+    born: {
+        at: {
+            timestamp: number;
+            gameTime: number;
+        }
+    };
     category: MobCategoryEnum;
-    chunkLoaded: boolean,
+    chunk: APIEntityChunkInterface;
     customName?: string;
     dimension: DimensionEnum;
     displayName: string;
     displayType: string;
     name: string;
-    onGround?: boolean;
     tags: string[];
     uuid: string;
     x: number;

@@ -3,7 +3,6 @@ import APIEntityInterface from './api/EntityInterface';
 
 interface StatisticEntityInterface extends APIEntityInterface {
     stats: {
-        firstSeen: number;
         order: Record<EntityOrderTypeEnum, number>;
         isMoved: boolean;
         isDeleted: boolean;

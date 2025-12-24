@@ -2,6 +2,7 @@ import ContourImage, {ContourType} from '@/component/ContourImage';
 import Coordinates from '@/component/Coordinates';
 import useDimension from '@/component/map/provider/dimension/use';
 import useMap from '@/component/map/provider/map/use';
+import config from '@/config';
 import useWSSPatch from '@/hook/useWSSPatch';
 import useWSSSend from '@/hook/useWSSSend';
 import getMobImageByType from '@/lib/getMobImageByType';
@@ -21,7 +22,7 @@ const DURATION_ALIVE_WARNING = 30 * 60 * 1000;
 
 export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}: MapMarkerEntityEntryOptionsInterface): ReactElement {
     const wssSend                                     = useWSSSend();
-    const [durationAlive, setDurationAlive]           = useState(Date.now() - entityInitial.stats.firstSeen);
+    const [durationAlive, setDurationAlive]           = useState(Date.now() - entityInitial.born.at.timestamp);
     const [tooltipIsPermanent, setTooltipIsPermanent] = useState(false);
     const map                                         = useMap();
     const dimension                                   = useDimension();
@@ -49,7 +50,7 @@ export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}
 
         refMarker.current.setIcon(refIcon.current);
 
-        const interval = setInterval(() => setDurationAlive(Date.now() - entity.stats.firstSeen), 1000);
+        const interval = setInterval(() => setDurationAlive(Date.now() - entityInitial.born.at.timestamp), 1000);
         return () => clearInterval(interval);
     }, []);
 
@@ -109,8 +110,12 @@ export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}
                 data-z={Math.floor(entity.z)}
                 style={{width: `${size}px`, height: `${size}px`}}
                 onClick={() => setTooltipIsPermanent(!tooltipIsPermanent)}
+                onDoubleClick={(event) => {
+                    event.stopPropagation();
+                    wssSend(CommandEnum.KILL_ENTITY, entity);
+                }}
             >
-                <ContourImage src={getMobImageByType(entity.displayType)} type={durationAlive < DURATION_ALIVE_WARNING ? ContourType.DEFAULT : ContourType.ERROR} width={size} height={size}/>
+                <ContourImage src={getMobImageByType(entity.displayType)} type={durationAlive < config.entity.highlightIfOlderThan ? ContourType.DEFAULT : ContourType.ERROR} width={size} height={size}/>
             </div>
             <div
                 ref={refTooltipElement}

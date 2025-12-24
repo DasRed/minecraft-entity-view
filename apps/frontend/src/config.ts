@@ -13,4 +13,8 @@ export default {
             nativeMax: 3,
         },
     },
+
+    entity: {
+        highlightIfOlderThan: 12 * 60 * 60 * 1000,
+    }
 } as const;

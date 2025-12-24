@@ -6,9 +6,6 @@ interface APIEntityItemInterface extends APIEntityBaseInterface {
         name: string;
         type: string;
         count: number;
-        age?: number;
-        lifespan?: number;
-        popTime?: number;
     };
     type: EntityTypeEnum.ITEM;
 }

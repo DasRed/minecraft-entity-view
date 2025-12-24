@@ -1,15 +1,17 @@
 import CountValue from '@/component/CountValue';
+import DimensionImage from '@/component/DimensionImage';
 import EntityEntry from '@/component/entity/Entry';
 import useWSSObjectListPatch from '@/hook/useWSSObjectListPatch';
 import cn from '@/lib/cn';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
+import DimensionEnum from '@dasred/minecraft-entity-view-sdk/constant/DimensionEnum';
 import EntityOrderTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityOrderTypeEnum';
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
 import SortDirectionEnum from '@dasred/minecraft-entity-view-sdk/constant/SortDirectionEnum';
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
 import {LucideChevronDown, LucideChevronUp} from 'lucide-react';
-import {ReactElement, useState} from 'react';
+import React, {ReactElement, useState} from 'react';
 
 interface EntitiesTableOptionsInterface {
     statistic: StatisticsInterface;
@@ -53,26 +55,26 @@ export default function EntityTable({statistic, category}: EntitiesTableOptionsI
             </h2>
 
             <div className="flex flex-col text-sm">
-                <div className="w-full font-bold border-b border-default grid grid-cols-7 cursor-pointer">
-                    <span className="col-span-3 overflow-hidden text-ellipsis" onClick={() => handleSort(EntityOrderTypeEnum.NAME)}>
+                <div className="w-full font-bold border-b border-default grid grid-cols-12 cursor-pointer">
+                    <span className="overflow-hidden items-center flex flex-col flex-nowrap" onClick={() => handleSort(EntityOrderTypeEnum.DIMENSION)}>
+                        {sortBy === EntityOrderTypeEnum.DIMENSION && sortDirection === SortDirectionEnum.ASC && <LucideChevronUp className="w-4 h-4 mr-0.5 inline-block"/>}
+                        {sortBy === EntityOrderTypeEnum.DIMENSION && sortDirection === SortDirectionEnum.DESC && <LucideChevronDown className="w-4 h-4 mr-0.5 inline-block"/>}
+                        {sortBy !== EntityOrderTypeEnum.DIMENSION && <DimensionImage dimension={DimensionEnum.OVERWORLD} className="w-4 h-4 mr-1"/> }
+                    </span>
+                    <span className="col-span-5 overflow-hidden text-ellipsis" onClick={() => handleSort(EntityOrderTypeEnum.NAME)}>
                         {sortBy === EntityOrderTypeEnum.NAME && sortDirection === SortDirectionEnum.ASC && <LucideChevronUp className="w-4 h-4 mr-0.5 inline-block"/>}
                         {sortBy === EntityOrderTypeEnum.NAME && sortDirection === SortDirectionEnum.DESC && <LucideChevronDown className="w-4 h-4 mr-0.5 inline-block"/>}
                         Name
                     </span>
-                    <span className="overflow-hidden text-ellipsis" onClick={() => handleSort(EntityOrderTypeEnum.DIMENSION)}>
-                        {sortBy === EntityOrderTypeEnum.DIMENSION && sortDirection === SortDirectionEnum.ASC && <LucideChevronUp className="w-4 h-4 mr-0.5 inline-block"/>}
-                        {sortBy === EntityOrderTypeEnum.DIMENSION && sortDirection === SortDirectionEnum.DESC && <LucideChevronDown className="w-4 h-4 mr-0.5 inline-block"/>}
-                        Dimension
-                    </span>
-                    <span className="text-right overflow-hidden text-ellipsis" onClick={() => handleSort(EntityOrderTypeEnum.POSITION)}>
+                    <span className="col-span-2 text-right overflow-hidden text-ellipsis" onClick={() => handleSort(EntityOrderTypeEnum.POSITION)}>
                         {sortBy === EntityOrderTypeEnum.POSITION && sortDirection === SortDirectionEnum.ASC && <LucideChevronUp className="w-4 h-4 mr-0.5 inline-block"/>}
                         {sortBy === EntityOrderTypeEnum.POSITION && sortDirection === SortDirectionEnum.DESC && <LucideChevronDown className="w-4 h-4 mr-0.5 inline-block"/>}
                         X
                     </span>
-                    <span className="text-right overflow-hidden text-ellipsis" onClick={() => handleSort(EntityOrderTypeEnum.POSITION)}>
+                    <span className="col-span-2 text-right overflow-hidden text-ellipsis" onClick={() => handleSort(EntityOrderTypeEnum.POSITION)}>
                         Y
                     </span>
-                    <span className="text-right overflow-hidden text-ellipsis" onClick={() => handleSort(EntityOrderTypeEnum.POSITION)}>
+                    <span className="col-span-2 text-right overflow-hidden text-ellipsis" onClick={() => handleSort(EntityOrderTypeEnum.POSITION)}>
                         Z
                     </span>
                 </div>

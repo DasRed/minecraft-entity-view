@@ -4,7 +4,6 @@ interface StatisticEntityInternalStateInterface {
         y: number;
         z: number;
     },
-    firstSeenTimestamp: number;
     previousPosition: {
         x: number;
         y: number;
