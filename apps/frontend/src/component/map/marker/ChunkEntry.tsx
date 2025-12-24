@@ -36,7 +36,6 @@ export default function MapMarkerChunkEntry({chunk: chunkInitial, layerGroup}: M
             html:       refIconElement.current,
             iconSize:   [size, size],
             iconAnchor: [0, 0],
-            // tooltipAnchor: [0, 0],
             className: 'bg-transparent border-none opacity-25',
         });
 
@@ -65,8 +64,8 @@ export default function MapMarkerChunkEntry({chunk: chunkInitial, layerGroup}: M
                 ref={refIconElement}
                 data-id={chunk.id}
                 style={{width: `${size * scale}px`, height: `${size * scale}px`}}
-                className={cn('flex flex-col items-center transition-all', {
-                    'bg-fuchsia-400':    chunk.status === ChunkStatusEnum.UNKNOWN,
+                className={cn('flex flex-col items-center', {
+                    'transparent':   chunk.status === ChunkStatusEnum.UNKNOWN,
                     'bg-red-500':    chunk.status === ChunkStatusEnum.INACCESSIBLE,
                     'bg-orange-500': chunk.status === ChunkStatusEnum.FULL,
                     'bg-yellow-500': chunk.status === ChunkStatusEnum.BLOCK_TICKING,

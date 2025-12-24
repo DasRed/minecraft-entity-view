@@ -1,3 +1,4 @@
+import MapChunkPosition from '@/component/map/ChunkPosition';
 import MapControlBlendTiles from '@/component/map/control/BlendTiles';
 import MapControlChunkStatus from '@/component/map/control/ChunkStatus';
 import MapControlContainer from '@/component/map/control/Container';
@@ -34,6 +35,7 @@ export default function Map(): ReactElement | null {
                 <DimensionBackground/>
                 <div className="absolute inset-0 pointer-events-none">
                     <MapCoordinates/>
+                    <MapChunkPosition/>
 
                     {isChunkStatusActive && <div className="border border-gray-600 bg-white/25 rounded text-sm absolute z-2 right-2 top-2 py-1 px-2 pointer-events-none flex flex-row gap-2 items-center">
                         <div className="pr-2">Legend</div>

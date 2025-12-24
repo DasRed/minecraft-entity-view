@@ -3,7 +3,6 @@ import useLayerGroup from '@/component/map/hook/useLayerGroup';
 import MapMarkerChunkEntry from '@/component/map/marker/ChunkEntry';
 import useWSSObjectListPatch from '@/hook/useWSSObjectListPatch';
 import setting from '@/lib/setting';
-import ChunkStatusEnum from '@dasred/minecraft-entity-view-sdk/constant/ChunkStatusEnum';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 import APIChunkInterface from '@dasred/minecraft-entity-view-sdk/model/api/ChunkInterface';
 import APIChunkListInterface from '@dasred/minecraft-entity-view-sdk/model/api/ChunkListInterface';
@@ -25,7 +24,7 @@ export default function MapControlChunkStatus({isActive, setIsActive, chunksActi
         <>
             <MapControlToggleIcon title="Chunk Status" icon="/map/chunkStatus/32x32.png" onToggle={setIsActive} active={isActive}/>
             <div className="hidden">
-                {chunksActive.map((chunk) => chunk.status !== ChunkStatusEnum.UNKNOWN && <MapMarkerChunkEntry key={chunk.id} layerGroup={layerGroup} chunk={chunk}/>)}
+                {chunksActive.map((chunk) => <MapMarkerChunkEntry key={chunk.id} layerGroup={layerGroup} chunk={chunk}/>)}
             </div>
         </>
     );
