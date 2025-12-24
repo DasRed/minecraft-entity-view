@@ -24,7 +24,7 @@ export default function MapControlChunkStatus({isActive, setIsActive, chunksActi
         <>
             <MapControlToggleIcon title="Chunk Status" icon="/map/chunkStatus/32x32.png" onToggle={setIsActive} active={isActive}/>
             <div className="hidden">
-                {chunksActive.map((chunk) => <MapMarkerChunkEntry key={`[${chunk.position.min.x}|${chunk.position.min.z}]-[${chunk.position.max.x}|${chunk.position.max.z}]`} layerGroup={layerGroup} chunk={chunk}/>)}
+                {chunksActive.map((chunk) => <MapMarkerChunkEntry key={chunk.id} layerGroup={layerGroup} chunk={chunk}/>)}
             </div>
         </>
     );

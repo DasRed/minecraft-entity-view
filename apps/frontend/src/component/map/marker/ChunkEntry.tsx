@@ -66,6 +66,7 @@ export default function MapMarkerChunkEntry({chunk: chunkInitial, layerGroup}: M
                 data-id={chunk.id}
                 style={{width: `${size * scale}px`, height: `${size * scale}px`}}
                 className={cn('flex flex-col items-center transition-all', {
+                    'bg-fuchsia-400':    chunk.status === ChunkStatusEnum.UNKNOWN,
                     'bg-red-500':    chunk.status === ChunkStatusEnum.INACCESSIBLE,
                     'bg-orange-500': chunk.status === ChunkStatusEnum.FULL,
                     'bg-yellow-500': chunk.status === ChunkStatusEnum.BLOCK_TICKING,
