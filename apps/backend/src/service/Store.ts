@@ -1,4 +1,5 @@
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
+import APIChunkListInterface from '@dasred/minecraft-entity-view-sdk/model/api/ChunkListInterface';
 import APIDimensionInterface from '@dasred/minecraft-entity-view-sdk/model/api/DimensionInterface';
 import APIPlayersInterface from '@dasred/minecraft-entity-view-sdk/model/api/PlayersInterface';
 import HistoryCountMobCategoryInterface from '@dasred/minecraft-entity-view-sdk/model/statistic/HistoryCountMobCategoryInterface';
@@ -10,6 +11,7 @@ import StatisticMobListInterface from '@dasred/minecraft-entity-view-sdk/model/S
 import StatisticsInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticsInterface';
 
 export default class Store {
+    protected chunksActive: APIChunkListInterface                              = {};
     protected dateNow: Date;
     protected dimensions: APIDimensionInterface[]                              = [];
     protected entities: StatisticEntityListInterface                           = {};
@@ -51,6 +53,10 @@ export default class Store {
         };
     }
 
+    public getChunksActive(): APIChunkListInterface {
+        return this.chunksActive;
+    }
+
     public getDateNow(): Date {
         return this.dateNow;
     }
@@ -66,9 +72,9 @@ export default class Store {
     public getEntityInternalState(entity: StatisticEntityInterface): StatisticEntityInternalStateInterface {
         if (this.entitiesInternalState[entity.uuid] === undefined) {
             this.entitiesInternalState[entity.uuid] = {
-                firstPosition:      {x: entity.x, y: entity.y, z: entity.z},
-                previousPosition:   {x: entity.x, y: entity.y, z: entity.z},
-                removeTimestamp:    null,
+                firstPosition:    {x: entity.x, y: entity.y, z: entity.z},
+                previousPosition: {x: entity.x, y: entity.y, z: entity.z},
+                removeTimestamp:  null,
             };
         }
 
@@ -89,6 +95,12 @@ export default class Store {
 
     public removeEntityInternalState(id: string): this {
         delete this.entitiesInternalState[id];
+        return this;
+    }
+
+    public setChunksActive(chunks: APIChunkListInterface): this {
+        this.chunksActive = chunks;
+
         return this;
     }
 

@@ -1,13 +1,14 @@
-import ChunkStatusEnum from '../../../constant/ChunkStatusEnum';
-import DimensionEnum from '../../../constant/DimensionEnum';
+import ChunkStatusEnum from '../../constant/ChunkStatusEnum';
+import DimensionEnum from '../../constant/DimensionEnum';
 
 interface Position {
     x: number;
     z: number;
 }
 
-interface APIEntityChunkInterface {
+interface APIChunkInterface {
     dimension: DimensionEnum;
+    id: string;
     isLoaded: boolean;
     position: {
         min: Position;
@@ -16,4 +17,4 @@ interface APIEntityChunkInterface {
     status: ChunkStatusEnum;
 }
 
-export default APIEntityChunkInterface;
+export default APIChunkInterface;

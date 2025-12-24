@@ -1,6 +1,6 @@
 import DimensionEnum from '../../../constant/DimensionEnum';
 import MobCategoryEnum from '../../../constant/MobCategoryEnum';
-import APIEntityChunkInterface from './ChunkInterface';
+import APIChunkInterface from '../ChunkInterface';
 
 interface APIEntityBaseInterface {
     born: {
@@ -10,7 +10,7 @@ interface APIEntityBaseInterface {
         }
     };
     category: MobCategoryEnum;
-    chunk: APIEntityChunkInterface;
+    chunk: APIChunkInterface;
     customName?: string;
     dimension: DimensionEnum;
     displayName: string;

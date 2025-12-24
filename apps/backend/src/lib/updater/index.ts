@@ -1,3 +1,4 @@
+import chunksActiveUpdater from '@/lib/updater/chunksActive';
 import dimensionsUpdater from '@/lib/updater/dimensions';
 import entitiesStatisticUpdater from '@/lib/updater/entitiesStatistic';
 import playersUpdater from '@/lib/updater/players';
@@ -7,4 +8,5 @@ export default <UpdaterAbstract[]>[
     entitiesStatisticUpdater,
     dimensionsUpdater,
     playersUpdater,
+    chunksActiveUpdater,
 ];

@@ -10,12 +10,12 @@ import {DivIcon, LayerGroup, Tooltip} from 'leaflet';
 import {LucideMapPin} from 'lucide-react';
 import {ReactElement, useEffect, useRef} from 'react';
 
-interface MapMarkerPlayerOptionsInterface {
+interface MapMarkerPlayerEntryOptionsInterface {
     player: APIPlayerInterface;
     layerGroup: LayerGroup;
 }
 
-export default function MapMarkerPlayerEntry({player: playerInitial, layerGroup}: MapMarkerPlayerOptionsInterface): ReactElement {
+export default function MapMarkerPlayerEntry({player: playerInitial, layerGroup}: MapMarkerPlayerEntryOptionsInterface): ReactElement {
     const map               = useMap();
     const dimension         = useDimension();
     const player            = useWSSPatch<APIPlayerInterface>(playerInitial, CommandEnum.PLAYERS_PATCH_ID(playerInitial.uuid));

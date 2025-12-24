@@ -1,6 +1,8 @@
 import EntityOrderTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityOrderTypeEnum';
 import EntityTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityTypeEnum';
 import MobCategoryEnum from '@dasred/minecraft-entity-view-sdk/constant/MobCategoryEnum';
+import APIChunkInterface from '@dasred/minecraft-entity-view-sdk/model/api/ChunkInterface';
+import APIChunkListInterface from '@dasred/minecraft-entity-view-sdk/model/api/ChunkListInterface';
 import APIDimensionInterface from '@dasred/minecraft-entity-view-sdk/model/api/DimensionInterface';
 import APIEntityInterface from '@dasred/minecraft-entity-view-sdk/model/api/EntityInterface';
 import APIPlayersInterface from '@dasred/minecraft-entity-view-sdk/model/api/PlayersInterface';
@@ -50,6 +52,19 @@ export default class MinecraftApiClient {
             console.log(exception);
             return null;
         }
+    }
+
+    public async getChunksActive(): Promise<APIChunkListInterface | null> {
+        const chunks: APIChunkInterface[] | null = await this.fetch('GET', '/chunks/active');
+        if (chunks === null) {
+            return null;
+        }
+
+        return chunks.reduce((acc, chunk) => {
+            acc[chunk.id] = chunk;
+
+            return acc;
+        }, {} as APIChunkListInterface);
     }
 
     public getDimensions(): Promise<APIDimensionInterface[] | null> {

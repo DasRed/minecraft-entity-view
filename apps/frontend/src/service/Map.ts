@@ -28,8 +28,9 @@ export default class Map {
     protected element: HTMLElement;
     public leafletMap: LeafletMap;
     protected tileLayerHandler: MapTileLayerHandler;
+    public zoomInitial: number;
 
-    protected get scale(): number {
+    public get scale(): number {
         return 1 / Math.pow(2, this.tileLayerHandler.nativeZoomMax);
     }
 
@@ -37,11 +38,12 @@ export default class Map {
         this.element     = options.element;
         this.dimensions  = options.dimensions;
         this.dimensionId = options.dimensionId ?? DimensionEnum.OVERWORLD;
+        this.zoomInitial = options.zoom?.current ?? 0;
 
         this.leafletMap = new LeafletMap(this.element, {
             crs:                CRS.Simple,
             center:             [0, 0],
-            zoom:               options.zoom?.current ?? 0,
+            zoom:               this.zoomInitial,
             attributionControl: false,
             preferCanvas:       false,
             zoomControl:        false,

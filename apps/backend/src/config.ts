@@ -23,6 +23,9 @@ export default {
     playersUpdater:           {
         interval: Number(process.env.UPDATER_PLAYERS_INTERVAL ?? 50),
     },
+    chunksActiveUpdater:           {
+        interval: Number(process.env.UPDATER_CHUNKS_ACTIVE_INTERVAL ?? 50),
+    },
     rcon:                     {
         host:     process.env.RCON_HOST ?? 'minecraft.dasred.de',
         port:     Number(process.env.RCON_PORT ?? 25575),
