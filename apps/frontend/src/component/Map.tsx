@@ -41,7 +41,7 @@ export default function Map(): ReactElement | null {
                         <div data-chukn-status={ChunkStatusEnum.BLOCK_TICKING} className="border border-gray-600 bg-yellow-500/25 px-1 py-0.5 rounded">Redstone</div>
                         <div data-chukn-status={ChunkStatusEnum.FULL} className="border border-gray-600 bg-orange-500/25 px-1 py-0.5 rounded">Inactive</div>
                         <div data-chukn-status={ChunkStatusEnum.INACCESSIBLE} className="border border-gray-600 bg-red-500/25 px-1 py-0.5 rounded">Unloaded</div>
-                        <div data-chukn-status={ChunkStatusEnum.UNKNOWN} className="border border-gray-600 bg-fuchsia-400/25 px-1 py-0.5 rounded">Unknown</div>
+                        {/*<div data-chukn-status={ChunkStatusEnum.UNKNOWN} className="border border-gray-600 bg-fuchsia-400/25 px-1 py-0.5 rounded">Unknown</div>*/}
                     </div>}
 
                     <div className="absolute z-2 left-2 top-2 flex flex-col gap-3 items-start text-sm pointer-events-none">
