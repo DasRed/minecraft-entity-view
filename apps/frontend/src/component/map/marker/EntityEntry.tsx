@@ -1,5 +1,6 @@
 import ContourImage, {ContourType} from '@/component/ContourImage';
 import Coordinates from '@/component/Coordinates';
+import MapEntityTooltip from '@/component/map/EntityTooltip';
 import useDimension from '@/component/map/provider/dimension/use';
 import useMap from '@/component/map/provider/map/use';
 import config from '@/config';
@@ -8,17 +9,19 @@ import useWSSSend from '@/hook/useWSSSend';
 import getMobImageByType from '@/lib/getMobImageByType';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
-import {DivIcon, LayerGroup, Marker, Tooltip} from 'leaflet';
+import {DivIcon, LayerGroup, LeafletEvent, Marker, Tooltip} from 'leaflet';
 import {LucideClock, LucideMapPin, LucideSkull} from 'lucide-react';
 import {Duration} from 'luxon';
-import {ReactElement, useEffect, useRef, useState} from 'react';
+import {ReactElement, useCallback, useEffect, useRef, useState} from 'react';
 
 interface MapMarkerEntityEntryOptionsInterface {
     entity: StatisticEntityInterface;
     layerGroup: LayerGroup;
 }
 
-const DURATION_ALIVE_WARNING = 30 * 60 * 1000;
+function calcScale(current: number, initial: number, factor: number = 2): number {
+    return Math.pow(2, (current - initial) / factor);
+}
 
 export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}: MapMarkerEntityEntryOptionsInterface): ReactElement {
     const wssSend                                     = useWSSSend();
@@ -26,6 +29,8 @@ export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}
     const [tooltipIsPermanent, setTooltipIsPermanent] = useState(false);
     const map                                         = useMap();
     const dimension                                   = useDimension();
+    // @ts-ignore
+    const [scale, setScale]                           = useState<number>(calcScale(map.leafletMap.getZoom(), map.zoomInitial));
     const entity                                      = useWSSPatch<StatisticEntityInterface>(entityInitial, CommandEnum.STATISTIC_PATCH_ENTITIES_ID(entityInitial.uuid));
     const refIconElement                              = useRef<HTMLDivElement>(null);
     const refIcon                                     = useRef<DivIcon | null>(null);
@@ -33,7 +38,22 @@ export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}
     const refTooltipElement                           = useRef<HTMLDivElement>(null);
     const refTooltip                                  = useRef<Tooltip>(null);
 
-    const size = 16;
+    const size = 16 * scale;
+
+    const zoomEvent = useCallback((event: LeafletEvent) => {
+        setScale(calcScale(event.target._zoom, map.zoomInitial));
+        if (refIconElement.current === null || refIcon.current === null) {
+            return;
+        }
+
+        refIcon.current = new DivIcon({
+            html:          refIconElement.current,
+            iconSize:      [size, size],
+            iconAnchor:    [size / 2, size / 2],
+            tooltipAnchor: [0, 0],
+            className:     'bg-transparent border-none',
+        });
+    }, [scale]);
 
     useEffect(() => {
         if (refIconElement.current === null || refIcon.current !== null || refTooltipElement === null || refTooltip.current !== null) {
@@ -51,7 +71,11 @@ export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}
         refMarker.current.setIcon(refIcon.current);
 
         const interval = setInterval(() => setDurationAlive(Date.now() - entityInitial.born.at.timestamp), 1000);
-        return () => clearInterval(interval);
+        map.leafletMap.on('zoom', zoomEvent, refIcon.current);
+        return () => {
+            clearInterval(interval);
+            map.leafletMap.off('zoom', zoomEvent, refIcon.current);
+        };
     }, []);
 
     useEffect(() => {
@@ -84,7 +108,7 @@ export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}
         refTooltip.current = new Tooltip({
             permanent: tooltipIsPermanent,
             direction: 'right',
-            offset:    [5, 0],
+            offset:    [5 * scale, 0],
             content:   refTooltipElement.current!,
             className: 'bg-black/90! border-gray-500/85! before:content-none! rounded!',
         });
@@ -97,7 +121,7 @@ export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}
             // @ts-ignore
             refMarker.current.removeFrom(layerGroup);
         }
-    }, [tooltipIsPermanent]);
+    }, [tooltipIsPermanent, size]);
 
     return (
         <div className="hidden">

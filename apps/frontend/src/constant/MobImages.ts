@@ -49,7 +49,7 @@ const MobImages: Record<string, string> = {
     [EntityTypeEnum.PIG]:              '/entity/pig/{size}/temperate_pig.png',
     [EntityTypeEnum.PIGLIN]:           '/entity/piglin/{size}/piglin.png',
     [EntityTypeEnum.PIGLIN_BRUTE]:     '/entity/piglin/{size}/piglin_brute.png',
-    [EntityTypeEnum.PILLAGER]:         '/entity/pillager/{size}/pillager.png',
+    [EntityTypeEnum.PILLAGER]:         '/entity/illager/{size}/pillager.png',
     [EntityTypeEnum.POLAR_BEAR]:       '/entity/bear/{size}/polar.png',
     [EntityTypeEnum.PUFFERFISH]:       '/entity/fish/{size}/pufferfish.png',
     [EntityTypeEnum.RABBIT]:           '/entity/rabbit/{size}/toast.png',
