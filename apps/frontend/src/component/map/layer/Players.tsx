@@ -1,5 +1,4 @@
-import useLayerGroup from '@/component/map/hook/useLayerGroup';
-import MapMarkerPlayerEntry from '@/component/map/marker/PlayerEntry';
+import MapMarkerEntityPlayerEntry from '@/component/map/marker/entity/PlayerEntry';
 import useWSSObjectListPatch from '@/hook/useWSSObjectListPatch';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
 import APIPlayerInterface from '@dasred/minecraft-entity-view-sdk/model/api/players/PlayerInterface';
@@ -12,12 +11,11 @@ interface MapLayerSpawnOptionsInterface {
 }
 
 export default function MapLayerPlayers({players: playersInitial, visible}: MapLayerSpawnOptionsInterface): ReactElement | null {
-    const players    = useWSSObjectListPatch<APIPlayerInterface>(playersInitial.players, CommandEnum.PLAYERS_PATCH_LIST);
-    const layerGroup = useLayerGroup(visible);
+    const players = useWSSObjectListPatch<APIPlayerInterface>(playersInitial.players, CommandEnum.PLAYERS_PATCH_LIST);
 
     return (
         <div className="hidden">
-            {players.map((player) => <MapMarkerPlayerEntry key={player.uuid} layerGroup={layerGroup} player={player}/>)}
+            {players.map((player) => <MapMarkerEntityPlayerEntry key={player.uuid} visible={visible} player={player}/>)}
         </div>
     );
 }

@@ -46,8 +46,8 @@ export default function ContourImage({src, type = ContourType.DEFAULT, width, he
                 </filter>
             </defs>
 
-            <image href={src} width="300" height="300" filter={`url(#outline-${refId.current})`}/>
-            <image href={src} x="25" y="25" width="250" height="250"/>
+            <image href={src} width="300" height="300" filter={`url(#outline-${refId.current})`} style={{imageRendering: 'pixelated'}}/>
+            <image href={src} x="25" y="25" width="250" height="250" style={{imageRendering: 'pixelated'}}/>
         </svg>
     );
 }

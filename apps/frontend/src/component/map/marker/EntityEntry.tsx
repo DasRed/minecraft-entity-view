@@ -1,44 +1,52 @@
 import ContourImage, {ContourType} from '@/component/ContourImage';
-import Coordinates from '@/component/Coordinates';
 import MapEntityTooltip from '@/component/map/EntityTooltip';
 import useDimension from '@/component/map/provider/dimension/use';
 import useMap from '@/component/map/provider/map/use';
 import config from '@/config';
-import useWSSPatch from '@/hook/useWSSPatch';
-import useWSSSend from '@/hook/useWSSSend';
-import getMobImageByType from '@/lib/getMobImageByType';
-import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
-import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
-import {DivIcon, LayerGroup, LeafletEvent, Marker, Tooltip} from 'leaflet';
-import {LucideClock, LucideMapPin, LucideSkull} from 'lucide-react';
-import {Duration} from 'luxon';
+import MapMarkerPlayer, {MapMarkerPlayerOptionsInterface} from '@/service/map/MarkerPlayer';
+import DimensionEnum from '@dasred/minecraft-entity-view-sdk/constant/DimensionEnum';
+import {DivIcon, LatLngExpression, LeafletEvent, Marker, MarkerOptions} from 'leaflet';
 import {ReactElement, useCallback, useEffect, useRef, useState} from 'react';
 
 interface MapMarkerEntityEntryOptionsInterface {
-    entity: StatisticEntityInterface;
-    layerGroup: LayerGroup;
+    uuid: string;
+    type: string;
+    name: string;
+    dimension: DimensionEnum;
+    x: number;
+    y: number;
+    z: number;
+    yHeadRot?: number;
+    image: string;
+    bornAtTimestamp?: number;
+    visible: boolean;
+    isDeleted?: boolean;
+    onClickKill?: () => void;
+    markerConstructor:
+        (new(latlng: LatLngExpression, options?: MarkerOptions) => Marker) |
+        (new(latlng: LatLngExpression, options: MapMarkerPlayerOptionsInterface) => MapMarkerPlayer);
 }
 
-function calcScale(current: number, initial: number, factor: number = 2): number {
-    return Math.pow(2, (current - initial) / factor);
+function calcScale(current: number, initial: number, factor: number = 0.125): number {
+    return  Math.pow(2, (current - initial) * factor);
 }
 
-export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}: MapMarkerEntityEntryOptionsInterface): ReactElement {
-    const wssSend                                     = useWSSSend();
-    const [durationAlive, setDurationAlive]           = useState(Date.now() - entityInitial.born.at.timestamp);
+export default function MapMarkerEntityEntry({uuid, type, name, dimension, x, y, z, yHeadRot, image, bornAtTimestamp, visible, isDeleted = false, onClickKill, markerConstructor}: MapMarkerEntityEntryOptionsInterface): ReactElement {
+    const map               = useMap();
+    const dimensionSelected = useDimension();
+
+    const [durationAlive, setDurationAlive]           = useState(Date.now() - (bornAtTimestamp ?? 0));
     const [tooltipIsPermanent, setTooltipIsPermanent] = useState(false);
-    const map                                         = useMap();
-    const dimension                                   = useDimension();
-    // @ts-ignore
-    const [scale, setScale]                           = useState<number>(calcScale(map.leafletMap.getZoom(), map.zoomInitial));
-    const entity                                      = useWSSPatch<StatisticEntityInterface>(entityInitial, CommandEnum.STATISTIC_PATCH_ENTITIES_ID(entityInitial.uuid));
-    const refIconElement                              = useRef<HTMLDivElement>(null);
-    const refIcon                                     = useRef<DivIcon | null>(null);
-    const refMarker                                   = useRef<Marker>(new Marker(map.toLatLng(entity.x, entity.z)));
-    const refTooltipElement                           = useRef<HTMLDivElement>(null);
-    const refTooltip                                  = useRef<Tooltip>(null);
 
-    const size = 16 * scale;
+    const refIconElement = useRef<HTMLDivElement>(null);
+    const refIcon        = useRef<DivIcon | null>(null);
+    const refMarker      = useRef<Marker | MapMarkerPlayer>(new markerConstructor(map.toLatLng(x, z), {
+        rotationAngle: 180 + (yHeadRot ?? 0),
+        anchor:        [8, 8],
+    }));
+
+    const [scale, setScale] = useState<number>(calcScale(map.leafletMap.getZoom(), map.zoomInitial));
+    const size              = 16 * scale;
 
     const zoomEvent = useCallback((event: LeafletEvent) => {
         setScale(calcScale(event.target._zoom, map.zoomInitial));
@@ -56,7 +64,7 @@ export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}
     }, [scale]);
 
     useEffect(() => {
-        if (refIconElement.current === null || refIcon.current !== null || refTooltipElement === null || refTooltip.current !== null) {
+        if (refIconElement.current === null || refIcon.current !== null) {
             return;
         }
 
@@ -69,100 +77,70 @@ export default function MapMarkerEntityEntry({entity: entityInitial, layerGroup}
         });
 
         refMarker.current.setIcon(refIcon.current);
-
-        const interval = setInterval(() => setDurationAlive(Date.now() - entityInitial.born.at.timestamp), 1000);
+        const interval = bornAtTimestamp ? setInterval(() => setDurationAlive(Date.now() - bornAtTimestamp), 1000) : undefined;
         map.leafletMap.on('zoom', zoomEvent, refIcon.current);
+
         return () => {
-            clearInterval(interval);
+            if (interval) {
+                clearInterval(interval);
+            }
             map.leafletMap.off('zoom', zoomEvent, refIcon.current);
         };
     }, []);
 
     useEffect(() => {
-        if (dimension.id === entity.dimension && entity.stats.isDeleted === false) {
-            refMarker.current.addTo(layerGroup);
-        }
-        else {
-            // @ts-ignore
-            refMarker.current.removeFrom(layerGroup);
-        }
-
-        // @ts-ignore
-        return () => void refMarker.current?.removeFrom(layerGroup);
-    }, [dimension.id, entity.dimension, layerGroup, entity.stats.isDeleted]);
+        refMarker.current.setLatLng(map.toLatLng(x, z));
+    }, [x, z]);
 
     useEffect(() => {
-        refMarker.current.setLatLng(map.toLatLng(entity.x, entity.z));
-    }, [entity.x, entity.z]);
+        if (yHeadRot !== undefined && refMarker.current instanceof MapMarkerPlayer) {
+            refMarker.current.setRotationAngle(180 + yHeadRot);
+        }
+    }, [yHeadRot]);
 
     useEffect(() => {
-        if (refTooltip.current?.options.permanent === tooltipIsPermanent) {
-            return;
-        }
-
-        refMarker.current.unbindTooltip();
-        // @ts-ignore
-        refMarker.current.removeFrom(layerGroup);
-        refTooltip.current?.remove();
-
-        refTooltip.current = new Tooltip({
-            permanent: tooltipIsPermanent,
-            direction: 'right',
-            offset:    [5 * scale, 0],
-            content:   refTooltipElement.current!,
-            className: 'bg-black/90! border-gray-500/85! before:content-none! rounded!',
-        });
-
-        refMarker.current.bindTooltip(refTooltip.current);
-        if (dimension.id === entity.dimension && entity.stats.isDeleted === false) {
-            refMarker.current.addTo(layerGroup);
+        if (dimensionSelected.id === dimension && isDeleted === false && visible === true) {
+            refMarker.current.addTo(map.leafletMap);
         }
         else {
-            // @ts-ignore
-            refMarker.current.removeFrom(layerGroup);
+            refMarker.current.removeFrom(map.leafletMap);
         }
-    }, [tooltipIsPermanent, size]);
+
+        return () => void refMarker?.current.removeFrom(map.leafletMap);
+    }, [map, visible, tooltipIsPermanent, dimensionSelected.id, dimension, isDeleted]);
 
     return (
         <div className="hidden">
             <div
                 ref={refIconElement}
-                data-uuid={entity.uuid}
-                data-type={entity.displayType}
-                data-x={Math.floor(entity.x)}
-                data-y={Math.floor(entity.y)}
-                data-z={Math.floor(entity.z)}
-                style={{width: `${size}px`, height: `${size}px`}}
+                data-uuid={uuid}
+                data-type={type}
+                data-x={Math.floor(x)}
+                data-y={Math.floor(y)}
+                data-z={Math.floor(z)}
+                className="flex flex-col items-center"
+                style={{width: `${size + (yHeadRot !== undefined ? 4 : 0)}px`, height: `${size + (yHeadRot !== undefined ? 4 : 0)}px`}}
                 onClick={() => setTooltipIsPermanent(!tooltipIsPermanent)}
-                onDoubleClick={(event) => {
-                    event.stopPropagation();
-                    wssSend(CommandEnum.KILL_ENTITY, entity);
-                }}
+                onDoubleClick={() => onClickKill?.()}
             >
-                <ContourImage src={getMobImageByType(entity.displayType)} type={durationAlive < config.entity.highlightIfOlderThan ? ContourType.DEFAULT : ContourType.ERROR} width={size} height={size}/>
+                {yHeadRot !== undefined && <div className="w-0 h-0 border-l-transparent border-l-4 border-r-transparent border-r-4 border-b-4 border-b-teal-400"/>}
+
+                <ContourImage src={image} type={bornAtTimestamp === undefined || durationAlive < config.entity.highlightIfOlderThan ? ContourType.DEFAULT : ContourType.ERROR} width={size} height={size}/>
             </div>
-            <div
-                ref={refTooltipElement}
-                data-uuid={entity.uuid}
-                className="text-white flex-row w-max flex gap-1 items-start flex-nowrap font-sans text-sm leading-4 pointer-events-auto"
-            >
-                <img src={getMobImageByType(entity.displayType)} alt="" className="w-8 h-8"/>
-                <div className="flex flex-col">
-                    <div className="flex flex-row gap-5">
-                        <div className="font-bold">{entity.customName ?? entity.displayName}</div>
-                        <div className="flex-1"/>
-                        <div>
-                            <LucideSkull className="w-3 h-3 cursor-pointer hover:text-red-500" onClick={() => wssSend(CommandEnum.KILL_ENTITY, entity)}/>
-                        </div>
-                    </div>
-                    <div className="text-gray-300 flex flex-row gap-1 items-center">
-                        <LucideMapPin className="w-3 h-3"/> <Coordinates x={entity.x} y={entity.y} z={entity.z}/>
-                    </div>
-                    <div className="text-gray-300 flex flex-row gap-1 items-center">
-                        <LucideClock className="w-3 h-3"/> <span>{Duration.fromMillis(durationAlive).toFormat('hh:mm:ss')}</span>
-                    </div>
-                </div>
-            </div>
+
+            {refMarker.current &&
+                <MapEntityTooltip
+                    marker={refMarker.current}
+                    name={name}
+                    image={image}
+                    x={x}
+                    y={y}
+                    z={z}
+                    durationAlive={bornAtTimestamp ? durationAlive : undefined}
+                    onClickKill={onClickKill}
+                    permanent={tooltipIsPermanent}
+                />
+            }
         </div>
     );
 }

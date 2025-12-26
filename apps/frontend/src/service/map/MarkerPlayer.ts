@@ -1,23 +1,19 @@
-import {Icon, LatLngExpression, Marker, Point, PointTuple} from 'leaflet';
+import {LatLngExpression, Marker, Point, PointTuple} from 'leaflet';
 
-interface MapMarkerPlayerOptionsInterface {
-    latlng: LatLngExpression;
-    rotationAngle: number;
+export interface MapMarkerPlayerOptionsInterface {
     anchor: PointTuple;
+    rotationAngle: number;
 }
 
 export default class MapMarkerPlayer extends Marker {
     rotationAngle: number;
     rotationOrigin: string;
 
-    constructor({rotationAngle, latlng, anchor}: MapMarkerPlayerOptionsInterface) {
-        super(latlng, {
-            interactive: false,
-            keyboard:    false,
-        });
+    constructor(latlng: LatLngExpression, options: MapMarkerPlayerOptionsInterface) {
+        super(latlng);
 
-        this.rotationAngle  = rotationAngle;
-        this.rotationOrigin = anchor[0] + 'px ' + anchor[1] + 'px';
+        this.rotationAngle  = options.rotationAngle;
+        this.rotationOrigin = options.anchor[0] + 'px ' + options.anchor[1] + 'px';
 
         // Ensure marker keeps rotated during dragging
         this.on('drag', () => this.applyRotation());
@@ -39,7 +35,7 @@ export default class MapMarkerPlayer extends Marker {
         element.style.transform += ' rotateZ(' + this.rotationAngle + 'deg)';
     }
 
-    protected setRotationAngle(angle: number): this {
+    public setRotationAngle(angle: number): this {
         if (this.rotationAngle === angle) {
             return this;
         }
