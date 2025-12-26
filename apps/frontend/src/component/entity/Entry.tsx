@@ -14,9 +14,10 @@ import React from 'react';
 interface EntityRowOptionsInterface {
     entity: StatisticEntityInterface;
     sortBy?: EntityOrderTypeEnum;
+    statusToShow: string[];
 }
 
-export default function EntityEntry({entity: entityInitial, sortBy = EntityOrderTypeEnum.DEFAULT}: EntityRowOptionsInterface): React.ReactElement {
+export default function EntityEntry({entity: entityInitial, statusToShow, sortBy = EntityOrderTypeEnum.DEFAULT}: EntityRowOptionsInterface): React.ReactElement {
     const entity = useWSSPatch<StatisticEntityInterface>(entityInitial, CommandEnum.STATISTIC_PATCH_ENTITIES_ID(entityInitial.uuid));
 
     return (
@@ -31,6 +32,7 @@ export default function EntityEntry({entity: entityInitial, sortBy = EntityOrder
                 'opacity-inactive bg-red-100':               entity.chunk.status === ChunkStatusEnum.BLOCK_TICKING,
                 'bg-value-new':                              entity.stats.isNew,
                 'bg-value-removed opacity-removed':          entity.stats.isDeleted,
+                'hidden':                                    statusToShow.includes(entity.chunk.status) === false || (entity.stats.isDeleted === true && statusToShow.includes('ENTITY_IS_DELETED') === false),
             })}
         >
             <div className="overflow-hidden text-ellipsis flex flex-col flex-nowrap items-center text-nowrap" title={DimensionName[entity.dimension]}>

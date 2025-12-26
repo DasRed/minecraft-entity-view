@@ -16,6 +16,7 @@ import React, {ReactElement, useState} from 'react';
 interface EntitiesTableOptionsInterface {
     statistic: StatisticsInterface;
     category: MobCategoryEnum;
+    statusToShow: string[];
 }
 
 const MobCategoryTitle: Record<string, string> = {
@@ -26,7 +27,7 @@ const MobCategoryTitle: Record<string, string> = {
     [MobCategoryEnum.MONSTER]:  'Monster',
 };
 
-export default function EntityTable({statistic, category}: EntitiesTableOptionsInterface): ReactElement {
+export default function EntityTable({statistic, category, statusToShow}: EntitiesTableOptionsInterface): ReactElement {
     const entities                          = useWSSObjectListPatch<StatisticEntityInterface>(statistic.entity[category], CommandEnum.STATISTIC_PATCH_ENTITIES_LIST(category));
     const [sortBy, setSortBy]               = useState<EntityOrderTypeEnum>(EntityOrderTypeEnum.NAME);
     const [sortDirection, setSortDirection] = useState<SortDirectionEnum>(SortDirectionEnum.ASC);
@@ -59,7 +60,7 @@ export default function EntityTable({statistic, category}: EntitiesTableOptionsI
                     <span className="overflow-hidden items-center flex flex-col flex-nowrap" onClick={() => handleSort(EntityOrderTypeEnum.DIMENSION)}>
                         {sortBy === EntityOrderTypeEnum.DIMENSION && sortDirection === SortDirectionEnum.ASC && <LucideChevronUp className="w-4 h-4 mr-0.5 inline-block"/>}
                         {sortBy === EntityOrderTypeEnum.DIMENSION && sortDirection === SortDirectionEnum.DESC && <LucideChevronDown className="w-4 h-4 mr-0.5 inline-block"/>}
-                        {sortBy !== EntityOrderTypeEnum.DIMENSION && <DimensionImage dimension={DimensionEnum.OVERWORLD} className="w-4 h-4 mr-1"/> }
+                        {sortBy !== EntityOrderTypeEnum.DIMENSION && <DimensionImage dimension={DimensionEnum.OVERWORLD} className="w-4 h-4 mr-1"/>}
                     </span>
                     <span className="col-span-5 overflow-hidden text-ellipsis" onClick={() => handleSort(EntityOrderTypeEnum.NAME)}>
                         {sortBy === EntityOrderTypeEnum.NAME && sortDirection === SortDirectionEnum.ASC && <LucideChevronUp className="w-4 h-4 mr-0.5 inline-block"/>}
@@ -83,7 +84,7 @@ export default function EntityTable({statistic, category}: EntitiesTableOptionsI
                     'flex-col':         sortDirection === SortDirectionEnum.ASC,
                     'flex-col-reverse': sortDirection === SortDirectionEnum.DESC,
                 })}>
-                    {entities.map((entity) => <EntityEntry key={entity.uuid} entity={entity} sortBy={sortBy}/>)}
+                    {entities.map((entity) => <EntityEntry key={entity.uuid} entity={entity} sortBy={sortBy} statusToShow={statusToShow}/>)}
                 </div>
             </div>
         </div>
