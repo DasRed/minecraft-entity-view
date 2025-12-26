@@ -31,7 +31,7 @@ export default function Map(): ReactElement | null {
 
     return (
         <div className="absolute left-0 top-0 right-0 bottom-0 overflow-hidden">
-            <MapProviderMap host={config.squaremapBackend}>
+            <MapProviderMap tileLayerServer={config.tileLayerServer}>
                 <DimensionBackground/>
                 <div className="absolute inset-0 pointer-events-none">
                     <div className="absolute z-2 left-16 top-2 pointer-events-none flex flex-row gap-3">

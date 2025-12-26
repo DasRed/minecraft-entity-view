@@ -6,6 +6,9 @@ import {defineConfig} from 'vite';
 import viteCompression from 'vite-plugin-compression';
 
 export default defineConfig({
+    /** @see https://github.com/vitejs/vite/pull/9880#issuecomment-3082449026 **/
+    envPrefix: `QWERTYUIOPASDFGHJKLZXCVBNM`.split(''),
+    envDir: '../../',
     plugins: [
         tanstackRouter({
             target:            'react',

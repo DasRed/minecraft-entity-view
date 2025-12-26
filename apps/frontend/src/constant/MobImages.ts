@@ -68,7 +68,6 @@ const MobImages: Record<string, string> = {
     [EntityTypeEnum.STRAY]:            '/entity/skeleton/{size}/stray.png',
     [EntityTypeEnum.STRIDER]:          '/entity/strider/{size}/strider_cold.png',
     [EntityTypeEnum.TRADER_LLAMA]:     '/entity/llama/{size}/white.png',
-    [EntityTypeEnum.TRIDENT]:          '/entity/trident/{size}/trident.png',
     [EntityTypeEnum.TROPICAL_FISH]:    '/entity/fish/{size}/tropical_fish.png',
     [EntityTypeEnum.TURTLE]:           '/entity/turtle/{size}/turtle.png',
     [EntityTypeEnum.VEX]:              '/entity/vex/{size}/vex.png',

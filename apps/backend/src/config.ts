@@ -7,9 +7,9 @@ export default {
     minecraftServer: process.env.MINECRAFT_SERVER ?? 'http://atlas.dasred.de:9874',
 
     websocket: {
-        protocol: process.env.WEBSOCKET_PROTOCOL ?? 'ws',
-        host:     process.env.WEBSOCKET_HOST ?? 'localhost',
-        port:     Number(process.env.WEBSOCKET_PORT ?? 7791),
+        protocol: process.env.WEBSOCKET_SERVER_PROTOCOL ?? 'ws',
+        host:     process.env.WEBSOCKET_SERVER_HOST ?? 'localhost',
+        port:     Number(process.env.WEBSOCKET_SERVER_PORT ?? 7791),
     },
 
     entitiesStatisticUpdater: <EntitiesStatisticUpdaterConfigInterface>{

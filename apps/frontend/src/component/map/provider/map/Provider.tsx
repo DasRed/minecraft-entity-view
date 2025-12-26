@@ -12,12 +12,12 @@ import APIDimensionInterface from '@dasred/minecraft-entity-view-sdk/model/api/D
 import {PropsWithChildren, ReactNode, useEffect, useRef, useState} from 'react';
 
 interface MapProviderMapOptionsInterface {
-    host: string;
+    tileLayerServer: string;
     className?: string;
     children: ReactNode;
 }
 
-export default function MapProviderMap({host, className, children}: PropsWithChildren<MapProviderMapOptionsInterface>) {
+export default function MapProviderMap({tileLayerServer, className, children}: PropsWithChildren<MapProviderMapOptionsInterface>) {
     const dimensions        = useWSS<APIDimensionInterface[]>(CommandEnum.DIMENSIONS_FULL);
     const containerRef      = useRef<HTMLDivElement>(null);
     const mapRef            = useRef<Map | null>(null);
@@ -30,7 +30,7 @@ export default function MapProviderMap({host, className, children}: PropsWithChi
 
         mapRef.current = new Map({
             element:     containerRef.current,
-            urlTemplate: `${host}/tiles/{dimensionId}/{z}/{x}_{y}.png`,
+            urlTemplate: `${tileLayerServer}/tiles/{dimensionId}/{z}/{x}_{y}.png`,
 
             dimensions,
             dimensionId: setting.get('dimension', DimensionEnum.OVERWORLD),
@@ -45,7 +45,7 @@ export default function MapProviderMap({host, className, children}: PropsWithChi
             mapRef.current = null;
             setReady(false);
         };
-    }, [host, dimensions, containerRef]);
+    }, [tileLayerServer, dimensions, containerRef]);
 
     return (
         <>

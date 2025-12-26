@@ -1,21 +1,21 @@
-export default {
-    // websocket: process.env.NODE_ENV === 'production' ? 'ws://minecraft.dasred.de:7791' : 'ws://localhost:7791',
-    websocket: 'ws://minecraft.dasred.de:7791',
+// @ts-ignore
+const env: Record<string, string> = import.meta.env;
 
-    // squaremapBackend: process.env.NODE_ENV === 'production' ? 'http://atlas.dasred.de:7792' : 'http://localhost:7792',
-    squaremapBackend: 'http://atlas.dasred.de:7792',
+export default {
+    websocket:       env.WEBSOCKET_CLIENT ?? 'ws://minecraft.dasred.de:7791',
+    tileLayerServer: env.TILE_LAYER_SERVER ?? 'http://atlas.dasred.de:7792',
 
     map: {
         zoom: {
-            current:   3,
-            min:       0,
-            max:       8,
-            nativeMin: 0,
-            nativeMax: 3,
+            current:   Number(env.MAP_ZOOM_CURRENT ?? 3),
+            min:       Number(env.MAP_ZOOM_MIN ?? 0),
+            max:       Number(env.MAP_ZOOM_MAX ?? 8),
+            nativeMin: Number(env.MAP_ZOOM_NATIVE_MIN ?? 0),
+            nativeMax: Number(env.MAP_ZOOM_NATIVE_MAX ?? 3),
         },
     },
 
     entity: {
-        highlightIfOlderThan: 12 * 60 * 60 * 1000,
-    }
+        highlightIfOlderThan: Number(env.ENTITY_HIGHLIGHT_IF_OLDER_THAN ?? 12 * 60 * 60 * 1000),
+    },
 } as const;
