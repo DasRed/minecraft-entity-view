@@ -1,11 +1,13 @@
 import DimensionImage from '@/component/DimensionImage';
 import MobImage from '@/component/MobImage';
 import DimensionName from '@/constant/DimensionName';
+import EntityFilterTypeEnum from '@/constant/EntityFilterTypeEnum';
 import useWSSPatch from '@/hook/useWSSPatch';
 import cn from '@/lib/cn';
 import numberFormatter from '@/lib/numberFormater';
 import ChunkStatusEnum from '@dasred/minecraft-entity-view-sdk/constant/ChunkStatusEnum';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
+import DimensionEnum from '@dasred/minecraft-entity-view-sdk/constant/DimensionEnum';
 import EntityOrderTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityOrderTypeEnum';
 import EntityTypeEnum from '@dasred/minecraft-entity-view-sdk/constant/EntityTypeEnum';
 import StatisticEntityInterface from '@dasred/minecraft-entity-view-sdk/model/StatisticEntityInterface';
@@ -14,7 +16,7 @@ import React from 'react';
 interface EntityRowOptionsInterface {
     entity: StatisticEntityInterface;
     sortBy?: EntityOrderTypeEnum;
-    statusToShow: string[];
+    statusToShow: EntityFilterTypeEnum[];
 }
 
 export default function EntityEntry({entity: entityInitial, statusToShow, sortBy = EntityOrderTypeEnum.DEFAULT}: EntityRowOptionsInterface): React.ReactElement {
@@ -32,7 +34,17 @@ export default function EntityEntry({entity: entityInitial, statusToShow, sortBy
                 'opacity-inactive bg-red-100':               entity.chunk.status === ChunkStatusEnum.BLOCK_TICKING,
                 'bg-value-new':                              entity.stats.isNew,
                 'bg-value-removed opacity-removed':          entity.stats.isDeleted,
-                'hidden':                                    statusToShow.includes(entity.chunk.status) === false || (entity.stats.isDeleted === true && statusToShow.includes('ENTITY_IS_DELETED') === false),
+                'hidden':                                    (entity.chunk.status === ChunkStatusEnum.INACCESSIBLE && statusToShow.includes(EntityFilterTypeEnum.CHUNK_STATUS_INACCESSIBLE) === false)
+                                                                 || (entity.chunk.status === ChunkStatusEnum.FULL && statusToShow.includes(EntityFilterTypeEnum.CHUNK_STATUS_FULL) === false)
+                                                                 || (entity.chunk.status === ChunkStatusEnum.BLOCK_TICKING && statusToShow.includes(EntityFilterTypeEnum.CHUNK_STATUS_BLOCK_TICKING) === false)
+                                                                 || (entity.chunk.status === ChunkStatusEnum.ENTITY_TICKING && statusToShow.includes(EntityFilterTypeEnum.CHUNK_STATUS_ENTITY_TICKING) === false)
+
+                                                                 || (entity.stats.isDeleted === true && statusToShow.includes(EntityFilterTypeEnum.ENTITY_IS_DELETED) === false)
+
+                                                                 || (entity.dimension === DimensionEnum.OVERWORLD && statusToShow.includes(EntityFilterTypeEnum.DIMENSION_OVERWORLD) === false)
+                                                                 || (entity.dimension === DimensionEnum.NETHER && statusToShow.includes(EntityFilterTypeEnum.DIMENSION_NETHER) === false)
+                                                                 || (entity.dimension === DimensionEnum.END && statusToShow.includes(EntityFilterTypeEnum.DIMENSION_END) === false)
+                ,
             })}
         >
             <div className="overflow-hidden text-ellipsis flex flex-col flex-nowrap items-center text-nowrap" title={DimensionName[entity.dimension]}>

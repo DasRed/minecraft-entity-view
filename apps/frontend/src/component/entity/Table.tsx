@@ -1,6 +1,7 @@
 import CountValue from '@/component/CountValue';
 import DimensionImage from '@/component/DimensionImage';
 import EntityEntry from '@/component/entity/Entry';
+import EntityFilterTypeEnum from '@/constant/EntityFilterTypeEnum';
 import useWSSObjectListPatch from '@/hook/useWSSObjectListPatch';
 import cn from '@/lib/cn';
 import CommandEnum from '@dasred/minecraft-entity-view-sdk/constant/CommandEnum';
@@ -16,7 +17,7 @@ import React, {ReactElement, useState} from 'react';
 interface EntitiesTableOptionsInterface {
     statistic: StatisticsInterface;
     category: MobCategoryEnum;
-    statusToShow: string[];
+    statusToShow: EntityFilterTypeEnum[];
 }
 
 const MobCategoryTitle: Record<string, string> = {

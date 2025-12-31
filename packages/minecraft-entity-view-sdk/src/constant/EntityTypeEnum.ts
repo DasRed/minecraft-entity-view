@@ -46,6 +46,7 @@ enum EntityTypeEnum {
     FURNACE_MINECART       = 'minecraft:furnace_minecart',
     GFLOW_ITEM_FRAME       = 'minecraft:glow_item_frame',
     GHAST                  = 'minecraft:ghast',
+    DRIED_GHAST            = 'minecraft:dried_ghast',
     GLOW_SQUID             = 'minecraft:glow_squid',
     GOAT                   = 'minecraft:goat',
     GUARDIAN               = 'minecraft:guardian',
