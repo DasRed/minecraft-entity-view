@@ -15,8 +15,8 @@
     },
     "homepage": "https://github.com/DasRed/minecraft-entity-view",
     "engines": {
-        "node": ">=25.0.0",
-        "npm": ">=11.6.1"
+        "node": ">=26.12.1",
+        "npm": ">=11.20.0"
     },
     "repository": {
         "type": "git",
