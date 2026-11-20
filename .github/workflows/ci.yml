@@ -20,4 +20,5 @@ jobs:
       dockhand-token: ${{ secrets.DOCKHAND_TOKEN }}
       homeassistant-webhook-url: ${{ secrets.HOMEASSISTANT_WEBHOOK_URL }}
     with:
+      deploy: false
       environment: atlas
