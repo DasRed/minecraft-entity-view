@@ -2,6 +2,16 @@
     "name": "@dasred/minecraft-entity-view",
     "packageManager": "npm@11.6.2",
     "version": "1.16.2",
+    "description": "Live map and statistics of all entities on a Minecraft server in the browser.",
+    "keywords": [
+        "minecraft",
+        "neoforge",
+        "entities",
+        "map",
+        "leaflet",
+        "websocket",
+        "react"
+    ],
     "private": true,
     "type": "module",
     "author": "Marco Starker",
