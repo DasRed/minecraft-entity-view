@@ -1,6 +1,6 @@
 ---
 title: Usage
-description: Use the map with entities and chunk status and read the statistics with chart and tables.
+description: Use the map of minecraft-entity-view with entities and chunk status, remove entities via RCON and read the statistics with their chart and tables.
 order: 30
 slug: usage
 section: Usage

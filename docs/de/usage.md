@@ -1,6 +1,6 @@
 ---
 title: Verwendung
-description: Die Karte mit Entities und Chunk-Status bedienen und die Statistik mit Diagramm und Tabellen lesen.
+description: Die Karte von minecraft-entity-view mit Entities und Chunk-Status bedienen, Entities per RCON entfernen und die Statistik mit Diagramm und Tabellen lesen.
 order: 30
 slug: verwendung
 section: Benutzung

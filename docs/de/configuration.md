@@ -1,6 +1,6 @@
 ---
 title: Konfiguration
-description: Alle Umgebungsvariablen von minecraft-entity-view – Adressen, RCON, Abfrageintervalle, Statistik und Karte.
+description: Alle Umgebungsvariablen von minecraft-entity-view mit Standardwerten, für die Adresse von minecraft-api, RCON, Abfrageintervalle, Statistik und die Karte.
 order: 20
 slug: konfiguration
 section: Einrichtung

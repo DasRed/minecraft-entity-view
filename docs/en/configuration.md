@@ -1,6 +1,6 @@
 ---
 title: Configuration
-description: All environment variables of minecraft-entity-view – addresses, RCON, polling intervals, statistics and map.
+description: All environment variables of minecraft-entity-view with defaults, for the address of minecraft-api, RCON, polling intervals, statistics and the map.
 order: 20
 slug: configuration
 section: Setup
