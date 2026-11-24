@@ -36,7 +36,6 @@
         "dev": "turbo run dev --parallel",
         "build": "turbo run build",
         "start": "turbo run start",
-        "semantic-release": "semantic-release",
         "wsc": "wsc -C ws://localhost:7791"
     },
     "dependencies": {
@@ -44,36 +43,6 @@
         "typescript": "^5.9.3"
     },
     "devDependencies": {
-        "@semantic-release/commit-analyzer": "^13.0.1",
-        "@semantic-release/git": "^10.0.1",
-        "@semantic-release/github": "^12.0.0",
-        "@semantic-release/npm": "^13.0.0",
-        "semantic-release": "^25.0.0",
-        "semantic-release-cli": "^5.4.6",
         "wsc": "^0.3.0"
-    },
-    "release": {
-        "branches": [
-            "main"
-        ],
-        "plugins": [
-            "@semantic-release/commit-analyzer",
-            [
-                "@semantic-release/npm",
-                {
-                    "npmPublish": false
-                }
-            ],
-            [
-                "@semantic-release/git",
-                {
-                    "assets": [
-                        "package.json",
-                        "package-lock.json"
-                    ]
-                }
-            ],
-            "@semantic-release/github"
-        ]
     }
 }
