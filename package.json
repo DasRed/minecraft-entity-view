@@ -1,7 +1,7 @@
 {
     "name": "@dasred/minecraft-entity-view",
     "packageManager": "npm@11.6.2",
-    "version": "1.16.2",
+    "version": "1.16.3",
     "description": "Live map and statistics of all entities on a Minecraft server in the browser.",
     "keywords": [
         "minecraft",
