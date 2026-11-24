@@ -1,3 +1,9 @@
+## [1.16.4](https://github.com/DasRed/minecraft-entity-view/compare/v1.16.3...v1.16.4) (2026-11-24)
+
+### Bug Fixes
+
+* homepage fixed ([abb04a3](https://github.com/DasRed/minecraft-entity-view/commit/abb04a300dd79a010b3b476a93268d450d412ea1))
+
 ## [1.16.3](https://github.com/DasRed/minecraft-entity-view/compare/v1.16.2...v1.16.3) (2026-11-24)
 
 ### Bug Fixes
